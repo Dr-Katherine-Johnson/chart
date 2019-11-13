@@ -1,6 +1,6 @@
-# Project Name
+# Chart
 
-> Project description
+> Chart for this particular stock
 
 ## Related Projects
 
