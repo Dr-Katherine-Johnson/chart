@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Sample from '../../sampledata/price.js'
 
 import ChartHat from './charthat.jsx';
+import Chart from './chart.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -28,6 +29,17 @@ class App extends React.Component {
         <div className="top-right">
           <span className="rating-percent">{this.state.ratingPercent} Hold</span>
           <span className="people-own">{this.state.peopleOwn}</span>
+        </div>
+        <Chart></Chart>
+        <div className="chart-footer">
+          <div className="chart-timeframes">
+            <span>1D</span>
+            <span>1W</span>
+            <span>1M</span>
+            <span>3M</span>
+            <span>1Y</span>
+          </div>
+          <div>Expand</div>
         </div>
       </div>
     );
