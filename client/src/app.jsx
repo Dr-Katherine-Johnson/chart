@@ -12,19 +12,23 @@ class App extends React.Component {
     this.state = {
       ticker: Sample.ticker,
       name: Sample.name,
-      prices: Sample.prices
+      prices: Sample.prices,
+      ratingPercent: `81%`,
+      peopleOwn: 2500
     }
   }
 
   render() {
     return (
-      <div className="priceChart">
+      <div className="price-chart">
         <ChartHat
           ticker={this.state.ticker}
         >
         </ChartHat>
-        <div className="rating-percent"></div>
-        <div className="people-own"></div>
+        <div className="top-right">
+          <span className="rating-percent">{this.state.ratingPercent} Hold</span>
+          <span className="people-own">{this.state.peopleOwn}</span>
+        </div>
       </div>
     );
   }
