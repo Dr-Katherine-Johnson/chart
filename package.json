@@ -26,8 +26,10 @@
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
+    "faker": "^4.1.0",
     "mocha": "^6.2.2",
     "nodemon": "^1.19.4",
+    "request": "^2.88.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   }
