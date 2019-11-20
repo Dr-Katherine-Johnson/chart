@@ -28,16 +28,61 @@ describe('Tickers Seeding Script', () => {
 
 // PRICES SEEDING SCRIPT
 describe('Prices Seeding Script', () => {
-  describe('Name', () => {
+  describe('generateName', () => {
     const name1 = prices.generateName();
     const name2 = prices.generateName();
 
-    it('Should generate string', () => {
+    it('Should generate a string', () => {
       expect(name1).to.be.a('string');
     });
 
     it('Should generate a random name', () => {
       expect(name1).to.not.equal(name2);
+    });
+  });
+
+  describe('generatePrice', () => {
+    const priceObject = prices.generatePrice();
+    it('should return an object', () => {
+      expect(priceObject).to.be.an.instanceOf(Object);
+    });
+
+    it('should not return an empty object', () => {
+      expect(priceObject).to.not.be.empty;
+    });
+
+    it('should have properties open, high, low, & close, of types INTEGER', () => {
+      const keys = ['open', 'high', 'low', 'close'];
+      keys.forEach(key => {
+        expect(priceObject[key]).to.be.a('number');
+      })
+    });
+
+    it('high should be the highest price', () => {
+      expect(priceObject['high']).to.be.at.least(priceObject['low']);
+      expect(priceObject['high']).to.be.at.least(priceObject['open']);
+      expect(priceObject['high']).to.be.at.least(priceObject['close']);
+    });
+
+    it('low should be the lowest price', () => {
+      expect(priceObject['low']).to.be.at.most(priceObject['high']);
+      expect(priceObject['low']).to.be.at.most(priceObject['open']);
+      expect(priceObject['low']).to.be.at.most(priceObject['close']);
+    });
+
+    it('should have different prices, if volume is greater than 0', () => {
+
+    })
+  });
+
+  describe('generatePricesList', () => {
+    const pricesList = prices.generatePricesList();
+    it('Should return an array', () => {
+      expect(pricesList).to.be.an.instanceOf(Array);
+    });
+
+    it('Array should have 7 objects', () => {
+      expect(pricesList).to.have.lengthOf(7);
     });
   });
 
