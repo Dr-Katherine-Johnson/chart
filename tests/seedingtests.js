@@ -70,9 +70,27 @@ describe('Prices Seeding Script', () => {
       expect(priceObject['low']).to.be.at.most(priceObject['close']);
     });
 
-    it('should have different prices, if volume is greater than 0', () => {
+    xit('should have different prices, if volume is greater than 0', () => {
 
     })
+
+    it('low price should be no more than 50% lower than high price', () => {
+
+    });
+
+    it('adjacent prices should be no more than 10% different', () => {
+
+    });
+  });
+
+  describe('createAnchorPrice', () => {
+    it('should return a number between 0 and less than 1000', () => {
+      let startingPrice;
+      for (let i = 0; i < 1000; i++) {
+        startingPrice = prices.createAnchorPrice();
+        expect(startingPrice >= 0 && startingPrice < 1000).to.be.true;
+      }
+    });
   });
 
   describe('generatePricesList', () => {

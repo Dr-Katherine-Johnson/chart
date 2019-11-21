@@ -35,7 +35,16 @@ module.exports = {
     return result;
   },
 
+  createAnchorPrice() {
+    // get starting price
+    return Math.random() * 1000;
+  },
+
   generatePrice() {
+
+
+
+
     return {
       dateTime: 'DATE',
       open: 1,
