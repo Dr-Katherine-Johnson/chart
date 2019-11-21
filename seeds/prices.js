@@ -93,8 +93,9 @@ module.exports = {
     if (index === 0) {
       const now = new Date();
       console.log('now: ', now);
-      dateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 30);
-      console.log('dateTime: ', dateTime);
+      dateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9 - (new Date().getTimezoneOffset() / 60), 30);
+      // console.log('dateTime: ', dateTime);
+
     } else if (index % 7 === 0) {
       const prevDateTime = prev.dateTime;
       // index DOES divide by 7 evenly, add the amount of milliseconds to the next day's 9:30 AM

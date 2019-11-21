@@ -127,14 +127,27 @@ describe('Prices Seeding Script', () => {
         current = pricesList[i].open
         previous = pricesList[i - 1].close
 
+        console.log() // TODO: ...
         // expect them to be less than 10% different from each other
         expect((current > previous * 0.90) || (current < previous * 1.10)).to.be.true;
       }
     });
   });
 
-  describe('Date', () => {
-    it('Should generate a random Date', () => {
+  xdescribe('Date', () => {
+    it('Each price object should have a date', () => {
+
+    });
+
+    it('The first dateTime should have a time of 9:30 AM', () => {
+
+    });
+
+    it('Each subsequent dateTime in a day should add 1 hour to the time', () => {
+
+    });
+
+    it('Every 7th dateTime should increment the day by 1', () => {
 
     });
   });
