@@ -109,6 +109,8 @@ describe('Prices Seeding Script', () => {
 
   describe('generatePricesList', () => {
     const pricesList = prices.generatePricesList();
+    console.log('pricesList: ', pricesList);
+
     it('Should return an array', () => {
       expect(pricesList).to.be.an.instanceOf(Array);
     });
