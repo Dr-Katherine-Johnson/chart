@@ -42,7 +42,7 @@ describe('Prices Seeding Script', () => {
   });
 
   describe('generatePrice', () => {
-    const priceObject = prices.generatePrice();
+    const priceObject = prices.generatePrice({});
     it('should return an object', () => {
       expect(priceObject).to.be.an.instanceOf(Object);
     });
@@ -74,13 +74,37 @@ describe('Prices Seeding Script', () => {
 
     })
 
-    it('low price should be no more than 50% lower than high price', () => {
+    xit('low price should be no more than 50% lower than anchorPrice', () => {
 
     });
 
-    it('adjacent prices should be no more than 10% different', () => {
+    xit('high price should be no more than 50% higher than anchorPrice', () => {
 
     });
+
+    it('adjacent prices should be less than 20% different', () => {
+
+    });
+
+    it(`in one price object, high is less than 10% different from low`, () => {
+      // TODO: only define one price object for all these tests?? or run multiple??
+      const price = prices.generatePrice({
+        dateTime: 'DATE',
+        open: 100,
+        high: 105,
+        low: 95,
+        close: 102,
+        volume: 'INTEGER'
+      });
+
+      const nextPrice = prices.generatePrice(price);
+      expect((nextPrice.high * 0.9) < nextPrice.low).to.be.true;
+    });
+
+    it(`the previous day's close should be less than 10% different from the next days open`, () => {
+      const price = prices.generatePrice({ close: 100 })
+      expect(price.open > 90).to.be.true;
+    })
   });
 
   describe('createAnchorPrice', () => {
@@ -99,8 +123,8 @@ describe('Prices Seeding Script', () => {
       expect(pricesList).to.be.an.instanceOf(Array);
     });
 
-    it('Array should have 7 objects', () => {
-      expect(pricesList).to.have.lengthOf(7);
+    it('Array should have 1750 objects', () => {
+      expect(pricesList).to.have.lengthOf(1750);
     });
   });
 

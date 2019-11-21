@@ -29,8 +29,8 @@ module.exports = {
   generatePricesList() {
     const result = [];
 
-    for (let i = 0; i < 7; i++) {
-      result.push(this.generatePrice());
+    for (let i = 0; i < 1750; i++) {
+      result.push(this.generatePrice({}));
     }
     return result;
   },
@@ -40,14 +40,22 @@ module.exports = {
     return Math.random() * 1000;
   },
 
-  generatePrice() {
+  generatePrice(previousPrice) {
+    // console.log('previousPrice: ', previousPrice);
 
 
+    // open should be less than 20% different from previousPrice.close
+    let random = Math.round(Math.random());
 
+    if (random === 0) {
+      open = previousPrice.close + Math.random() * (0.10 * previousPrice.close)
+    } else {
+      open = previousPrice.close - Math.random() * (0.10 * previousPrice.close)
+    }
 
     return {
       dateTime: 'DATE',
-      open: 1,
+      open: open,
       high: 1,
       low: 1,
       close: 1,
