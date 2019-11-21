@@ -107,6 +107,26 @@ describe('Prices Seeding Script', () => {
     })
   });
 
+  describe('lessThanTenPercentDifferent', () => {
+    it('should return a number that is less than 10% different - either greater or lesser - than its argument', () => {
+
+      let random, num;
+      // iterate 1000 times
+      for (let i = 0; i < 1000; i++) {
+        // make a random number between 0 and 1000
+        random = Math.random() * 1000;
+
+        // save num as return from lessThanTenPercentDifferent on that random number
+        num = prices.lessThanTenPercentDifferent(random);
+
+        // verify that num is either
+        // greater than num * 0.90, OR
+        // less than num * 1.10
+        expect((num > num * 0.90) || (num < num * 1.10)).to.be.true;
+      }
+    });
+  });
+
   describe('createAnchorPrice', () => {
     it('should return a number between 0 and less than 1000', () => {
       let startingPrice;

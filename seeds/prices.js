@@ -42,16 +42,7 @@ module.exports = {
 
   generatePrice(previousPrice) {
     // console.log('previousPrice: ', previousPrice);
-
-
-    // open should be less than 20% different from previousPrice.close
-    let random = Math.round(Math.random());
-
-    if (random === 0) {
-      open = previousPrice.close + Math.random() * (0.10 * previousPrice.close)
-    } else {
-      open = previousPrice.close - Math.random() * (0.10 * previousPrice.close)
-    }
+    let open = this.lessThanTenPercentDifferent(previousPrice.close);
 
     return {
       dateTime: 'DATE',
@@ -61,5 +52,19 @@ module.exports = {
       close: 1,
       volume: 'INTEGER'
     };
+  },
+
+  // returns a number that is less than 10% different from its argument
+  lessThanTenPercentDifferent(num) {
+    const flag = Math.round(Math.random());
+    let result, random;
+    random = Math.random() * (0.10 * num);
+
+    if (flag === 0) {
+      result = num + random
+    } else {
+      result = num - random
+    }
+    return result;
   }
 }
