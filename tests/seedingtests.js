@@ -32,7 +32,7 @@ describe('Prices Seeding Script', () => {
     it('should return a number between 0 and less than 1000', () => {
       let startingPrice;
       for (let i = 0; i < 1000; i++) {
-        startingPrice = prices.createAnchorPrice();
+        startingPrice = prices.createAnchorPrice(1000);
         expect(startingPrice >= 0 && startingPrice < 1000).to.be.true;
       }
     });
@@ -101,10 +101,6 @@ describe('Prices Seeding Script', () => {
       expect(priceObject['low']).to.be.at.most(priceObject['close']);
     });
 
-    xit('should have different prices, if volume is greater than 0', () => {
-
-    });
-
     it(`in one price object, high is less than 20% different from low`, () => {
       const nextPrice = prices.generatePrice(priceObject);
       expect((nextPrice.high * 0.8) < nextPrice.low).to.be.true;
@@ -122,9 +118,6 @@ describe('Prices Seeding Script', () => {
     });
 
     it(`the previous day's close should be less than 10% different from the next day's open`, () => {
-      // const price = prices.generatePrice()
-      // expect(price.open > 90).to.be.true;
-
       let current, previous;
       // iterate through pricesList, starting at the second element
       for (let i = 1; i < 1750; i++) {
@@ -136,13 +129,11 @@ describe('Prices Seeding Script', () => {
         expect((current > previous * 0.90) || (current < previous * 1.10)).to.be.true;
       }
     });
-
-    xit('adjacent prices should be less than 10% different', () => {
-      // TODO: unneeded??
-    });
   });
 
-  xdescribe('Date', () => {
-    it('Should generate a random Date')
-  })
+  describe('Date', () => {
+    it('Should generate a random Date', () => {
+
+    });
+  });
 });

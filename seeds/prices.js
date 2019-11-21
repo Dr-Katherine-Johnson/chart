@@ -15,7 +15,7 @@ const faker = require('faker');
     //       high: NUMBER,
     //       low: NUMBER,
     //       close: NUMBER,
-    //       volume: INTEGER
+    //       volume: NUMBER
     //     },
     //     // ...
     //   ]
@@ -35,9 +35,9 @@ module.exports = {
     return result;
   },
 
-  createAnchorPrice() {
+  createAnchorPrice(num) {
     // get starting price
-    return Math.random() * 1000;
+    return Math.random() * num;
   },
 
   generatePrice(previousPrice) {
@@ -46,7 +46,7 @@ module.exports = {
     // set open price first
     let open;
     if (previousPrice === undefined) { // TODO: might need to change if you update the arguments to generatePrice in generatePricesList()
-      open = this.lessThanTenPercentDifferent(this.createAnchorPrice());
+      open = this.lessThanTenPercentDifferent(this.createAnchorPrice(1000));
     } else {
       open = this.lessThanTenPercentDifferent(previousPrice.close);
     }
@@ -81,7 +81,8 @@ module.exports = {
       high,
       low,
       close,
-      volume: 'INTEGER'
+      // TODO: more realistic volume patterns??
+      volume: Math.round(Math.random() * 1000000)
     };
   },
 
