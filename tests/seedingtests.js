@@ -109,7 +109,6 @@ describe('Prices Seeding Script', () => {
 
   describe('generatePricesList', () => {
     const pricesList = prices.generatePricesList();
-    console.log('pricesList: ', pricesList);
 
     it('Should return an array', () => {
       expect(pricesList).to.be.an.instanceOf(Array);
@@ -127,28 +126,44 @@ describe('Prices Seeding Script', () => {
         current = pricesList[i].open
         previous = pricesList[i - 1].close
 
-        console.log() // TODO: ...
         // expect them to be less than 10% different from each other
-        expect((current > previous * 0.90) || (current < previous * 1.10)).to.be.true;
+        expect((current > previous * 0.90 && current < previous) || (current < previous * 1.10 && current > previous)).to.be.true;
       }
     });
   });
 
-  xdescribe('Date', () => {
-    it('Each price object should have a date', () => {
+  describe('Date', () => {
+    const pricesList = prices.generatePricesList();
 
+    it('Each price object should have a dateTime as an ISO 8601 Extended Format string', () => {
+      pricesList.forEach(price => {
+        expect(price.dateTime).to.be.a('string');
+        expect(new Date(price.dateTime)).to.be.an.instanceOf(Date);
+      });
     });
 
     it('The first dateTime should have a time of 9:30 AM', () => {
-
+      expect(new Date(pricesList[0].dateTime).getUTCHours()).to.equal(9);
+      expect(new Date(pricesList[0].dateTime).getUTCMinutes()).to.equal(30);
     });
 
     it('Each subsequent dateTime in a day should add 1 hour to the time', () => {
-
+      // iterate through the collection, starting from the second element
+      for (let i = 1; i < pricesList.length; i++) {
+        // if the index does NOT divide evenly by 7
+        if (i % 7 !== 0) {
+          // check that the current dateTime's hour is one greater than the previous dateTime's hour
+          expect(new Date(pricesList[i].dateTime).getUTCHours()).to.equal(new Date(pricesList[i - 1].dateTime).getUTCHours() + 1);
+        }
+      }
     });
 
     it('Every 7th dateTime should increment the day by 1', () => {
-
+      for (let i = 1; i < pricesList.length; i++) {
+        if (i % 7 === 0) {
+          expect(new Date(pricesList[i].dateTime).getTime()).to.equal(new Date(pricesList[i - 1].dateTime).getTime() + 64800000);
+        }
+      }
     });
   });
 });

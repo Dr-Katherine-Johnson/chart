@@ -35,17 +35,15 @@ module.exports = {
     const result = [];
 
     for (let i = 0; i < 1750; i++) {
-      result.push(this.generateDate(this.generatePrice(), i, result[i - 1]));
+      result.push(this.generateDate(this.generatePrice(result[i - 1]), i, result[i - 1]));
     }
     return result;
   },
 
   generatePrice(previousPrice) {
-    // console.log('previousPrice: ', previousPrice);
-
     // set open price first
     let open;
-    if (previousPrice === undefined) { // TODO: might need to change if you update the arguments to generatePrice in generatePricesList()
+    if (previousPrice === undefined) {
       open = this.lessThanTenPercentDifferent(this.createAnchorPrice(1000));
     } else {
       open = this.lessThanTenPercentDifferent(previousPrice.close);
@@ -92,21 +90,19 @@ module.exports = {
     // index is 0, generate 9:30 AM on today's date
     if (index === 0) {
       const now = new Date();
-      console.log('now: ', now);
       dateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9 - (new Date().getTimezoneOffset() / 60), 30);
-      // console.log('dateTime: ', dateTime);
 
     } else if (index % 7 === 0) {
-      const prevDateTime = prev.dateTime;
+      const prevDateTime = new Date(prev.dateTime);
       // index DOES divide by 7 evenly, add the amount of milliseconds to the next day's 9:30 AM
       dateTime = new Date(prevDateTime.getTime() + 64800000);
     } else {
-      const prevDateTime = prev.dateTime;
+      const prevDateTime = new Date(prev.dateTime);
       // index does NOT divide by 7 evenly, add 1 hour to the previous dateTime
       dateTime = new Date(prevDateTime.getTime() + 3600000);
     }
 
-    return Object.assign({}, priceObject, { dateTime });
+    return Object.assign({}, priceObject, { dateTime: dateTime.toISOString() });
   },
 
   // returns a number that is less than 10% different from its argument
