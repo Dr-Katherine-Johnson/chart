@@ -72,7 +72,6 @@ describe('Prices Seeding Script', () => {
   });
 
   describe('generatePrice', () => {
-    // TODO: is this a good way of entering initial sample data?
     const priceObject = prices.generatePrice();
 
     it('should return an object', () => {
@@ -104,29 +103,12 @@ describe('Prices Seeding Script', () => {
 
     xit('should have different prices, if volume is greater than 0', () => {
 
-    })
-
-    xit('low price should be no more than 50% lower than anchorPrice', () => {
-
     });
 
-    xit('high price should be no more than 50% higher than anchorPrice', () => {
-
-    });
-
-    it('adjacent prices should be less than 10% different', () => {
-
-    });
-
-    it(`in one price object, high is less than 10% different from low`, () => {
+    it(`in one price object, high is less than 20% different from low`, () => {
       const nextPrice = prices.generatePrice(priceObject);
-      expect((nextPrice.high * 0.9) < nextPrice.low).to.be.true;
+      expect((nextPrice.high * 0.8) < nextPrice.low).to.be.true;
     });
-
-    it(`the previous day's close should be less than 10% different from the next days open`, () => {
-      const price = prices.generatePrice({ close: 100 })
-      expect(price.open > 90).to.be.true;
-    })
   });
 
   describe('generatePricesList', () => {
@@ -137,6 +119,26 @@ describe('Prices Seeding Script', () => {
 
     it('Array should have 1750 objects', () => {
       expect(pricesList).to.have.lengthOf(1750);
+    });
+
+    it(`the previous day's close should be less than 10% different from the next day's open`, () => {
+      // const price = prices.generatePrice()
+      // expect(price.open > 90).to.be.true;
+
+      let current, previous;
+      // iterate through pricesList, starting at the second element
+      for (let i = 1; i < 1750; i++) {
+        // check the current element's open with the previous element's close
+        current = pricesList[i].open
+        previous = pricesList[i - 1].close
+
+        // expect them to be less than 10% different from each other
+        expect((current > previous * 0.90) || (current < previous * 1.10)).to.be.true;
+      }
+    });
+
+    xit('adjacent prices should be less than 10% different', () => {
+      // TODO: unneeded??
     });
   });
 
