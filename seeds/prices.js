@@ -42,14 +42,34 @@ module.exports = {
 
   generatePrice(previousPrice) {
     // console.log('previousPrice: ', previousPrice);
-    let open = this.lessThanTenPercentDifferent(previousPrice.close);
+
+    // set open price first
+    let open;
+    if (previousPrice === undefined) {
+      open = this.lessThanTenPercentDifferent(this.createAnchorPrice());
+    } else {
+      open = this.lessThanTenPercentDifferent(previousPrice.close);
+    }
+
+    // calculate three prices of lessThanTenPercentDifferent
+    let otherPrices = []
+    for (let i = 0; i < 3; i++) {
+      otherPrices.push(this.lessThanTenPercentDifferent(open));
+    }
+
+    // sort them ascending
+    otherPrices.sort((a, b) => a - b);
+
+    const high = otherPrices.pop();
+    const close = otherPrices.pop();
+    const low = otherPrices.pop();
 
     return {
       dateTime: 'DATE',
-      open: open,
-      high: 1,
-      low: 1,
-      close: 1,
+      open,
+      high,
+      low,
+      close,
       volume: 'INTEGER'
     };
   },
