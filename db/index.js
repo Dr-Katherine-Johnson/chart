@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const seed = require('../seeds/seed.js');
 
-// TODO: It's not creating a database in the local mongoDB installation. Why?
-mongoose.connect(`mongodb://127.0.0.1:3000/robinhood`, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(`mongodb://127.0.0.1:27017/robinhood`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 
@@ -11,26 +10,24 @@ db.on('error', (err) => {
 });
 
 db.once('open', () => {
-  console.log('db connected!');
+  console.log('db connected');
 
-  const tickerSchema = new Mongoose.schema({
-    ticker: STRING,
-    name: STRING,
+  const tickerSchema = new mongoose.Schema({
+    ticker: String,
+    name: String,
     prices: [
       {
-        dateTime: DATE,
-        open: NUMBER,
-        high: NUMBER,
-        low: NUMBER,
-        close: NUMBER,
-        volume: NUMBER
+        dateTime: Date,
+        open: Number,
+        high: Number,
+        low: Number,
+        close: Number,
+        volume: Number
       }
     ]
   });
 
   let Ticker = mongoose.model('Ticker', tickerSchema);
-
-
 
   // TODO: how to set this up to only run 1 time??
   Ticker.create(seed.start(), (result) => {
@@ -42,10 +39,4 @@ db.once('open', () => {
 
 module.exports = {
   db,
-  // create(collection, cb) {
-  //   db.create(collection, (err, result) => {
-  //     if (err) { return console.log(err); }
-  //     cb(result);
-  //   });
-  // }
 };;
