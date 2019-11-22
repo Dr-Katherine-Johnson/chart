@@ -1,6 +1,7 @@
 const tickers = require('../seeds/tickers.js');
 const prices = require('../seeds/prices.js');
 const seed = require('../seeds/seed.js');
+const db = require('../db/index.js');
 
 // TICKER SEEDING SCRIPT
 describe('Tickers Seeding Function', () => {
@@ -168,12 +169,14 @@ describe('Prices Seeding Function', () => {
 
 // SEEDING SCRIPT
 xdescribe('Seeding Script', () => {
-  seed.start();
+  const tickersWithPrices = seed.start();
   it('Should return an array of 100 objects', () => {
 
   });
 
-  it('Should save each object to the database', () => {
-
+  it('Should save each object to the database', (done) => {
+    db.seed(() => {
+      done();
+    });
   });
 });
