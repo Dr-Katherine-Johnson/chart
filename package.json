@@ -11,7 +11,8 @@
   "scripts": {
     "dev": "webpack -w",
     "start": "nodemon server/server.js",
-    "test": "mocha tests/seedingtests.js"
+    "test-mocha": "mocha tests/seedingtests.mocha.js",
+    "test": "jest"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -27,6 +28,7 @@
     "chai": "^4.2.0",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "faker": "^4.1.0",
+    "jest": "^24.9.0",
     "mocha": "^6.2.2",
     "nodemon": "^1.19.4",
     "request": "^2.88.0",

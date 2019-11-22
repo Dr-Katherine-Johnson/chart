@@ -1,3 +1,6 @@
+const mocha = require('mocha');
+const expect = require('chai').expect;
+
 const tickers = require('../seeds/tickers.js');
 const prices = require('../seeds/prices.js');
 const seed = require('../seeds/seed.js');
