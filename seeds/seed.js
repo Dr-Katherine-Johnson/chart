@@ -1,8 +1,9 @@
 const prices = require('./prices.js');
 const tickers = require('./tickers.js');
+const db = require('../db/index.js');
 
-// needs to create the array of all the tickers, and add the additional price data
 module.exports = {
+  // Adds the name and price data to each ticker, and returns an array
   start() {
     let tickerList = tickers.createTickers().map(ticker => {
       return {
@@ -12,5 +13,13 @@ module.exports = {
       };
     });
     return tickerList;
+  },
+
+  seedDatabase(cb) {
+    // Creates a document in MongoDB for each ticker
+    db.Ticker.create(this.start(), (result) => {
+      console.log('Prices seeded to database!');
+      cb();
+    });
   }
 };

@@ -168,15 +168,13 @@ describe('Prices Seeding Function', () => {
 });
 
 // SEEDING SCRIPT
-xdescribe('Seeding Script', () => {
+describe.only('Seeding Script', () => {
   const tickersWithPrices = seed.start();
-  it('Should return an array of 100 objects', () => {
+  xit('Should return an array of 100 objects', () => {
 
   });
 
   it('Should save each object to the database', (done) => {
-    db.seed(() => {
-      done();
-    });
-  });
+    seed.seedDatabase(done);
+  }, 40000);
 });
