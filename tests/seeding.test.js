@@ -170,11 +170,41 @@ describe('Prices Seeding Function', () => {
 // SEEDING SCRIPT
 describe.only('Seeding Script', () => {
   const tickersWithPrices = seed.start();
-  xit('Should return an array of 100 objects', () => {
-
+  it('Should return an array of 100 objects', () => {
+    expect(tickersWithPrices).toHaveLength(100);
   });
 
   it('Should save each object to the database', (done) => {
-    seed.seedDatabase(done);
+    // TODO: verify that the db now has 100 unique documents
+    seed.seedDatabase(() => {
+      db.Ticker.count({}, (err, count) => {
+        if (err) { return console.log(err); }
+        expect(count).toBe(100);
+        done();
+      });
+    });
+    // TODO: connect to separate test database for running test runner file
   }, 40000);
+
+  describe('Each ticker', () => {
+    it('Should have ticker & name properties of a String', () => {
+      tickersWithPrices.forEach(ticker => {
+        expect(ticker).toHaveProperty('ticker', expect.any(String));
+        expect(ticker).toHaveProperty('name', expect.any(String));
+      });
+    });
+
+    it('Should have a prices property of an Array', () => {
+      tickersWithPrices.forEach(ticker => {
+        expect(ticker).toHaveProperty('prices', expect.any(Array));
+      });
+    });
+  });
+
+  afterAll(() => {
+    db.Ticker.deleteMany({}, (err, result) => {
+      if (err) { return console.log(err); }
+      // TODO: how to handle callback here with Jest??
+    });
+  });
 });
