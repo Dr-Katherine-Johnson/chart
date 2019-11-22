@@ -15,7 +15,7 @@ module.exports = {
     return tickerList;
   },
 
-  seedDatabase(cb) {
+  seedDatabase(cb = () => {}) {
     // Creates a document in MongoDB for each ticker
     db.Ticker.create(this.start(), (result) => {
       console.log('Prices seeded to database!');

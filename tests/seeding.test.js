@@ -202,6 +202,7 @@ describe.only('Seeding Script', () => {
   });
 
   afterAll(() => {
+    // TODO: should this delete ALL the documents in the testing database??
     db.Ticker.deleteMany({}, (err, result) => {
       if (err) { return console.log(err); }
       // TODO: how to handle callback here with Jest??

@@ -11,7 +11,8 @@
   "scripts": {
     "dev": "webpack -w",
     "start": "nodemon server/server.js",
-    "test": "jest"
+    "test": "jest",
+    "seed": "node seeds/start.js"
   },
   "dependencies": {
     "express": "^4.17.1",
