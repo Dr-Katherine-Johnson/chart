@@ -3,9 +3,10 @@ const expect = require('chai').expect;
 
 const tickers = require('../seeds/tickers.js');
 const prices = require('../seeds/prices.js');
+const seed = require('../seeds/seed.js');
 
 // TICKER SEEDING SCRIPT
-describe('Tickers Seeding Script', () => {
+describe('Tickers Seeding Function', () => {
   const tickerList1 = tickers.createTickers();
   const tickerList2 = tickers.createTickers();
 
@@ -27,7 +28,7 @@ describe('Tickers Seeding Script', () => {
 });
 
 // PRICES SEEDING SCRIPT
-describe('Prices Seeding Script', () => {
+describe('Prices Seeding Function', () => {
   describe('createAnchorPrice', () => {
     it('should return a number between 0 and less than 1000', () => {
       let startingPrice;
@@ -165,5 +166,17 @@ describe('Prices Seeding Script', () => {
         }
       }
     });
+  });
+});
+
+// SEEDING SCRIPT
+xdescribe('Seeding Script', () => {
+  seed.start();
+  it('Should return an array of 100 objects', () => {
+
+  });
+
+  it('Should save each object to the database', () => {
+
   });
 });
