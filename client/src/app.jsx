@@ -25,24 +25,26 @@ class App extends React.Component {
     this.calculatey = this.calculateY.bind(this);
   }
 
-  updateTimeFrame(e) {
-    let dataPointCount = 0;
-    switch (e.target.textContent) {
-      case '1D':
-        dataPointCount = 7;
-        break;
-      case '1W':
-        dataPointCount = 35;
-        break;
-      case '1M':
-        dataPointCount = 140;
-        break;
-      case '3M':
-        dataPointCount = 420;
-        break;
-      case '1Y':
-        dataPointCount = 1680;
-        break;
+  // TODO: need to add tests for these functions ...
+  updateTimeFrame(e, dataPointCount = 1680) {
+    if (e) {
+      switch (e.target.textContent) {
+        case '1D':
+          dataPointCount = 7;
+          break;
+        case '1W':
+          dataPointCount = 35;
+          break;
+        case '1M':
+          dataPointCount = 140;
+          break;
+        case '3M':
+          dataPointCount = 420;
+          break;
+        case '1Y':
+          dataPointCount = 1680;
+          break;
+      }
     }
     let path = 'M0 196';
     let price = null;
@@ -112,6 +114,8 @@ class App extends React.Component {
           low: highLow[1],
           priceRange: highLow[0] - highLow[1]
         });
+
+        this.updateTimeFrame();
       },
       error: (err) => {
         console.log(err);
