@@ -5,38 +5,30 @@ mongoose.connect(`mongodb://127.0.0.1:27017/robinhood`, { useNewUrlParser: true,
 
 const db = mongoose.connection;
 
-db.on('error', (err) => {
-  console.log(err);
+db.on('error', (err) => console.log(err));
+db.once('open', () => console.log('db connected'));
+
+
+// TODO: clarify - I thought the Model definitions needed to be inside the callback to db.once('open', ...) ?? What effect does this have when establishing the db connecion takes significant time ??
+const tickerSchema = new mongoose.Schema({
+  ticker: String,
+  name: String,
+  prices: [
+    {
+      dateTime: Date,
+      open: Number,
+      high: Number,
+      low: Number,
+      close: Number,
+      volume: Number
+    }
+  ]
 });
 
-db.once('open', () => {
-  console.log('db connected');
+const Ticker = mongoose.model('Ticker', tickerSchema);
 
-  const tickerSchema = new mongoose.Schema({
-    ticker: String,
-    name: String,
-    prices: [
-      {
-        dateTime: Date,
-        open: Number,
-        high: Number,
-        low: Number,
-        close: Number,
-        volume: Number
-      }
-    ]
-  });
+const dropAll = () => {
+  return Ticker.deleteMany({});
+}
 
-  let Ticker = mongoose.model('Ticker', tickerSchema);
-
-  // TODO: how to set this up to only run 1 time??
-  Ticker.create(seed.start(), (result) => {
-    console.log('Prices seeded to database!');
-    console.log(result);
-  });
-  // create a document in Mongoose for each ticker
-});
-
-module.exports = {
-  db,
-};;
+module.exports = { db, Ticker, dropAll }

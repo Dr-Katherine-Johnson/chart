@@ -11,7 +11,9 @@
   "scripts": {
     "dev": "webpack -w",
     "start": "nodemon server/server.js",
-    "test": "mocha tests/seedingtests.js"
+    "test": "jest",
+    "test-api": "jest endpoints.test",
+    "seed": "node seeds/start.js"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -24,10 +26,9 @@
     "@babel/core": "^7.7.2",
     "@babel/preset-react": "^7.7.0",
     "babel-loader": "^8.0.6",
-    "chai": "^4.2.0",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "faker": "^4.1.0",
-    "mocha": "^6.2.2",
+    "jest": "^24.9.0",
     "nodemon": "^1.19.4",
     "request": "^2.88.0",
     "webpack": "^4.41.2",
