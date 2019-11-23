@@ -23,4 +23,8 @@ describe('GET /price/:ticker', () => {
       done();
     });
   });
+
+  afterAll(() => {
+    db.db.close();
+  });
 });
