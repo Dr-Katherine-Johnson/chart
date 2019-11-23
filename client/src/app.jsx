@@ -18,7 +18,7 @@ class App extends React.Component {
       priceRange: 0,
       ratingPercent: `81%`,
       peopleOwn: 2500,
-      path: 'M0 196'
+      path: ''
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -27,11 +27,32 @@ class App extends React.Component {
 
   updateTimeFrame(e) {
     // TODO: need to grab the timeframe from the child elements
-    let path = this.state.path;
 
-    this.state.prices.forEach((price, i) => {
-      path += ` L${i} ${this.calculateY(price.open)}`; // TODO: will need to run this for the other prices as well ...
-    });
+    let dataPointCount = null;
+    switch (e.target.textContent) {
+      case '1D':
+        dataPointCount = 7;
+        break;
+      case '1W':
+        dataPointCount = 35;
+        break;
+      case '1M':
+        dataPointCount = 140;
+        break;
+      case '3M':
+        dataPointCount = 420;
+        break;
+      case '1Y':
+        dataPointCount = 1680;
+        break;
+    }
+    let path = 'M0 196';
+    let price = null;
+
+    for (let i = 0; i < dataPointCount; i++) {
+      price = this.state.prices[i];
+      path += ` L${i} ${this.calculateY(price.open)}`;
+    }
 
     this.setState({ path });
   }
