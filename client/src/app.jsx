@@ -26,9 +26,7 @@ class App extends React.Component {
   }
 
   updateTimeFrame(e) {
-    // TODO: need to grab the timeframe from the child elements
-
-    let dataPointCount = null;
+    let dataPointCount = 0;
     switch (e.target.textContent) {
       case '1D':
         dataPointCount = 7;
@@ -51,7 +49,7 @@ class App extends React.Component {
 
     for (let i = 0; i < dataPointCount; i++) {
       price = this.state.prices[i];
-      path += ` L${i} ${this.calculateY(price.open)}`;
+      path += ` L${this.calculateX(dataPointCount, i)} ${this.calculateY(price.open)}`;
     }
 
     this.setState({ path });
@@ -72,6 +70,14 @@ class App extends React.Component {
 
     // use those numbers to determine the range for what the y-axis should be
     return [high, low];
+  }
+
+  calculateX(dataPointCount, i) {
+    // width of svg divided by how many data points for this timeframe
+    const portion = 676 / dataPointCount;
+
+    // calculates a fixed position for how far along this particular data point is in terms of the total number of data points
+    return (portion * i) + portion;
   }
 
   calculateY(price) {
