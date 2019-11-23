@@ -15,10 +15,25 @@ class App extends React.Component {
       prices: Sample.prices,
       high: 0,
       low: 0,
+      priceRange: 0,
       ratingPercent: `81%`,
       peopleOwn: 2500,
-      path: 'M0 300 L10 290'
+      path: 'M0 300'
     }
+
+    this.updateTimeFrame = this.updateTimeFrame.bind(this);
+    this.calculatey = this.calculateY.bind(this);
+  }
+
+  updateTimeFrame(e) {
+    // TODO: need to grab the timeframe from the child elements
+    let path = this.state.path;
+
+    this.state.prices.forEach((price, i) => {
+      path += ` L${i} ${this.calculateY(price.open)}`; // TODO: will need to run this for the other prices as well ...
+    });
+
+    this.setState({ path });
   }
 
   calculateHighAndLow(prices) {
@@ -38,9 +53,14 @@ class App extends React.Component {
     return [high, low];
   }
 
-  calculatePath() {
-    // map the numbers in the y-axis to these prices ??
+  calculateY(price) {
+    // set verticalPercentFromTheBottom as (price - low) / priceRange
+    const verticalPercentFromTheBottom = (price - this.state.low) / this.state.priceRange;
 
+    // set verticalPercentFromTheTop as 1 - verticalPercentFromTheBottom
+    const verticalPercentFromTheTop = 1 - verticalPercentFromTheBottom;
+
+    return 300 * verticalPercentFromTheTop; // TODO: height will need to change if the height of the <svg> changes
   }
 
   componentDidMount() {
@@ -62,7 +82,8 @@ class App extends React.Component {
           name: ticker.name,
           prices: ticker.prices,
           high: highLow[0],
-          low: highLow[1]
+          low: highLow[1],
+          priceRange: highLow[0] - highLow[1]
         });
       },
       error: (err) => {
@@ -84,7 +105,7 @@ class App extends React.Component {
         </div>
         <Chart path={this.state.path}></Chart>
         <div className="chart-footer">
-          <div className="chart-timeframes">
+          <div onClick={this.updateTimeFrame} className="chart-timeframes">
             <span>1D</span>
             <span>1W</span>
             <span>1M</span>
