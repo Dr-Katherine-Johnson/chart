@@ -68,6 +68,7 @@ describe('Prices Seeding Function', () => {
     it('Should generate a random name', () => {
       expect(name1).not.toBe(name2);
     });
+
   });
 
   describe('generatePrice', () => {
@@ -167,23 +168,25 @@ describe('Prices Seeding Function', () => {
   });
 });
 
+// TODO: connect to separate test database for running test runner file
 // SEEDING SCRIPT
-describe.only('Seeding Script', () => {
+describe('Seeding Script', () => {
   const tickersWithPrices = seed.start();
   it('Should return an array of 100 objects', () => {
     expect(tickersWithPrices).toHaveLength(100);
   });
 
   it('Should save each object to the database', (done) => {
-    // TODO: verify that the db now has 100 unique documents
-    seed.seedDatabase(() => {
-      db.Ticker.count({}, (err, count) => {
-        if (err) { return console.log(err); }
-        expect(count).toBe(100);
-        done();
+    db.Ticker.countDocuments({}, (err, prevCount) => {
+      // verifies that the db now has 100 more documents than it had previously
+      seed.seedDatabase(() => {
+        db.Ticker.countDocuments({}, (err, count) => {
+          if (err) { return console.log(err); }
+          expect(count).toBe(prevCount + 100);
+          done();
+        });
       });
     });
-    // TODO: connect to separate test database for running test runner file
   }, 40000);
 
   describe('Each ticker', () => {
@@ -201,11 +204,5 @@ describe.only('Seeding Script', () => {
     });
   });
 
-  afterAll(() => {
-    // TODO: should this delete ALL the documents in the testing database??
-    db.Ticker.deleteMany({}, (err, result) => {
-      if (err) { return console.log(err); }
-      // TODO: how to handle callback here with Jest??
-    });
-  });
+  // TODO: delete ALL the documents in the testing database after each test run??
 });

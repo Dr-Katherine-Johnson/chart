@@ -27,4 +27,8 @@ const tickerSchema = new mongoose.Schema({
 
 const Ticker = mongoose.model('Ticker', tickerSchema);
 
-module.exports = { db, Ticker }
+const dropAll = () => {
+  return Ticker.deleteMany({});
+}
+
+module.exports = { db, Ticker, dropAll }
