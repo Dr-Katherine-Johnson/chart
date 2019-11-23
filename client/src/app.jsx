@@ -18,7 +18,7 @@ class App extends React.Component {
       priceRange: 0,
       ratingPercent: `81%`,
       peopleOwn: 2500,
-      path: 'M0 300'
+      path: 'M0 196'
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -60,7 +60,7 @@ class App extends React.Component {
     // set verticalPercentFromTheTop as 1 - verticalPercentFromTheBottom
     const verticalPercentFromTheTop = 1 - verticalPercentFromTheBottom;
 
-    return 300 * verticalPercentFromTheTop; // TODO: height will need to change if the height of the <svg> changes
+    return 196 * verticalPercentFromTheTop; // TODO: height will need to change if the height of the <svg> changes
   }
 
   componentDidMount() {
