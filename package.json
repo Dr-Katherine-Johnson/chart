@@ -12,7 +12,7 @@
     "dev": "webpack -w",
     "start": "nodemon server/server.js",
     "test": "jest",
-    "test-api": "jest endpoints.test",
+    "test-api": "jest -w endpoints.test",
     "seed": "node seeds/start.js"
   },
   "dependencies": {

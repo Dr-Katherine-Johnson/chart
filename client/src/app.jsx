@@ -23,6 +23,22 @@ class App extends React.Component {
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
     this.calculatey = this.calculateY.bind(this);
+    this.mouseMove = this.mouseMove.bind(this);
+  }
+
+  mouseMove(e) {
+    // debugger;
+    const target = e.target;
+    // console.log(target);
+
+    // get the x distance in the svg
+    // creates / updates?? an absolutely positioned div with an inline style of the current x position of the cursor relative to the width of the svg
+    // debugger;
+    const width = document.querySelector('body').clientWidth;
+    const marginWidth = (width - 676) / 2;
+
+    const offset = e.clientX - marginWidth;
+    console.log('marginWidth: ', marginWidth, 'offset: ', offset);
   }
 
   // TODO: need to add tests for these functions ...
@@ -134,7 +150,11 @@ class App extends React.Component {
           <span className="rating-percent">{this.state.ratingPercent} Hold</span>
           <span className="people-own">{this.state.peopleOwn}</span>
         </div>
-        <Chart path={this.state.path}></Chart>
+        <Chart
+          path={this.state.path}
+          mouseMove={this.mouseMove}
+        >
+        </Chart>
         <div className="chart-footer">
           <div onClick={this.updateTimeFrame} className="chart-timeframes">
             <span>1D</span>
