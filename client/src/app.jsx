@@ -20,7 +20,9 @@ class App extends React.Component {
       peopleOwn: 2500,
       path: '',
       offsetX: null,
-      offsetY: null
+      offsetY: null,
+      timeFrame: '1Y',
+      dataPointCount: 1680
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -33,8 +35,6 @@ class App extends React.Component {
   // TODO: why does the vertical line flicker and / or disappear sometimes?? too many setState calls to fast??
   mouseMove(e) {
     // offsetX & offsetY are the distance of the cursor from the edge of the chart
-
-
     let offsetX = e.nativeEvent.offsetX;
     let offsetY = e.nativeEvent.offsetY;
 
@@ -57,25 +57,25 @@ class App extends React.Component {
 
   // TODO: need to add tests for these functions ...
   updateTimeFrame(e, dataPointCount = 1680) {
-    if (e) {
-      switch (e.target.textContent) {
-        case '1D':
-          dataPointCount = 7;
-          break;
-        case '1W':
-          dataPointCount = 35;
-          break;
-        case '1M':
-          dataPointCount = 140;
-          break;
-        case '3M':
-          dataPointCount = 420;
-          break;
-        case '1Y':
-          dataPointCount = 1680;
-          break;
-      }
+    const timeFrame = e.target.textContent;
+    switch (timeFrame) {
+      case '1D':
+        dataPointCount = 7;
+        break;
+      case '1W':
+        dataPointCount = 35;
+        break;
+      case '1M':
+        dataPointCount = 140;
+        break;
+      case '3M':
+        dataPointCount = 420;
+        break;
+      case '1Y':
+        dataPointCount = 1680;
+        break;
     }
+
     let path = 'M0 196';
     let price = null;
 
@@ -84,7 +84,7 @@ class App extends React.Component {
       path += ` L${this.calculateX(dataPointCount, i)} ${this.calculateY(price.open)}`;
     }
 
-    this.setState({ path });
+    this.setState({ path, timeFrame, dataPointCount });
   }
 
   calculateHighAndLow(prices) {
@@ -145,7 +145,7 @@ class App extends React.Component {
           priceRange: highLow[0] - highLow[1]
         });
 
-        this.updateTimeFrame();
+        this.updateTimeFrame({ target: { textContent: '1Y' }}); // defaults to displaying 1Y timeframe
       },
       error: (err) => {
         console.log(err);
