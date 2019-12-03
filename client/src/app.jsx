@@ -19,42 +19,40 @@ class App extends React.Component {
       ratingPercent: `81%`,
       peopleOwn: 2500,
       path: '',
-      leftOffset: null
+      offsetX: null,
+      offsetY: null
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
     this.calculatey = this.calculateY.bind(this);
     this.mouseMove = this.mouseMove.bind(this);
-  }
-
-  calculateOffsets() {
-
+    this.mouseLeave = this.mouseLeave.bind(this);
   }
 
   // TODO: add tests
+  // TODO: why does the vertical line flicker and / or disappear sometimes?? too many setState calls to fast??
   mouseMove(e) {
-    // calculates the distance from the left side of the chart to the cursor
-    const body = document.querySelector('body');
-    const width = body.clientWidth;
-    const marginWidth = (width - 676) / 2;
-    let leftOffset = e.clientX - marginWidth;
-    // if leftOffest is outside the svg chart, set null
-    if (leftOffset < 0 || leftOffset > 676) {
-      leftOffset = null;
+    // offsetX & offsetY are the distance of the cursor from the edge of the chart
+
+
+    let offsetX = e.nativeEvent.offsetX;
+    let offsetY = e.nativeEvent.offsetY;
+
+    // if either value is outside the svg chart, set null
+    if (offsetX < 0 || offsetX > 676) {
+      offsetX = null;
     }
 
-    debugger;
-    const height = body.clientHeight;
-    // const marginHeight = (height - )
+    if (offsetY < 0 || offsetY > 196) {
+      offsetY = null;
+    }
 
-
-    this.setState({ leftOffset });
+    this.setState({ offsetX, offsetY });
   }
 
   mouseLeave(e) {
-    // when the mouse leaves the chart area, hide the vertical bar
-
-    // TODO: need the same sort of calculation for vertical offset
+    // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
+    this.setState({ offsetX: null, offsetY: null });
   }
 
   // TODO: need to add tests for these functions ...
@@ -169,7 +167,9 @@ class App extends React.Component {
         <Chart
           path={this.state.path}
           mouseMove={this.mouseMove}
-          leftOffset={this.state.leftOffset}
+          mouseLeave={this.mouseLeave}
+          offsetX={this.state.offsetX}
+          offsetY={this.state.offsetY}
         >
         </Chart>
         <div className="chart-footer">
