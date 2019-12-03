@@ -27,21 +27,34 @@ class App extends React.Component {
     this.mouseMove = this.mouseMove.bind(this);
   }
 
+  calculateOffsets() {
+
+  }
+
   // TODO: add tests
   mouseMove(e) {
-    // get the x distance in the svg
-    // creates / updates?? an absolutely positioned div with an inline style of the current x position of the cursor relative to the width of the svg
-    const width = document.querySelector('body').clientWidth;
+    // calculates the distance from the left side of the chart to the cursor
+    const body = document.querySelector('body');
+    const width = body.clientWidth;
     const marginWidth = (width - 676) / 2;
-
     let leftOffset = e.clientX - marginWidth;
-    console.log('marginWidth: ', marginWidth, 'leftOffset: ', leftOffset);
-    // don't set state if leftOffest is outside the svg chart
-    let result;
+    // if leftOffest is outside the svg chart, set null
     if (leftOffset < 0 || leftOffset > 676) {
       leftOffset = null;
     }
+
+    debugger;
+    const height = body.clientHeight;
+    // const marginHeight = (height - )
+
+
     this.setState({ leftOffset });
+  }
+
+  mouseLeave(e) {
+    // when the mouse leaves the chart area, hide the vertical bar
+
+    // TODO: need the same sort of calculation for vertical offset
   }
 
   // TODO: need to add tests for these functions ...
