@@ -18,7 +18,8 @@ class App extends React.Component {
       priceRange: 0,
       ratingPercent: `81%`,
       peopleOwn: 2500,
-      path: ''
+      path: '',
+      leftOffset: null
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -26,19 +27,21 @@ class App extends React.Component {
     this.mouseMove = this.mouseMove.bind(this);
   }
 
+  // TODO: add tests
   mouseMove(e) {
-    // debugger;
-    const target = e.target;
-    // console.log(target);
-
     // get the x distance in the svg
     // creates / updates?? an absolutely positioned div with an inline style of the current x position of the cursor relative to the width of the svg
-    // debugger;
     const width = document.querySelector('body').clientWidth;
     const marginWidth = (width - 676) / 2;
 
-    const offset = e.clientX - marginWidth;
-    console.log('marginWidth: ', marginWidth, 'offset: ', offset);
+    let leftOffset = e.clientX - marginWidth;
+    console.log('marginWidth: ', marginWidth, 'leftOffset: ', leftOffset);
+    // don't set state if leftOffest is outside the svg chart
+    let result;
+    if (leftOffset < 0 || leftOffset > 676) {
+      leftOffset = null;
+    }
+    this.setState({ leftOffset });
   }
 
   // TODO: need to add tests for these functions ...
@@ -153,6 +156,7 @@ class App extends React.Component {
         <Chart
           path={this.state.path}
           mouseMove={this.mouseMove}
+          leftOffset={this.state.leftOffset}
         >
         </Chart>
         <div className="chart-footer">
