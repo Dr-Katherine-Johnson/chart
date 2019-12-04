@@ -23,7 +23,8 @@ class App extends React.Component {
       offsetY: null,
       timeFrame: '1Y',
       dataPointCount: 1680,
-      activeDateTime: null
+      activeDateTime: null,
+      activePrice: null
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -50,7 +51,8 @@ class App extends React.Component {
 
     const timeFrameIndex = this.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX);
     const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
-    this.setState({ offsetX, offsetY, timeFrameIndex, activeDateTime });
+    const activePrice = this.state.prices[timeFrameIndex].open;
+    this.setState({ offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice });
   }
 
   mouseLeave(e) {
@@ -91,7 +93,7 @@ class App extends React.Component {
 
     for (let i = 0; i < dataPointCount; i++) {
       price = this.state.prices[i];
-      path += ` L${this.calculateX(dataPointCount, i)} ${this.calculateY(price.open)}`;
+      path += ` L${this.calculateX(dataPointCount, i)} ${this.calculateY(price.open)}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
     }
 
     this.setState({ path, timeFrame, dataPointCount });
@@ -168,6 +170,7 @@ class App extends React.Component {
       <div className="price-chart">
         <ChartHat
           ticker={this.state.ticker}
+          activePrice={this.state.activePrice}
         >
         </ChartHat>
         <div className="top-right">
