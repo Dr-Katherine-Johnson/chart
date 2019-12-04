@@ -47,12 +47,20 @@ class App extends React.Component {
       offsetY = null;
     }
 
-    this.setState({ offsetX, offsetY });
+    const timeFrameIndex = this.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX);
+    this.setState({ offsetX, offsetY, timeFrameIndex });
   }
 
   mouseLeave(e) {
     // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
     this.setState({ offsetX: null, offsetY: null });
+  }
+
+  // TODO: add tests
+  calculateHoveredTimeFrame(dataPointCount, offsetX) {
+    const timeFrameWidth = 676 / dataPointCount;
+    const timeFrameIndex = Math.floor(offsetX / timeFrameWidth);
+    return timeFrameIndex;
   }
 
   // TODO: need to add tests for these functions ...
