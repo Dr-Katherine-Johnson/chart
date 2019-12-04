@@ -22,7 +22,8 @@ class App extends React.Component {
       offsetX: null,
       offsetY: null,
       timeFrame: '1Y',
-      dataPointCount: 1680
+      dataPointCount: 1680,
+      activeDateTime: null
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -48,7 +49,8 @@ class App extends React.Component {
     }
 
     const timeFrameIndex = this.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX);
-    this.setState({ offsetX, offsetY, timeFrameIndex });
+    const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
+    this.setState({ offsetX, offsetY, timeFrameIndex, activeDateTime });
   }
 
   mouseLeave(e) {
@@ -178,6 +180,7 @@ class App extends React.Component {
           mouseLeave={this.mouseLeave}
           offsetX={this.state.offsetX}
           offsetY={this.state.offsetY}
+          activeDateTime={this.state.activeDateTime}
         >
         </Chart>
         <div className="chart-footer">
