@@ -5,6 +5,10 @@ module.exports = {
     return faker.company.companyName();
   },
 
+  twoDecimalPlaces(num) {
+    return Math.trunc(num * 100) / 100;
+  },
+
   createAnchorPrice(num) {
     // get starting price
     return Math.random() * num;
@@ -51,6 +55,8 @@ module.exports = {
         // else, set the higher of open OR close as high
         high = open >= close ? open : close;
       }
+
+      [open, high, low, close] = [open, high, low, close].map(this.twoDecimalPlaces);
 
     return {
       open,
