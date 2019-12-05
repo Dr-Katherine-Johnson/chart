@@ -55,6 +55,10 @@ class App extends React.Component {
     this.setState({ offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice });
   }
 
+  // get the direction transition working for a single digit
+    //
+  // apply that direction transformation to each digit in the current price
+
   mouseLeave(e) {
     // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
     this.setState({ offsetX: null, offsetY: null });

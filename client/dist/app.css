@@ -2,6 +2,11 @@ body {
   margin: 0;
 }
 
+#active-price {
+  font-size: 2.2rem;
+  padding: 1rem;
+}
+
 .price-chart {
   background-color: #BADA55;
   position: relative;
