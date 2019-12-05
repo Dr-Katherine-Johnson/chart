@@ -23,6 +23,7 @@ class App extends React.Component {
       offsetY: null,
       timeFrame: '1Y',
       dataPointCount: 1680,
+      timeFrameIndex: null,
       activeDateTime: null,
       activePrice: null,
       prevActivePrice: null
@@ -35,12 +36,21 @@ class App extends React.Component {
   }
 
   // TODO: add tests
-  // TODO: why does the vertical line flicker and / or disappear sometimes?? too many setState calls to fast??
   mouseMove(e) {
     // offsetX & offsetY are the distance of the cursor from the edge of the chart
     let offsetX = e.nativeEvent.offsetX;
     let offsetY = e.nativeEvent.offsetY;
 
+
+    // TODO: this seems to improve - but not solve - the flickering issue ... why is this needed??
+    if (offsetX === -1 || offsetY === -0) {
+      return;
+    }
+
+    // console.log('offsetX: ', offsetX, '\n',
+    //             'offsetY: ', offsetY);
+
+    // TODO: is this actually the behavior that I want??
     // if either value is outside the svg chart, set null
     if (offsetX < 0 || offsetX > 676) {
       offsetX = null;
@@ -50,8 +60,12 @@ class App extends React.Component {
       offsetY = null;
     }
 
-    const timeFrameIndex = this.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX);
+    let timeFrameIndex = this.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX);
     const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
+
+    // console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
+    //             'timeFrameIndex: ', timeFrameIndex, '\n',
+    //             'this.state.offsetX: ', this.state.offsetX); // TODO: why is this.state.offsetX sometimes null??
 
     this.setState((state, props) => {
       let newActivePrice = state.prices[timeFrameIndex].open;
@@ -60,21 +74,18 @@ class App extends React.Component {
     });
   }
 
-  // get the direction transition working for a single digit
-    //
-  // apply that direction transformation to each digit in the current price
-
-  mouseLeave(e) {
-    // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
-    this.setState({ offsetX: null, offsetY: null });
-  }
-
   // TODO: add tests
   calculateHoveredTimeFrame(dataPointCount, offsetX) {
     const timeFrameWidth = 676 / dataPointCount;
     const timeFrameIndex = Math.floor(offsetX / timeFrameWidth);
     return timeFrameIndex;
   }
+
+  mouseLeave(e) {
+    // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
+    this.setState({ offsetX: null, offsetY: null });
+  }
+
 
   // TODO: need to add tests for these functions ...
   updateTimeFrame(e, dataPointCount = 1680) {
