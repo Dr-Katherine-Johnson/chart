@@ -24,7 +24,8 @@ class App extends React.Component {
       timeFrame: '1Y',
       dataPointCount: 1680,
       activeDateTime: null,
-      activePrice: null
+      activePrice: null,
+      prevActivePrice: null
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -51,8 +52,12 @@ class App extends React.Component {
 
     const timeFrameIndex = this.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX);
     const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
-    const activePrice = this.state.prices[timeFrameIndex].open;
-    this.setState({ offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice });
+
+    this.setState((state, props) => {
+      let newActivePrice = state.prices[timeFrameIndex].open;
+      let prevActivePrice = state.activePrice;
+      return { offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice: newActivePrice, prevActivePrice }
+    });
   }
 
   // get the direction transition working for a single digit
@@ -175,6 +180,7 @@ class App extends React.Component {
         <ChartHat
           ticker={this.state.ticker}
           activePrice={this.state.activePrice}
+          prevActivePrice={this.state.prevActivePrice}
         >
         </ChartHat>
         <div className="top-right">

@@ -5,6 +5,13 @@ body {
 #active-price {
   font-size: 2.2rem;
   padding: 1rem;
+  position: relative;
+}
+
+.price-wheel {
+  position: absolute;
+  overflow: hidden;
+  transition: all 0.5s;
 }
 
 .price-chart {
