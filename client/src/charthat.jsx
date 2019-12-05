@@ -1,27 +1,37 @@
 import React from 'react';
 
-const ChartHat = ({ ticker, children, activePrice, prevActivePrice }) => {
-  // TODO: only doing the one digit of activePrice for now
-    activePrice = Number(new String(activePrice).split('')[0]);
-    prevActivePrice = Number(new String(prevActivePrice).split('')[0]);
-
+const ChartHat = ({ ticker, children, activePrice }) => {
     // TODO: make into separate component??
-    let priceWheel = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+    let priceWheel = ['$', '.', 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
     priceWheel = priceWheel.map((num, i) => <div key={i}>{num}</div>);
 
-    // TODO: why is each div's height 40px??
-    let bottomOffset = activePrice * -40;
+    let allDigits = null;
+    if (activePrice !== null) {
+      allDigits = new String(activePrice).split('');
+      allDigits.unshift('$');
+      allDigits = allDigits.map((digit, i) => {
+        if (digit === '.') {
+          digit = 10;
+        } else if (digit === '$') {
+          digit = 11;
+        }
+        return (
+          <div
+            key={i}
+            className="price-wheel"
+            style={{ bottom: -(digit * 40), left: i * 20 }}
+          >
+            {priceWheel}
+          </div>
+          );
+        });
+    }
+
   return (
     <>
       <h1>{ticker}</h1>
       <div id="active-price">
-        <div
-          className="price-wheel"
-          style={{ bottom: bottomOffset }}
-        >
-          {priceWheel}
-          {/* {activePrice} */}
-        </div>
+        {allDigits}
       </div>
       {/* TODO: what are these percent changes computed from?? */}
       <div>Absolute and % change</div>

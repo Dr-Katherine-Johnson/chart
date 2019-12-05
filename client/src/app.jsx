@@ -174,7 +174,8 @@ class App extends React.Component {
           prices: ticker.prices,
           high: highLow[0],
           low: highLow[1],
-          priceRange: highLow[0] - highLow[1]
+          priceRange: highLow[0] - highLow[1],
+          activePrice: ticker.prices[0].open // defaults to displaying the first price
         });
 
         this.updateTimeFrame({ target: { textContent: '1Y' }}); // defaults to displaying 1Y timeframe

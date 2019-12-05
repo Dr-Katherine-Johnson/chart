@@ -2,23 +2,19 @@ body {
   margin: 0;
 }
 
+/* CHART HAT */
 #active-price {
   font-size: 2.2rem;
-  padding: 1rem;
+  padding-top: 1.3rem;
+  padding-bottom: 1.3rem;
   position: relative;
+  overflow: hidden;
 }
 
 .price-wheel {
   position: absolute;
   overflow: hidden;
   transition: all 0.5s;
-}
-
-.price-chart {
-  background-color: #BADA55;
-  position: relative;
-  width: 676px;
-  margin: 0 auto;
 }
 
 .top-right {
@@ -29,6 +25,14 @@ body {
   max-width: 200px;
   min-width: 150px;
   justify-content: space-evenly;
+}
+
+/* CHART */
+.price-chart {
+  background-color: #BADA55;
+  position: relative;
+  width: 676px;
+  margin: 0 auto;
 }
 
 .chart {
@@ -43,6 +47,7 @@ body {
   height: 216px;
 }
 
+/* VERTICAL LINE & DATE */
 #vertical-line {
   width: 0;
   height: 196px;
@@ -53,7 +58,7 @@ body {
   text-align: center;
   background-color: tan;
   width: 150px;
-  /* better way to do this? it feels hacky ... */
+  /* TODO: better way to do this? it feels hacky ... */
   margin-left: -75px;
 }
 
@@ -61,6 +66,7 @@ body {
   height: 2rem;
 }
 
+/* CHART FOOTER */
 .chart-footer {
   display: flex;
   background-color: lightblue;
