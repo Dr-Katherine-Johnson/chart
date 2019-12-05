@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ChartHat = ({ ticker, children, activePrice }) => {
+const ChartHat = ({ ticker, activePrice }) => {
     // TODO: make into separate component??
     let priceWheel = ['$', '.', 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
     priceWheel = priceWheel.map((num, i) => <div key={i}>{num}</div>);
@@ -33,7 +33,6 @@ const ChartHat = ({ ticker, children, activePrice }) => {
       <div id="active-price">
         {allDigits}
       </div>
-      {/* TODO: what are these percent changes computed from?? */}
       <div>Absolute and % change</div>
       <div id="hover-active-datetime"></div>
     </>
