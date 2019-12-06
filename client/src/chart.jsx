@@ -15,7 +15,7 @@ const Chart = ({ path, mouseMove, mouseLeave, offsetX, offsetY, activeDateTime }
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <path d={path} fill="transparent" stroke="black"></path>
       </svg>
-      {offsetX && offsetY ? verticalLineContainer : null}
+      {offsetX !== null && offsetY !== null ? verticalLineContainer : null}
     </div>
   );
 }

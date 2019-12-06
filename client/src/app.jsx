@@ -37,6 +37,7 @@ class App extends React.Component {
 
   // TODO: add tests
   mouseMove(e) {
+    debugger;
     // offsetX & offsetY are the distance of the cursor from the edge of the chart
     let offsetX = e.nativeEvent.offsetX;
     let offsetY = e.nativeEvent.offsetY;
@@ -63,9 +64,13 @@ class App extends React.Component {
     let timeFrameIndex = this.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX);
     const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
 
-    // console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
-    //             'timeFrameIndex: ', timeFrameIndex, '\n',
-    //             'this.state.offsetX: ', this.state.offsetX); // TODO: why is this.state.offsetX sometimes null??
+    console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
+                'timeFrameIndex: ', timeFrameIndex, '\n',
+                'this.state.offsetX: ', this.state.offsetX, '\n',
+                'offsetX: ', offsetX, '\n',
+                'this.state.offsetY: ', this.state.offsetY, '\n',
+                'offsetY: ', offsetY); // TODO: why is this.state.offsetX sometimes null??
+
 
     this.setState((state, props) => {
       let newActivePrice = state.prices[timeFrameIndex].open;
