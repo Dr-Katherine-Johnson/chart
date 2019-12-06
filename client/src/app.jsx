@@ -37,7 +37,6 @@ class App extends React.Component {
 
   // TODO: add tests
   mouseMove(e) {
-    debugger;
     // offsetX & offsetY are the distance of the cursor from the edge of the chart
     let offsetX = e.nativeEvent.offsetX;
     let offsetY = e.nativeEvent.offsetY;
@@ -51,7 +50,6 @@ class App extends React.Component {
     // console.log('offsetX: ', offsetX, '\n',
     //             'offsetY: ', offsetY);
 
-    // TODO: is this actually the behavior that I want??
     // if either value is outside the svg chart, set null
     if (offsetX < 0 || offsetX > 676) {
       offsetX = null;
@@ -64,12 +62,13 @@ class App extends React.Component {
     let timeFrameIndex = this.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX);
     const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
 
+    // TODO: generates different values for offsetX when hover to the right (-0) VS hover to the left (null) why??
     console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
                 'timeFrameIndex: ', timeFrameIndex, '\n',
                 'this.state.offsetX: ', this.state.offsetX, '\n',
                 'offsetX: ', offsetX, '\n',
                 'this.state.offsetY: ', this.state.offsetY, '\n',
-                'offsetY: ', offsetY); // TODO: why is this.state.offsetX sometimes null??
+                'offsetY: ', offsetY);
 
 
     this.setState((state, props) => {
