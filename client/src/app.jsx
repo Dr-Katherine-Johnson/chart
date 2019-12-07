@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Sample from '../../sampledata/price.js'
+// import Sample from '../../sampledata/price.js'
 import $ from 'jquery';
 import ChartHat from './charthat.jsx';
 import Chart from './chart.jsx';
@@ -9,10 +9,20 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    // default values initially in state
     this.state = {
-      ticker: Sample.ticker,
-      name: Sample.name,
-      prices: Sample.prices,
+      ticker: 'ABCD',
+      name: 'ABCD Company',
+      prices: [
+        {
+          dateTime: new Date("2019-11-16T22:27:19.319Z"),
+          open: 264.03,
+          high: 264.40,
+          low: 264.02,
+          close: 264.35,
+          volume: 96770
+        },
+      ],
       high: 0,
       low: 0,
       priceRange: 0,
@@ -30,7 +40,6 @@ class App extends React.Component {
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
-    this.calculatey = this.calculateY.bind(this);
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseLeave = this.mouseLeave.bind(this);
   }
@@ -149,20 +158,16 @@ class App extends React.Component {
   }
 
   calculateY(price) {
-    // set verticalPercentFromTheBottom as (price - low) / priceRange
     const verticalPercentFromTheBottom = (price - this.state.low) / this.state.priceRange;
-
-    // set verticalPercentFromTheTop as 1 - verticalPercentFromTheBottom
     const verticalPercentFromTheTop = 1 - verticalPercentFromTheBottom;
-
     return 196 * verticalPercentFromTheTop; // TODO: height will need to change if the height of the <svg> changes
   }
 
   componentDidMount() {
     // ajax request to the server for price data
+    const ticker = this.state.ticker;
     $.ajax({
-      // TODO: fixed stock ticker for now
-      url: `http://localhost:3000/price/${'ABCD'}`,
+      url: `http://localhost:3000/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
         ticker.prices.forEach(price => {
