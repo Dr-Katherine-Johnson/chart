@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import Sample from '../../sampledata/price.js'
 import $ from 'jquery';
 import ChartHat from './charthat.jsx';
 import Chart from './chart.jsx';
@@ -167,7 +166,8 @@ class App extends React.Component {
     // ajax request to the server for price data
     const ticker = this.state.ticker;
     $.ajax({
-      url: `http://localhost:3000/price/${ticker}`,
+      // TODO: will the port part of this url become unnecessary to specify when deployed??
+      url: `http://localhost:4444/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
         ticker.prices.forEach(price => {

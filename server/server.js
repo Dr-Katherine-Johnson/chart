@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.port || 4444;
 const controller = require('../controller/index.js');
 
 app.use(express.static('client/dist'));
