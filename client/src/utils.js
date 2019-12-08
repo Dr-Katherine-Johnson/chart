@@ -4,12 +4,13 @@
 
 module.exports = {
   /**
-  * This calculates a fixed position for how far along (ie, from the left side) this particular data point is in terms of the total number of data points
-  * @param {Number} dataPointCount How many data points are in this time frame (ie, a week would have 7)
-  * @param {Number} i The index in the array of the particular data point we're interested in
-  * @param {Number} width The width in pixels of the displayed svg
-  * @returns {Number} The offset in pixels from the left side of the svg (ie, the x coordinate)
-  */
+   *
+   * Calculates a fixed position for how far along (ie, from the left side) this particular data point is in terms of the total number of data points
+   * @param {Number} dataPointCount How many data points are in this time frame (ie, a week would have 7)
+   * @param {Number} i The index in the array of the particular data point we're interested in
+   * @param {Number} width The width in pixels of the displayed svg
+   * @returns {Number} The offset in pixels from the left side of the svg (ie, the x coordinate)
+   */
   calculateX(dataPointCount, i, width) {
     validDataPointCount = Number.isInteger(dataPointCount) && dataPointCount >= 0;
     validI = Number.isInteger(i) && i >= 0;
@@ -25,13 +26,14 @@ module.exports = {
   },
 
   /**
-  *
-  * @param {Number} price The price for this data point
-  * @param {Number} height The height in pixels of the svg
-  * @param {Number} lowest The lowest price in this collection
-  * @param {Number} priceRange The difference between the highest and lowest prices for this collection
-  * @returns {Number} This price's offset from the bottom of the svg, in pixels
-  */
+   *
+   * Calculates a fixed position for how high this data point (this price) should be from the bottom of the svg
+   * @param {Number} price The price for this data point
+   * @param {Number} height The height in pixels of the svg
+   * @param {Number} lowest The lowest price in this collection
+   * @param {Number} priceRange The difference between the highest and lowest prices for this collection
+   * @returns {Number} This price's offset from the bottom of the svg, in pixels
+   */
   calculateY(price, height, lowest, priceRange) {
     // TODO: can this be DRYER??
     const validPrice = Number.isFinite(price) && price >= 0;
@@ -61,20 +63,30 @@ module.exports = {
     return timeFrameIndex;
   },
 
+  /**
+   *
+   * Determines what the highest high and lowest low is for this particular collection of prices
+   * @param {Array} prices An array of price objects, each of which must have a high and low property
+   * @returns {Array} The highest and lowest values in prices
+   */
   calculateHighAndLow(prices) {
-    // determine what the highest high and lowest low is for this particular stock
-    let high = prices[0].high;
-    let low = prices[0].low;
-    for (let i = 1; i < prices.length; i++) {
-      if (prices[i].high > high) {
-        high = prices[i].high;
-      }
-      if (prices[i].low < low) {
-        low = prices[i].low;
-      }
-    }
+    try {
+      let high = prices[0].high;
+      let low = prices[0].low;
 
-    // use those numbers to determine the range for what the y-axis should be
-    return [high, low];
+      for (let i = 1; i < prices.length; i++) {
+        if (prices[i].high > high) {
+          high = prices[i].high;
+        }
+        if (prices[i].low < low) {
+          low = prices[i].low;
+        }
+      }
+
+      return [high, low];
+    } catch(e) {
+      throw e;
+    }
   }
 };
+

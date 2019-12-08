@@ -80,4 +80,86 @@ describe('utils', () => {
       expect(() => utils.calculateY(150, 676, 13.41, 76.56)).toThrowError(message);
     });
   });
+
+  describe('calculateHoveredTimeFrame', () => {
+
+  });
+
+  describe('calculateHighAndLow', () => {
+    let prices = [
+      {
+        dateTime: new Date("2019-11-16T22:27:19.319Z"),
+        open: 264.03,
+        high: 264.40,
+        low: 264.02,
+        close: 264.35,
+        volume: 96770
+      },
+      {
+        dateTime: new Date("2018-11-16T22:27:19.319Z"),
+        open: 24.03,
+        high: 26,
+        low: 22.10,
+        close: 25.31,
+        volume: 170
+      },
+    ]
+
+    const result = utils.calculateHighAndLow(prices);
+
+    it('Should return an array with two positive numbers', () => {
+      expect(result).toEqual(expect.any(Array));
+      expect(result).toHaveLength(2);
+      result.forEach(value => {
+        expect(value).toEqual(expect.any(Number));
+        expect(Number.isFinite(value)).toBe(true);
+        expect(value).toBeGreaterThanOrEqual(0);
+      });
+    });
+
+    it('Should error if prices is NOT an array with at least two objects, which each contain numbers at properties high and low ', () => {
+      const invalidArgs = [
+        [],
+        [1.4],
+        [6, 5],
+        [null, true],
+        [{}, 3],
+        [{}, {}],
+        [{}, {
+          high: 5
+        }],
+        [{}, {
+          high: 5,
+          low: 'tuna'
+        }],
+        [{}, {
+          high: [],
+          low: 'tuna'
+        }]
+      ];
+
+      const validArgs = [
+        [
+          {
+            high: 5.4,
+            low: 3.2
+          },
+          {
+            high: 10.2,
+            low: 9.12
+          }
+        ]
+      ]
+      invalidArgs.forEach(args => {
+        expect(() => utils.calculateHighAndLow(args).toThrowError());
+      });
+      validArgs.forEach(args => {
+        expect(() => utils.calculateHighAndLow(args).not.toThrowError());
+      });
+    });
+
+    it('high should be greater than or equal to low', () => {
+      expect(result[0]).toBeGreaterThanOrEqual(result[1]);
+    });
+  });
 });
