@@ -2,11 +2,11 @@ import React from 'react';
 
 const VerticalLine = ({ offsetX, offsetY, activeDateTime }) => {
   const verticalLineContainer = (
-    <div id="vertical-line-container" style={{ left: offsetX }}>
-      <div id="datetime-container">
+    <div id="chart-chart-vertical-line-container" style={{ left: offsetX }}>
+      <div id="chart-datetime-container">
         {activeDateTime ? activeDateTime.toDateString() : null}
       </div>
-      <div id="vertical-line"></div>
+      <div id="chart-vertical-line"></div>
     </div>
   );
 

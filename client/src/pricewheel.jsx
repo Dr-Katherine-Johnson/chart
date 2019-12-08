@@ -16,7 +16,7 @@ const PriceWheel = ({ activePrice }) => {
          return (
            <div
              key={i}
-             className="price-wheel"
+             className="chart-price-wheel"
              style={{ bottom: -(digit * 40), left: i * 20 }}
            >
              {oneDigitPriceWheel}

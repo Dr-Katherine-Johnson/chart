@@ -9,8 +9,8 @@ describe('CharHat', () => {
     expect(wrapper.find('h1')).toHaveLength(1);
   });
 
-  it('Should have one <div id="active-price">', () => {
-    expect(wrapper.find('#active-price')).toHaveLength(1);
+  it('Should have one <div id="chart-active-price">', () => {
+    expect(wrapper.find('#chart-active-price')).toHaveLength(1);
   });
 
   xit('???', () => {

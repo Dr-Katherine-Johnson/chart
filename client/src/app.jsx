@@ -129,6 +129,7 @@ class App extends React.Component {
     this.setState({ path, timeFrame, dataPointCount });
   }
 
+  // TODO: need additional tests for this ??
   componentDidMount() {
     const ticker = this.state.ticker;
     $.ajax({
@@ -163,16 +164,16 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="price-chart">
+      <div className="chart">
         <ChartHat
           ticker={this.state.ticker}
           activePrice={this.state.activePrice}
           prevActivePrice={this.state.prevActivePrice}
         >
         </ChartHat>
-        <div className="top-right">
-          <span className="rating-percent">{this.state.ratingPercent} Hold</span>
-          <span className="people-own">{this.state.peopleOwn}</span>
+        <div className="chart-top-right">
+          <span className="chart-rating-percent">{this.state.ratingPercent} Hold</span>
+          <span className="chart-people-own">{this.state.peopleOwn}</span>
         </div>
         <Chart
           path={this.state.path}

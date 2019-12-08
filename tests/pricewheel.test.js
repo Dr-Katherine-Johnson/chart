@@ -6,7 +6,7 @@ import PriceWheel from '../client/src/pricewheel.jsx';
 describe('PriceWheel', () => {
   let wrapper = shallow(<PriceWheel activePrice={null} />)
   it('Should have 0 nodes when activePrice is null', () => {
-    expect(wrapper.find('.price-wheel')).toHaveLength(0);
+    expect(wrapper.find('.chart-price-wheel')).toHaveLength(0);
   });
 
   it('Should have the correct number of nodes to account for every digit in the price, as well as the $ (and optionally the dot), when activePrice is a decimal.', () => {
@@ -14,7 +14,7 @@ describe('PriceWheel', () => {
     prices.forEach(price => {
       wrapper = shallow(<PriceWheel activePrice={price} />)
       const digitCount = String(price).length + 1;
-      expect(wrapper.find('.price-wheel')).toHaveLength(digitCount);
+      expect(wrapper.find('.chart-price-wheel')).toHaveLength(digitCount);
     });
   });
 });
