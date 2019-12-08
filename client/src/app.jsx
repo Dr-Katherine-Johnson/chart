@@ -74,13 +74,13 @@ class App extends React.Component {
     let timeFrameIndex = utils.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
     const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
 
-    // TODO: generates different values for offsetX when hover to the right (-0) VS hover to the left (null) why??
-    console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
-                'timeFrameIndex: ', timeFrameIndex, '\n',
-                'this.state.offsetX: ', this.state.offsetX, '\n',
-                'offsetX: ', offsetX, '\n',
-                'this.state.offsetY: ', this.state.offsetY, '\n',
-                'offsetY: ', offsetY);
+    // // TODO: generates different values for offsetX when hover to the right (-0) VS hover to the left (null) why?? ... need to remove returns from around line 70 to see this ...
+    // console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
+    //             'timeFrameIndex: ', timeFrameIndex, '\n',
+    //             'this.state.offsetX: ', this.state.offsetX, '\n',
+    //             'offsetX: ', offsetX, '\n',
+    //             'this.state.offsetY: ', this.state.offsetY, '\n',
+    //             'offsetY: ', offsetY);
 
 
     this.setState((state, props) => {
@@ -91,15 +91,13 @@ class App extends React.Component {
   }
 
   // TODO: add tests
-
-
   mouseLeave(e) {
     // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
     this.setState({ offsetX: null, offsetY: null });
   }
 
 
-  // TODO: need to add tests for these functions ...
+  // TODO: add tests
   updateTimeFrame(e, dataPointCount = 1680) {
     const timeFrame = e.target.textContent;
     switch (timeFrame) {
@@ -132,7 +130,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // ajax request to the server for price data
     const ticker = this.state.ticker;
     $.ajax({
       // TODO: will the port part of this url become unnecessary to specify when deployed??
