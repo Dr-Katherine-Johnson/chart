@@ -13,9 +13,9 @@
     "start": "nodemon server/server.js",
     "test": "jest --watchAll",
     "test:coverage": "jest --coverage --colors",
-    "test:api": "jest -w endpoints.test",
-    "test:utils": "jest utils.test",
-    "test:chart": "jest chart.test",
+    "test:api": "jest --watch endpoints.test.js",
+    "test:utils": "jest --watch utils.test.js",
+    "test:chart": "jest --watch chart.test.js",
     "seed": "node seeds/start.js"
   },
   "dependencies": {
