@@ -82,7 +82,37 @@ describe('utils', () => {
   });
 
   describe('calculateHoveredTimeFrame', () => {
+    it('Should return a positive integer', () => {
+      const result = utils.calculateHoveredTimeFrame(7, 100, 676);
+      expect(result).toBeGreaterThanOrEqual(0);
+      expect(Number.isInteger(result)).toBe(true);
+    });
 
+    it('Should error if dataPointCount is NOT a positive integer greater than or equal to 0', () => {
+      const invalidArgs = [1.4, -1.4, -90, null, undefined, NaN, true, false, '', 'salmon', [], {}]
+      const validArgs = [0, 1, 5, 10, 100, 500, 1700]
+
+      invalidArgs.forEach(arg => {
+        expect(() => utils.calculateHoveredTimeFrame(arg, 100, 676)).toThrowError();
+      });
+      validArgs.forEach(arg => {
+        expect(() => utils.calculateHoveredTimeFrame(arg, 100, 676)).not.toThrowError();
+      });
+    });
+
+    it('Should error if offsetX or width are NOT positive numbers', () => {
+      const invalidArgs = [-1.4, -90, null, undefined, NaN, true, false, '', 'salmon', [], {}]
+      const validArgs = [1, 5, 6.5, 10, 100, 234.64, 500, 1700]
+
+      invalidArgs.forEach(arg => {
+        expect(() => utils.calculateHoveredTimeFrame(7, arg, 676)).toThrowError();
+        expect(() => utils.calculateHoveredTimeFrame(7, 100, arg)).toThrowError();
+      });
+      validArgs.forEach(arg => {
+        expect(() => utils.calculateHoveredTimeFrame(7, arg, 676)).not.toThrowError();
+        expect(() => utils.calculateHoveredTimeFrame(7, 100, arg)).not.toThrowError();
+      });
+    });
   });
 
   describe('calculateHighAndLow', () => {

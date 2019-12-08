@@ -61,13 +61,14 @@ class App extends React.Component {
     // console.log('offsetX: ', offsetX, '\n',
     //             'offsetY: ', offsetY);
 
+    // TODO: where do null and -0 come from??
     // if either value is outside the svg chart, set null
-    if (offsetX < 0 || offsetX > 676) {
-      offsetX = null;
+    if (offsetX < 0 || offsetX > 676 || offsetX === -0) {
+      return;
     }
 
-    if (offsetY < 0 || offsetY > 196) {
-      offsetY = null;
+    if (offsetY < 0 || offsetY > 196 || offsetY === -0) {
+      return;
     }
 
     let timeFrameIndex = utils.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);

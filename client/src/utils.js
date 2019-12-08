@@ -1,11 +1,7 @@
-
-
-
-
 module.exports = {
   /**
    *
-   * Calculates a fixed position for how far along (ie, from the left side) this particular data point is in terms of the total number of data points
+   * Calculates a fixed position for how far along (ie, from the left edge) this particular data point is in terms of the total number of data points
    * @param {Number} dataPointCount How many data points are in this time frame (ie, a week would have 7)
    * @param {Number} i The index in the array of the particular data point we're interested in
    * @param {Number} width The width in pixels of the displayed svg
@@ -35,7 +31,6 @@ module.exports = {
    * @returns {Number} This price's offset from the bottom of the svg, in pixels
    */
   calculateY(price, height, lowest, priceRange) {
-    // TODO: can this be DRYER??
     const validPrice = Number.isFinite(price) && price >= 0;
     const validHeight = Number.isFinite(height) && height >= 0;
     const validLowest = Number.isFinite(lowest) && lowest >= 0;
@@ -57,10 +52,25 @@ module.exports = {
     }
   },
 
+  /**
+   *
+   *
+   * @param {Number} dataPointCount How many data points are in this time frame (ie, a week would have 7)
+   * @param {Number} offsetX the offset in pixels from the left edge of the svg
+   * @param {Number} width The width in pixels of the displayed svg
+   * @returns {Number} The index in the prices collection of the data point (ie, the price) being hovered over
+   */
   calculateHoveredTimeFrame(dataPointCount, offsetX, width) {
-    const timeFrameWidth = width / dataPointCount;
-    const timeFrameIndex = Math.floor(offsetX / timeFrameWidth);
-    return timeFrameIndex;
+    const validDataPointCount = Number.isInteger(dataPointCount) && dataPointCount >= 0;
+    const validOffsetX = Number.isFinite(offsetX) && offsetX > 0;
+    const validWidth = Number.isFinite(width) && width > 0;
+
+    if (validDataPointCount && validOffsetX && validWidth) {
+      const timeFrameWidth = width / dataPointCount;
+      return Math.floor(offsetX / timeFrameWidth);
+    } else {
+      throw new Error();
+    }
   },
 
   /**
@@ -89,4 +99,3 @@ module.exports = {
     }
   }
 };
-
