@@ -14,6 +14,7 @@ module.exports = {
     validDataPointCount = Number.isInteger(dataPointCount) && dataPointCount >= 0;
     validI = Number.isInteger(i) && i >= 0;
     validWidth = Number.isInteger(width) && width > 0;
+
     if (validDataPointCount && validI && validWidth) {
       const portion = width / dataPointCount;
       return (portion * i) + portion;
@@ -25,16 +26,33 @@ module.exports = {
 
   /**
   *
-  * @param {*} price
-  * @param {*} height
-  * @param {*} low
-  * @param {*} priceRange
-  * @returns
+  * @param {Number} price The price for this data point
+  * @param {Number} height The height in pixels of the svg
+  * @param {Number} lowest The lowest price in this collection
+  * @param {Number} priceRange The difference between the highest and lowest prices for this collection
+  * @returns {Number} This price's offset from the bottom of the svg, in pixels
   */
-  function calculateY(price, height, low, priceRange) {
-    const verticalPercentFromTheBottom = (price - low) / priceRange;
-    const verticalPercentFromTheTop = 1 - verticalPercentFromTheBottom;
-    return height * verticalPercentFromTheTop;
+  calculateY(price, height, lowest, priceRange) {
+    // TODO: can this be DRYER??
+    const validPrice = Number.isFinite(price) && price >= 0;
+    const validHeight = Number.isFinite(height) && height >= 0;
+    const validLowest = Number.isFinite(lowest) && lowest >= 0;
+    const validPriceRange = Number.isFinite(priceRange) && priceRange >= 0;
+
+    if (validPrice && validHeight && validLowest && validPriceRange) {
+      if (lowest !== 0 && priceRange !== 0) {
+        if (price < lowest) {
+          throw new Error('The current price must be greater than or equal to the lowest price.');
+        } else if (price >= (lowest + priceRange)) {
+          throw new Error('The current price must be less than lowest + priceRange');
+        }
+      }
+      const percentFromTheBottom = (price - lowest) / priceRange;
+      const percentFromTheTop = 1 - percentFromTheBottom;
+      return height * percentFromTheTop;
+    } else {
+      throw new Error();
+    }
   },
 
   calculateHoveredTimeFrame(dataPointCount, offsetX, width) {
