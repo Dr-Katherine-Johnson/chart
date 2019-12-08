@@ -17,6 +17,7 @@
     "test:utils": "jest --watch utils.test.js",
     "test:chart": "jest --watch chart.test.js",
     "test:verticalline": "jest --watch verticalline.test.js",
+    "test:pricewheel": "jest --watch pricewheel.test.js",
     "seed": "node seeds/start.js"
   },
   "dependencies": {

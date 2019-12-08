@@ -11,8 +11,7 @@ const Chart = ({ path, mouseMove, mouseLeave, offsetX, offsetY, activeDateTime }
       offsetX={offsetX}
       offsetY={offsetY}
       activeDateTime={activeDateTime}
-    >
-    </VerticalLine>
+    />
     </div>
   );
 }
