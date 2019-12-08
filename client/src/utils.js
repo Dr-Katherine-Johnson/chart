@@ -1,16 +1,40 @@
-module.exports = {
-  calculateX(dataPointCount, i, width) {
-    // width of svg divided by how many data points for this timeframe
-    const portion = width / dataPointCount;
 
-    // calculates a fixed position for how far along this particular data point is in terms of the total number of data points
-    return (portion * i) + portion;
+
+
+
+module.exports = {
+  /**
+  * This calculates a fixed position for how far along (ie, from the left side) this particular data point is in terms of the total number of data points
+  * @param {Number} dataPointCount How many data points are in this time frame (ie, a week would have 7)
+  * @param {Number} i The index in the array of the particular data point we're interested in
+  * @param {Number} width The width in pixels of the displayed svg
+  * @returns {Number} The offset in pixels from the left side of the svg (ie, the x coordinate)
+  */
+  calculateX(dataPointCount, i, width) {
+    validDataPointCount = Number.isInteger(dataPointCount) && dataPointCount >= 0;
+    validI = Number.isInteger(i) && i >= 0;
+    validWidth = Number.isInteger(width) && width > 0;
+    if (validDataPointCount && validI && validWidth) {
+      const portion = width / dataPointCount;
+      return (portion * i) + portion;
+    } else {
+      throw new Error();
+    }
+
   },
 
-  calculateY(price, height, low, priceRange) {
+  /**
+  *
+  * @param {*} price
+  * @param {*} height
+  * @param {*} low
+  * @param {*} priceRange
+  * @returns
+  */
+  function calculateY(price, height, low, priceRange) {
     const verticalPercentFromTheBottom = (price - low) / priceRange;
     const verticalPercentFromTheTop = 1 - verticalPercentFromTheBottom;
-    return height * verticalPercentFromTheTop; // TODO: height will need to change if the height of the <svg> changes
+    return height * verticalPercentFromTheTop;
   },
 
   calculateHoveredTimeFrame(dataPointCount, offsetX, width) {

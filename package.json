@@ -13,6 +13,7 @@
     "start": "nodemon server/server.js",
     "test": "jest",
     "test-api": "jest -w endpoints.test",
+    "test-utils": "jest utils.test",
     "seed": "node seeds/start.js"
   },
   "dependencies": {
