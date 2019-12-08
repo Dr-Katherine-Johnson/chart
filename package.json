@@ -11,9 +11,11 @@
   "scripts": {
     "dev": "webpack -w",
     "start": "nodemon server/server.js",
-    "test": "jest",
-    "test-api": "jest -w endpoints.test",
-    "test-utils": "jest utils.test",
+    "test": "jest --watchAll",
+    "test:coverage": "jest --coverage --colors",
+    "test:api": "jest -w endpoints.test",
+    "test:utils": "jest utils.test",
+    "test:chart": "jest chart.test",
     "seed": "node seeds/start.js"
   },
   "dependencies": {
@@ -26,8 +28,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.6",
     "@babel/preset-react": "^7.7.0",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "faker": "^4.1.0",
     "jest": "^24.9.0",
