@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import ChartHat from './charthat.jsx';
 import Chart from './chart.jsx';
+import utils from './utils.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -22,6 +23,8 @@ class App extends React.Component {
           volume: 96770
         },
       ],
+      width: 676,
+      height: 196,
       high: 0,
       low: 0,
       priceRange: 0,
@@ -67,7 +70,7 @@ class App extends React.Component {
       offsetY = null;
     }
 
-    let timeFrameIndex = this.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX);
+    let timeFrameIndex = utils.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
     const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
 
     // TODO: generates different values for offsetX when hover to the right (-0) VS hover to the left (null) why??
@@ -87,11 +90,7 @@ class App extends React.Component {
   }
 
   // TODO: add tests
-  calculateHoveredTimeFrame(dataPointCount, offsetX) {
-    const timeFrameWidth = 676 / dataPointCount;
-    const timeFrameIndex = Math.floor(offsetX / timeFrameWidth);
-    return timeFrameIndex;
-  }
+
 
   mouseLeave(e) {
     // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
@@ -125,41 +124,10 @@ class App extends React.Component {
 
     for (let i = 0; i < dataPointCount; i++) {
       price = this.state.prices[i];
-      path += ` L${this.calculateX(dataPointCount, i)} ${this.calculateY(price.open)}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
+      path += ` L${utils.calculateX(dataPointCount, i, this.state.width)} ${utils.calculateY(price.open, this.state.height, this.state.low, this.state.priceRange)}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
     }
 
     this.setState({ path, timeFrame, dataPointCount });
-  }
-
-  calculateHighAndLow(prices) {
-    // determine what the highest high and lowest low is for this particular stock
-    let high = prices[0].high;
-    let low = prices[0].low;
-    for (let i = 1; i < prices.length; i++) {
-      if (prices[i].high > high) {
-        high = prices[i].high;
-      }
-      if (prices[i].low < low) {
-        low = prices[i].low;
-      }
-    }
-
-    // use those numbers to determine the range for what the y-axis should be
-    return [high, low];
-  }
-
-  calculateX(dataPointCount, i) {
-    // width of svg divided by how many data points for this timeframe
-    const portion = 676 / dataPointCount;
-
-    // calculates a fixed position for how far along this particular data point is in terms of the total number of data points
-    return (portion * i) + portion;
-  }
-
-  calculateY(price) {
-    const verticalPercentFromTheBottom = (price - this.state.low) / this.state.priceRange;
-    const verticalPercentFromTheTop = 1 - verticalPercentFromTheBottom;
-    return 196 * verticalPercentFromTheTop; // TODO: height will need to change if the height of the <svg> changes
   }
 
   componentDidMount() {
@@ -175,7 +143,7 @@ class App extends React.Component {
           price.dateTime = new Date(new Date(price.dateTime).getTime() + new Date().getTimezoneOffset() * 60 * 1000);
         });
 
-        const highLow = this.calculateHighAndLow(ticker.prices);
+        const highLow = utils.calculateHighAndLow(ticker.prices);
 
         this.setState({
           ticker: ticker.ticker,
