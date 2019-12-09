@@ -1,13 +1,17 @@
 import React from 'react';
+import PriceWheel from './pricewheel.jsx';
 
-const ChartHat = ({ ticker, children }) => {
+const ChartHat = ({ ticker, activePrice }) => {
   return (
     <>
       <h1>{ticker}</h1>
-      <div>This is the price that is currently being hovered over</div>
-      {/* TODO: what are these percent changes computed from?? */}
+      <div id="chart-active-price">
+        <PriceWheel
+          activePrice={activePrice}
+        />
+      </div>
       <div>Absolute and % change</div>
-
+      <div id="chart-hover-active-datetime"></div>
     </>
   );
 };

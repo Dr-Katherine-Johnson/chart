@@ -1,0 +1,88 @@
+body {
+  margin: 0;
+}
+
+/* CHART HAT */
+#chart-active-price {
+  font-size: 2.2rem;
+  padding-top: 1.3rem;
+  padding-bottom: 1.3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-price-wheel {
+  position: absolute;
+  overflow: hidden;
+  transition: all 0.5s;
+}
+
+.chart-top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  max-width: 200px;
+  min-width: 150px;
+  justify-content: space-evenly;
+}
+
+.chart-rating-percent {
+
+}
+
+.chart-people-own {
+
+}
+
+/* CHART */
+.chart {
+  background-color: #BADA55;
+  position: relative;
+  width: 676px;
+  margin: 0 auto;
+}
+
+.chart-svg-container {
+  height: 196px;
+  position: relative;
+  background-color: gray;
+}
+
+#chart-chart-vertical-line-container {
+  position: absolute;
+  top: -20px;
+  height: 216px;
+}
+
+/* VERTICAL LINE & DATE */
+#chart-vertical-line {
+  width: 0;
+  height: 196px;
+  border: 1px solid red;
+}
+
+#chart-datetime-container {
+  text-align: center;
+  background-color: tan;
+  width: 150px;
+  /* TODO: better way to do this? it feels hacky ... */
+  margin-left: -75px;
+}
+
+#chart-hover-active-datetime {
+  height: 2rem;
+}
+
+/* CHART FOOTER */
+.chart-footer {
+  display: flex;
+  background-color: lightblue;
+  justify-content: space-between;
+  padding: 7px;
+  border-bottom: 2px solid black;
+}
+
+.chart-timeframes > span {
+  margin-right: 10px;
+}

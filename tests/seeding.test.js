@@ -27,6 +27,16 @@ describe('Tickers Seeding Function', () => {
 
 // PRICES SEEDING SCRIPT
 describe('Prices Seeding Function', () => {
+  describe('twoDecimalPlaces', () => {
+    it('Should return a floating point number with only two decimal places', () => {
+      expect(prices.twoDecimalPlaces(123.456789)).toBeCloseTo(123.45);
+    });
+
+    it('Should return NaN with no argument', () => {
+      expect(prices.twoDecimalPlaces()).toBeNaN();
+    })
+  });
+
   describe('createAnchorPrice', () => {
     it('should return a number between 0 and less than 1000', () => {
       let startingPrice;
@@ -41,12 +51,8 @@ describe('Prices Seeding Function', () => {
     it('should return a number that is less than 10% different - either greater or lesser - than its argument', () => {
 
       let random, num;
-      // iterate 1000 times
       for (let i = 0; i < 1000; i++) {
-        // make a random number between 0 and 1000
         random = Math.random() * 1000;
-
-        // save num as return from lessThanTenPercentDifferent on that random number
         num = prices.lessThanTenPercentDifferent(random);
 
         // verify that num is either
@@ -118,16 +124,24 @@ describe('Prices Seeding Function', () => {
       expect(pricesList).toHaveLength(1750);
     });
 
-    it(`the previous day's close should be less than 10% different from the next day's open`, () => {
-      let current, previous;
+    it(`the previous day's close should be less than or equal to 10% different from the next day's open`, () => {
+      let result, current, previous, above, below;
       // iterate through pricesList, starting at the second element
       for (let i = 1; i < 1750; i++) {
         // check the current element's open with the previous element's close
         current = pricesList[i].open
         previous = pricesList[i - 1].close
 
-        // expect them to be less than 10% different from each other
-        expect((current > previous * 0.90 && current < previous) || (current < previous * 1.10 && current > previous)).toBe(true);
+        // expect them to be less than or equal to 10% different from each other
+        below = prices.twoDecimalPlaces(previous * 0.90);
+        above = prices.twoDecimalPlaces(previous * 1.10);
+
+        if (current >= below && current <= previous || current <= above && current >= previous) {
+          result = true;
+        } else {
+          result = false;
+        }
+        expect(result).toBe(true);
       }
     });
   });
