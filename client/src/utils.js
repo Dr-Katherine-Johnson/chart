@@ -69,10 +69,10 @@ module.exports = {
       const timeFrameWidth = width / dataPointCount;
       return Math.floor(offsetX / timeFrameWidth);
     } else {
-      // console.log('dataPointCount: ', dataPointCount, '\n',
-      //             'offsetX: ', offsetX, '\n',
-      //             'width: ', width);
-      // // // throw new Error();
+      console.log('dataPointCount: ', dataPointCount, '\n',
+                  'offsetX: ', offsetX, '\n',
+                  'width: ', width);
+      throw new Error();
     }
   },
 
