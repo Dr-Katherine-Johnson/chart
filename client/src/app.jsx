@@ -73,19 +73,29 @@ class App extends React.Component {
     // .chart-svg-container , this is the element the eventhandler is attached to
     if (e.currentTarget.classList.contains('chart-svg-container')) {
 
-      //TESTING
-      // immediately returning if e.target is .chart-vertical-line OR .chart-vertical-line-container
-      // **************WORKS**************
-      // this stops the flickering, but the UI response is then very choppy ...
-      // TODO: how to improve this??
-      if (e.target.id === 'chart-vertical-line' || e.target.id === 'chart-vertical-line-container') {
-        return;
-      }
+      // //TESTING
+      // // immediately returning if e.target is .chart-vertical-line OR .chart-vertical-line-container
+      // // **************WORKS**************
+      // // this stops the flickering, but the UI response is then very choppy ...
+      // // TODO: how to improve this??
+      // if (e.target.id === 'chart-vertical-line' || e.target.id === 'chart-vertical-line-container') {
+      //   return;
+      // }
+
+      // TODO: need to manually calculate offsetX and offsetX, because e.offsetX & e.offsetY give the offsets in those dimensions to the e.target ... the element I want to calculate relative to is .chart-svg-container
+
+      // leftMargin = distance between start of .chart-svg-container and left edge of the screen
+        // (window.innerWidth - width of .chart-svg-container) / 2
+      // e.pageX - leftMargin
+
+
+      let leftMargin = (window.innerWidth - document.querySelector('.chart-svg-container').clientWidth) / 2;
+      let offsetX = e.pageX - leftMargin;
       // this is the only place I want to calculate the offsets ...
       console.log('y');
 
       // offsetX & offsetY are the distance of the cursor from the edge of the chart
-      let offsetX = e.nativeEvent.offsetX;
+      // let offsetX = e.nativeEvent.offsetX;
       let offsetY = e.nativeEvent.offsetY;
 
       console.log('offsetX: ', offsetX);
@@ -105,12 +115,12 @@ class App extends React.Component {
       // console.log('offsetX: ', offsetX, '\n',
       //             'offsetY: ', offsetY);
 
-      // // TODO: where do null and -0 come from??
-      // // if either value is outside the svg chart, set null
-      // if (offsetX < 0 || offsetX > 676 || offsetX === -0) {
-      //   // return;
-      //   offsetX = null;
-      // }
+      // TODO: where do null and -0 come from??
+      // if either value is outside the svg chart, set null
+      if (offsetX < 0 || offsetX > 676 || offsetX === -0) {
+        // return;
+        offsetX = null;
+      }
 
       // if (offsetY < 0 || offsetY > 196 || offsetY === -0) {
       //   // return;
