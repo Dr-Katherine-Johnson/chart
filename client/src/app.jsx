@@ -38,7 +38,6 @@ class App extends React.Component {
       timeFrameIndex: null,
       activeDateTime: null,
       activePrice: null,
-      prevActivePrice: null
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -46,7 +45,7 @@ class App extends React.Component {
     this.mouseLeave = this.mouseLeave.bind(this);
   }
 
-  // TODO: add tests
+  // TODO: need additional tests for this??
   mouseMove(e) {
     // offsetX & offsetY are the distance of the cursor from the edge of the chart
     let offsetX = e.nativeEvent.offsetX;
@@ -85,12 +84,11 @@ class App extends React.Component {
 
     this.setState((state, props) => {
       let newActivePrice = state.prices[timeFrameIndex].open;
-      let prevActivePrice = state.activePrice;
-      return { offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice: newActivePrice, prevActivePrice }
+      return { offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice: newActivePrice }
     });
   }
 
-  // TODO: add tests
+  // TODO: are more tests necessary here??
   mouseLeave(e) {
     // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
     this.setState({ offsetX: null, offsetY: null });
@@ -168,7 +166,6 @@ class App extends React.Component {
         <ChartHat
           ticker={this.state.ticker}
           activePrice={this.state.activePrice}
-          prevActivePrice={this.state.prevActivePrice}
         >
         </ChartHat>
         <div className="chart-top-right">
