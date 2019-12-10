@@ -5,6 +5,8 @@ import ChartHat from './charthat.jsx';
 import Chart from './chart.jsx';
 import utils from './utils.js';
 
+import _ from 'lodash';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -42,15 +44,38 @@ class App extends React.Component {
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
     this.mouseMove = this.mouseMove.bind(this);
+    // this.mouseMoveThrottled = _.throttle(this.mouseMoveThrottled.bind(this), 2); // TODO: remove lodash if not using throttling ...
     this.mouseLeave = this.mouseLeave.bind(this);
   }
 
-  // TODO: need additional tests for this??
+
+
+  // // throttling at various timeframes did not improve issue
+  // mouseMove(e) {
+  //   // offsetX & offsetY are the distance of the cursor from the edge of the chart
+  //   let offsetX = e.nativeEvent.offsetX;
+  //   let offsetY = e.nativeEvent.offsetY;
+
+  //   this.mouseMoveThrottled(offsetX, offsetY);
+  // }
+
   mouseMove(e) {
+    // this is the part of the event propogation where target is the vertical line that we want to move. ie, if we calculated offsetX against the current position of the vertical line, it will result in 0
+    if (e.target.id === 'chart-vertical-line') {
+      return;
+    }
+
     // offsetX & offsetY are the distance of the cursor from the edge of the chart
     let offsetX = e.nativeEvent.offsetX;
     let offsetY = e.nativeEvent.offsetY;
 
+    console.log('offsetX: ', offsetX);
+
+
+    if (offsetX === 0 || offsetX === -0) {
+      // debugger;
+      console.log(e.target.id)
+    }
 
     // TODO: this seems to improve - but not solve - the flickering issue ... why is this needed??
     if (offsetX === -1 || offsetY === -0) {
@@ -60,27 +85,32 @@ class App extends React.Component {
     // console.log('offsetX: ', offsetX, '\n',
     //             'offsetY: ', offsetY);
 
-    // TODO: where do null and -0 come from??
-    // if either value is outside the svg chart, set null
-    if (offsetX < 0 || offsetX > 676 || offsetX === -0) {
-      return;
-    }
+    // // TODO: where do null and -0 come from??
+    // // if either value is outside the svg chart, set null
+    // if (offsetX < 0 || offsetX > 676 || offsetX === -0) {
+    //   // return;
+    //   offsetX = null;
+    // }
 
-    if (offsetY < 0 || offsetY > 196 || offsetY === -0) {
-      return;
-    }
+    // if (offsetY < 0 || offsetY > 196 || offsetY === -0) {
+    //   // return;
+    //   offsetY = null;
+    // }
 
     let timeFrameIndex = utils.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
     const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
 
-    // // TODO: generates different values for offsetX when hover to the right (-0) VS hover to the left (null) why?? ... need to remove returns from around line 70 to see this ...
+    // TODO: generates different values for offsetX when hover to the right (-0) VS hover to the left (null) why?? ... need to remove returns from around line 70 to see this ...
+    if (this.state.offsetX === null || this.state.offsetY === null || this.state.offsetX === -0 || this.state.offsetY === -0 || this.state.offsetX === 0 || this.state.offsetY === 0) {
+
+    }
+
     // console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
     //             'timeFrameIndex: ', timeFrameIndex, '\n',
     //             'this.state.offsetX: ', this.state.offsetX, '\n',
     //             'offsetX: ', offsetX, '\n',
     //             'this.state.offsetY: ', this.state.offsetY, '\n',
     //             'offsetY: ', offsetY);
-
 
     this.setState((state, props) => {
       let newActivePrice = state.prices[timeFrameIndex].open;
