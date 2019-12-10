@@ -15,6 +15,7 @@
     "test:coverage": "jest --coverage --colors",
     "test:api": "jest --watch endpoints.test.js",
     "test:utils": "jest --watch utils.test.js",
+    "test:app": "jest --watch app.test.js",
     "test:chart": "jest --watch chart.test.js",
     "test:charthat": "jest --watch charthat.test.js",
     "test:verticalline": "jest --watch verticalline.test.js",
@@ -42,6 +43,7 @@
     "faker": "^4.1.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
+    "puppeteer": "^2.0.0",
     "request": "^2.88.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"

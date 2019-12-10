@@ -2,8 +2,15 @@ module.exports = {
   env: {
       test: {
           presets: [
+            [
               "@babel/preset-env",
-              "@babel/preset-react"
+              {
+                targets: {
+                  node: 10
+                }
+              }
+            ],
+            "@babel/preset-react"
           ]
       }
   }
