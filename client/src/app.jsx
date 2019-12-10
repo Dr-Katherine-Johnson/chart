@@ -183,11 +183,11 @@ class App extends React.Component {
         </Chart>
         <div className="chart-footer">
           <div onClick={this.updateTimeFrame} className="chart-timeframes">
-            <span>1D</span>
-            <span>1W</span>
-            <span>1M</span>
-            <span>3M</span>
-            <span>1Y</span>
+            <span className="chart-1D">1D</span>
+            <span className="chart-1W">1W</span>
+            <span className="chart-1M">1M</span>
+            <span className="chart-3M">3M</span>
+            <span className="chart-1Y">1Y</span>
           </div>
           <div>Expand</div>
         </div>
