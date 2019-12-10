@@ -8,9 +8,9 @@ module.exports = {
    * @returns {Number} The offset in pixels from the left side of the svg (ie, the x coordinate)
    */
   calculateX(dataPointCount, i, width) {
-    validDataPointCount = Number.isInteger(dataPointCount) && dataPointCount >= 0;
-    validI = Number.isInteger(i) && i >= 0;
-    validWidth = Number.isInteger(width) && width > 0;
+    const validDataPointCount = Number.isInteger(dataPointCount) && dataPointCount >= 0;
+    const validI = Number.isInteger(i) && i >= 0;
+    const validWidth = Number.isInteger(width) && width > 0;
 
     if (validDataPointCount && validI && validWidth) {
       const portion = width / dataPointCount;
