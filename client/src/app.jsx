@@ -60,62 +60,83 @@ class App extends React.Component {
   // }
 
   mouseMove(e) {
-    // this is the part of the event propogation where target is the vertical line that we want to move. ie, if we calculated offsetX against the current position of the vertical line, it will result in 0
-    if (e.target.id === 'chart-vertical-line') {
-      return;
-    }
-
-    // offsetX & offsetY are the distance of the cursor from the edge of the chart
-    let offsetX = e.nativeEvent.offsetX;
-    let offsetY = e.nativeEvent.offsetY;
-
-    console.log('offsetX: ', offsetX);
-
-
-    if (offsetX === 0 || offsetX === -0) {
-      // debugger;
-      console.log(e.target.id)
-    }
-
-    // TODO: this seems to improve - but not solve - the flickering issue ... why is this needed??
-    if (offsetX === -1 || offsetY === -0) {
-      return;
-    }
-
-    // console.log('offsetX: ', offsetX, '\n',
-    //             'offsetY: ', offsetY);
-
-    // // TODO: where do null and -0 come from??
-    // // if either value is outside the svg chart, set null
-    // if (offsetX < 0 || offsetX > 676 || offsetX === -0) {
-    //   // return;
-    //   offsetX = null;
+    // // this is the part of the event propogation where target is the vertical line that we want to move. ie, if we calculated offsetX against the current position of the vertical line, it will result in 0
+    // if (e.target.id === 'chart-vertical-line') {
+    //   return;
     // }
 
-    // if (offsetY < 0 || offsetY > 196 || offsetY === -0) {
-    //   // return;
-    //   offsetY = null;
-    // }
+    // const str = e.target;
+    // console.log('str', str);
 
-    let timeFrameIndex = utils.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
-    const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
+    // TESTING
+    // only continue with processing if event.currentTarget is the div that contains the svg
+    // .chart-svg-container , this is the element the eventhandler is attached to
+    if (e.currentTarget.classList.contains('chart-svg-container')) {
 
-    // TODO: generates different values for offsetX when hover to the right (-0) VS hover to the left (null) why?? ... need to remove returns from around line 70 to see this ...
-    if (this.state.offsetX === null || this.state.offsetY === null || this.state.offsetX === -0 || this.state.offsetY === -0 || this.state.offsetX === 0 || this.state.offsetY === 0) {
+      //TESTING
+      // immediately returning if e.target is .chart-vertical-line OR .chart-vertical-line-container
+      // **************WORKS**************
+      // this stops the flickering, but the UI response is then very choppy ...
+      // TODO: how to improve this??
+      if (e.target.id === 'chart-vertical-line' || e.target.id === 'chart-vertical-line-container') {
+        return;
+      }
+      // this is the only place I want to calculate the offsets ...
+      console.log('y');
 
+      // offsetX & offsetY are the distance of the cursor from the edge of the chart
+      let offsetX = e.nativeEvent.offsetX;
+      let offsetY = e.nativeEvent.offsetY;
+
+      console.log('offsetX: ', offsetX);
+      console.log('e.target: ', e.target);
+
+
+      // if (offsetX === 0 || offsetX === -0) {
+      //   // debugger;
+      //   console.log(e.target.id)
+      // }
+
+      // // TODO: this seems to improve - but not solve - the flickering issue ... why is this needed??
+      // if (offsetX === -1 || offsetY === -0) {
+      //   return;
+      // }
+
+      // console.log('offsetX: ', offsetX, '\n',
+      //             'offsetY: ', offsetY);
+
+      // // TODO: where do null and -0 come from??
+      // // if either value is outside the svg chart, set null
+      // if (offsetX < 0 || offsetX > 676 || offsetX === -0) {
+      //   // return;
+      //   offsetX = null;
+      // }
+
+      // if (offsetY < 0 || offsetY > 196 || offsetY === -0) {
+      //   // return;
+      //   offsetY = null;
+      // }
+
+      let timeFrameIndex = utils.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
+      const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
+
+      // TODO: generates different values for offsetX when hover to the right (-0) VS hover to the left (null) why?? ... need to remove returns from around line 70 to see this ...
+      if (this.state.offsetX === null || this.state.offsetY === null || this.state.offsetX === -0 || this.state.offsetY === -0 || this.state.offsetX === 0 || this.state.offsetY === 0) {
+
+      }
+
+      // console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
+      //             'timeFrameIndex: ', timeFrameIndex, '\n',
+      //             'this.state.offsetX: ', this.state.offsetX, '\n',
+      //             'offsetX: ', offsetX, '\n',
+      //             'this.state.offsetY: ', this.state.offsetY, '\n',
+      //             'offsetY: ', offsetY);
+
+      this.setState((state, props) => {
+        let newActivePrice = state.prices[timeFrameIndex].open;
+        return { offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice: newActivePrice }
+      });
     }
-
-    // console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
-    //             'timeFrameIndex: ', timeFrameIndex, '\n',
-    //             'this.state.offsetX: ', this.state.offsetX, '\n',
-    //             'offsetX: ', offsetX, '\n',
-    //             'this.state.offsetY: ', this.state.offsetY, '\n',
-    //             'offsetY: ', offsetY);
-
-    this.setState((state, props) => {
-      let newActivePrice = state.prices[timeFrameIndex].open;
-      return { offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice: newActivePrice }
-    });
   }
 
   // TODO: are more tests necessary here??

@@ -54,7 +54,7 @@ h1 {
   background-color: gray;
 }
 
-#chart-chart-vertical-line-container {
+#chart-vertical-line-container {
   position: absolute;
   top: -20px;
   height: 216px;

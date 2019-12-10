@@ -15,7 +15,7 @@ const VerticalLine = ({ offsetX, offsetY, activeDateTime }) => {
   }
 
   const verticalLineContainer = (
-    <div id="chart-chart-vertical-line-container" style={style}>
+    <div id="chart-vertical-line-container" style={style}>
       <div id="chart-datetime-container">
         {activeDateTime ? activeDateTime.toDateString() : null}
       </div>
