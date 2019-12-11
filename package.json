@@ -11,16 +11,19 @@
   "scripts": {
     "dev": "webpack -w",
     "start": "nodemon server/server.js",
-    "test": "jest --watchAll",
-    "test:coverage": "jest --coverage --colors",
+    "seed": "node seeds/start.js",
+
+
+    "test": "jest --watchAll --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
+    "test:all": "jest",
+    "test:coverage": "jest --coverage --colors --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
     "test:api": "jest --watch endpoints.test.js",
     "test:utils": "jest --watch utils.test.js",
     "test:app": "jest --watch app.test.js",
     "test:chart": "jest --watch chart.test.js",
     "test:charthat": "jest --watch charthat.test.js",
     "test:verticalline": "jest --watch verticalline.test.js",
-    "test:pricewheel": "jest --watch pricewheel.test.js",
-    "seed": "node seeds/start.js"
+    "test:pricewheel": "jest --watch pricewheel.test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
