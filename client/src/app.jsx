@@ -49,16 +49,16 @@ class App extends React.Component {
 
   mouseMove(e) {
       // Need to manually calculate offsetX, because e.offset gives the offsets to e.target ... which is not necessarily .chart-svg-container (the element I need)
-      // leftMargin = distance between start of .chart-svg-container and left edge of the screen
-        // (window.innerWidth - width of .chart-svg-container) / 2
-      // e.pageX - leftMargin
       // TODO: formalize this function into utils module & add tests
-      function calculateLeftOffsetFromChartDiv(windowWidth, clientWidth, cursorOffsetFromPage) {
-        const leftMargin = (windowWidth - clientWidth) / 2;
-        return cursorOffsetFromPage - leftMargin;
+      function calculateLeftOffsetFromChartDiv(cursorOffsetFromPageLeft, leftMargin) {
+        return cursorOffsetFromPageLeft - leftMargin;
       }
 
-      let offsetX = calculateLeftOffsetFromChartDiv(window.innerWidth, document.querySelector('.chart-svg-container').clientWidth, e.pageX)
+      const chartSvgContainer = document.querySelector('.chart-svg-container');
+      const clientWidth = chartSvgContainer.clientWidth
+      const leftMargin = chartSvgContainer.getBoundingClientRect().left;
+
+      let offsetX = calculateLeftOffsetFromChartDiv(e.pageX, leftMargin)
       let offsetY = e.nativeEvent.offsetY;
 
       // if either value is outside the svg chart
@@ -183,4 +183,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App></App>, document.querySelector('#root'));
+ReactDOM.render(<App></App>, document.querySelector('#chart'));
