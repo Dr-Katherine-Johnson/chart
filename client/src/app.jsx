@@ -48,17 +48,13 @@ class App extends React.Component {
   }
 
   mouseMove(e) {
-      // Need to manually calculate offsetX, because e.offset gives the offsets to e.target ... which is not necessarily .chart-svg-container (the element I need)
-      // TODO: formalize this function into utils module & add tests
-      function calculateLeftOffsetFromChartDiv(cursorOffsetFromPageLeft, leftMargin) {
-        return cursorOffsetFromPageLeft - leftMargin;
-      }
+
 
       const chartSvgContainer = document.querySelector('.chart-svg-container');
       const clientWidth = chartSvgContainer.clientWidth
       const leftMargin = chartSvgContainer.getBoundingClientRect().left;
 
-      let offsetX = calculateLeftOffsetFromChartDiv(e.pageX, leftMargin)
+      let offsetX = utils.calcLeftOffset(e.pageX, leftMargin)
       let offsetY = e.nativeEvent.offsetY;
 
       // if either value is outside the svg chart
@@ -66,7 +62,7 @@ class App extends React.Component {
         return;
       }
 
-      let timeFrameIndex = utils.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
+      let timeFrameIndex = utils.calcHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
       const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
 
       this.setState((state, props) => {
@@ -108,7 +104,7 @@ class App extends React.Component {
 
     for (let i = 0; i < dataPointCount; i++) {
       price = this.state.prices[i];
-      path += ` L${utils.calculateX(dataPointCount, i, this.state.width)} ${utils.calculateY(price.open, this.state.height, this.state.low, this.state.priceRange)}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
+      path += ` L${utils.calcX(dataPointCount, i, this.state.width)} ${utils.calcY(price.open, this.state.height, this.state.low, this.state.priceRange)}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
     }
 
     this.setState({ path, timeFrame, dataPointCount });
@@ -127,7 +123,7 @@ class App extends React.Component {
           price.dateTime = new Date(new Date(price.dateTime).getTime() + new Date().getTimezoneOffset() * 60 * 1000);
         });
 
-        const highLow = utils.calculateHighAndLow(ticker.prices);
+        const highLow = utils.calcHighAndLow(ticker.prices);
 
         this.setState({
           ticker: ticker.ticker,

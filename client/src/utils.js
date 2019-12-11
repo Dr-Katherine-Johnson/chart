@@ -1,13 +1,13 @@
 module.exports = {
   /**
    *
-   * Calculates a fixed position for how far along (ie, from the left edge) this particular data point is in terms of the total number of data points
+   * calcs a fixed position for how far along (ie, from the left edge) this particular data point is in terms of the total number of data points
    * @param {Number} dataPointCount How many data points are in this time frame (ie, a week would have 7)
    * @param {Number} i The index in the array of the particular data point we're interested in
    * @param {Number} width The width in pixels of the displayed svg
    * @returns {Number} The offset in pixels from the left side of the svg (ie, the x coordinate)
    */
-  calculateX(dataPointCount, i, width) {
+  calcX(dataPointCount, i, width) {
     const validDataPointCount = Number.isInteger(dataPointCount) && dataPointCount >= 0;
     const validI = Number.isInteger(i) && i >= 0;
     const validWidth = Number.isInteger(width) && width > 0;
@@ -23,14 +23,14 @@ module.exports = {
 
   /**
    *
-   * Calculates a fixed position for how high this data point (this price) should be from the bottom of the svg
+   * calcs a fixed position for how high this data point (this price) should be from the bottom of the svg
    * @param {Number} price The price for this data point
    * @param {Number} height The height in pixels of the svg
    * @param {Number} lowest The lowest price in this collection
    * @param {Number} priceRange The difference between the highest and lowest prices for this collection
    * @returns {Number} This price's offset from the bottom of the svg, in pixels
    */
-  calculateY(price, height, lowest, priceRange) {
+  calcY(price, height, lowest, priceRange) {
     const validPrice = Number.isFinite(price) && price >= 0;
     const validHeight = Number.isFinite(height) && height >= 0;
     const validLowest = Number.isFinite(lowest) && lowest >= 0;
@@ -60,7 +60,7 @@ module.exports = {
    * @param {Number} width The width in pixels of the displayed svg
    * @returns {Number} The index in the prices collection of the data point (ie, the price) being hovered over
    */
-  calculateHoveredTimeFrame(dataPointCount, offsetX, width) {
+  calcHoveredTimeFrame(dataPointCount, offsetX, width) {
     const validDataPointCount = Number.isInteger(dataPointCount) && dataPointCount >= 0;
     const validOffsetX = Number.isFinite(offsetX) && offsetX > 0;
     const validWidth = Number.isFinite(width) && width > 0;
@@ -79,7 +79,7 @@ module.exports = {
    * @param {Array} prices An array of price objects, each of which must have a high and low property
    * @returns {Array} The highest and lowest values in prices
    */
-  calculateHighAndLow(prices) {
+  calcHighAndLow(prices) {
     try {
       let high = prices[0].high;
       let low = prices[0].low;
@@ -96,6 +96,24 @@ module.exports = {
       return [high, low];
     } catch(e) {
       throw e;
+    }
+  },
+
+  /**
+   *
+   * The offsetX mouse event property (e.offset) does NOT work here because it gives the offsets to e.target ... which is not necessarily chartDiv (the needed element). Calculating the value with the following two arguments does not require chartDiv to be centered on the page.
+   * @param {Number} dLM Distance from the visible left edge of the page to the mouse cursor
+   * @param {Number} leftMargin Distance from the visible left edge of the page to the left edge of chartDiv
+   * @returns {Number} The left offset of the cursor from the chartDiv
+   */
+  // TODO: formalize this function into utils module & add tests
+  calcLeftOffset(dLM, leftMargin) {
+    const validdLM = Number.isInteger(dLM) && dLM >= 0;
+    const validLeftMargin = Number.isInteger(leftMargin) && leftMargin >= 0;
+    if (validdLM && validLeftMargin && leftMargin <= dLM) {
+      return dLM - leftMargin;
+    } else {
+      throw new Error();
     }
   }
 };
