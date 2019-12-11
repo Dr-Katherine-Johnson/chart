@@ -7,6 +7,11 @@ h1 {
   margin: 0;
 }
 
+/* UTILITY */
+.hidden {
+  visibility: hidden;
+}
+
 /* CHART HAT */
 #chart-active-price {
   font-size: 2.2rem;
