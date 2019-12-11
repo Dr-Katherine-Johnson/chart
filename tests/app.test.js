@@ -1,5 +1,5 @@
 const React = require('react');
-// const { shallow } = require('enzyme');
+const _ = require('lodash');
 const puppeteer = require('puppeteer');
 const url = 'http://localhost:4444';
 let page;
@@ -16,10 +16,23 @@ describe('App', () => {
     it('Should correctly update the number of data points in the <svg> path based on which timeframe is selected', async () => {
       await page.goto(url);
       let d = await page.$eval('path', (path) => {
-        console.log(`path.attributes['d'].value: `, path.attributes['d'].value);
-        const str = path.attributes['d'].value;
-        return str;
+        // console.log(`path.attributes['d']: `, path.attributes['d']);
+        // console.log(`console.dir(path.attributes['d']): `, console.dir(path.attributes['d']));
+        // console.log(`path.getAttributeNS(null, 'd'): `, path.getAttributeNS(null, 'd'));
+        // console.log(`typeof path.attributes['d'].value: `, typeof path.attributes['d'].value);
+
+        let str;
+        // str = path.attributes['d'].value.split(' ').length;
+        // str = path.attributes['d'].value.split(' ');
+
+        str = JSON.parse(JSON.stringify(path.attributes['d'].value));
+        console.log('str: ', str);
+        // str = _.cloneDeep(path.attributes['d']);
+        return Promise.resolve(str);
+        // return str;
       });
+
+
 
       // console.log('path.attributes: ', path.attributes);
       // console.log('d: ', d);

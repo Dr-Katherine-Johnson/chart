@@ -3,7 +3,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.js'],
   clearMocks: true,
   collectCoverageFrom: [
-    'src/**/*.{js,jsx}'
+    'client/src/**/*.{js,jsx}'
   ],
   coverageDirectory: 'coverage',
   testPathIgnorePatterns: [

@@ -4,7 +4,7 @@ const seed = require('../seeds/seed.js');
 const PORT = process.env.PORT || 4444;
 
 // ENDPOINT TESTS
-xdescribe('GET /price/:ticker', () => {
+describe('GET /price/:ticker', () => {
   const tickerList = seed.start();
   // get a random ticker from the list
   const tickerObj = tickerList[Math.floor(Math.random() * tickerList.length)]

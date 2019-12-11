@@ -12,11 +12,10 @@
     "dev": "webpack -w",
     "start": "nodemon server/server.js",
     "seed": "node seeds/start.js",
-
-
     "test": "jest --watchAll --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
     "test:all": "jest",
-    "test:coverage": "jest --coverage --colors --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
+    "test:coverage": "jest --watchAll --coverage --colors --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
+    "coverage": "open ./coverage/lcov-report/index.html",
     "test:api": "jest --watch endpoints.test.js",
     "test:utils": "jest --watch utils.test.js",
     "test:app": "jest --watch app.test.js",
@@ -45,6 +44,7 @@
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "faker": "^4.1.0",
     "jest": "^24.9.0",
+    "lodash": "^4.17.15",
     "nodemon": "^1.19.4",
     "puppeteer": "^2.0.0",
     "request": "^2.88.0",
