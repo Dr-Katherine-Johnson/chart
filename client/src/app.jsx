@@ -32,7 +32,7 @@ class App extends React.Component {
       priceRange: 0,
       ratingPercent: `81%`,
       peopleOwn: 2500,
-      path: '',
+      path: [''],
       offsetX: null,
       offsetY: null,
       timeFrame: '1Y',
@@ -124,20 +124,47 @@ class App extends React.Component {
         break;
     }
 
-    let path = 'M0 196';
+    let path = ['M0 196'];
     let price = null;
     let fittedSVGCoords = [[0, 196]];
     let x;
     let y;
     const strokeDashArrayGap = 676 / dataPointCount;
+    let group = 0;
+    let lastPosition = '';
+
+    // TODO: combine with loop below
+    // TODO:
+      // if timeframe is 1W, split the path into multiple paths inside <g> elements
+      // create 5 path
+      // if dataPointCount is 35 AND i % 7 === 0
+
 
     for (let i = 0; i < dataPointCount; i++) {
       price = this.state.prices[i];
       x = utils.calcX(dataPointCount, i, this.state.width);
       y = utils.calcY(price.open, this.state.height, this.state.low, this.state.priceRange);
-      fittedSVGCoords.push([x, y]);
-      path += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
+      fittedSVGCoords.push([x, y]); // this is for displaying the y position of the ball
+
+      if (dataPointCount === 35 && i !== 0 && i % 7 === 0) {
+        // increment the index in the array where the paths are getting collected
+        ++group;
+        // put the last path's positions as the starting position in the new group's path
+        path.push(`M${lastPosition}`);
+      }
+
+      lastPosition = `${x} ${y}`;
+      path[group] += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
     }
+
+    // for (let i = 0; i < dataPointCount; i++) {
+    //   price = this.state.prices[i];
+    //   x = utils.calcX(dataPointCount, i, this.state.width);
+    //   y = utils.calcY(price.open, this.state.height, this.state.low, this.state.priceRange);
+    //   fittedSVGCoords.push([x, y]); // this is for displaying the y position of the ball
+
+    //   path[group] += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
+    // }
 
     this.setState({ path, timeFrame, dataPointCount, fittedSVGCoords, strokeDashArrayGap });
   }

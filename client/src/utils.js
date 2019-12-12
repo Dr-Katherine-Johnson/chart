@@ -108,11 +108,12 @@ module.exports = {
    */
   // TODO: formalize this function into utils module & add tests
   calcLeftOffset(dLM, leftMargin) {
-    const validdLM = Number.isInteger(dLM) && dLM >= 0;
-    const validLeftMargin = Number.isInteger(leftMargin) && leftMargin >= 0;
+    const validdLM = Number.isFinite(dLM) && dLM >= 0;
+    const validLeftMargin = Number.isFinite(leftMargin) && leftMargin >= 0;
     if (validdLM && validLeftMargin && leftMargin <= dLM) {
       return dLM - leftMargin;
     } else {
+      debugger;
       throw new Error();
     }
   }

@@ -206,7 +206,7 @@ describe('utils', () => {
       });
     });
 
-    it('Should throw an error when leftMargin is greater than dLM OR dLM or leftMargin is NOT an integer greater than or equal to 0', () => {
+    it('Should throw an error when leftMargin is greater than dLM OR dLM or leftMargin is NOT a number greater than or equal to 0', () => {
       invalidArgs.forEach(invalid => {
         const fn = () => {
           utils.calcLeftOffset(invalid[0], invalid[1])
