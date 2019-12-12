@@ -42,7 +42,8 @@ class App extends React.Component {
       displayDateTime: null,
       activePrice: null,
       fittedSVGCoords: null,
-      chartOffsetY: null
+      chartOffsetY: null,
+      strokeDashArrayGap: null
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -102,6 +103,7 @@ class App extends React.Component {
 
 
   // TODO: add tests
+  // TODO: I think this default value for dataPointCount is unnecessary ...
   updateTimeFrame(e, dataPointCount = 1680) {
     const timeFrame = e.target.textContent;
     switch (timeFrame) {
@@ -127,6 +129,7 @@ class App extends React.Component {
     let fittedSVGCoords = [[0, 196]];
     let x;
     let y;
+    const strokeDashArrayGap = 676 / dataPointCount;
 
     for (let i = 0; i < dataPointCount; i++) {
       price = this.state.prices[i];
@@ -136,7 +139,7 @@ class App extends React.Component {
       path += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
     }
 
-    this.setState({ path, timeFrame, dataPointCount, fittedSVGCoords });
+    this.setState({ path, timeFrame, dataPointCount, fittedSVGCoords, strokeDashArrayGap });
   }
 
   // TODO: need additional tests for this ??
@@ -193,6 +196,8 @@ class App extends React.Component {
           offsetY={this.state.offsetY}
           displayDateTime={this.state.displayDateTime}
           chartOffsetY={this.state.chartOffsetY}
+          strokeDashArrayGap={this.state.strokeDashArrayGap}
+          timeFrame={this.state.timeFrame}
         >
         </Chart>
         <div className="chart-footer">

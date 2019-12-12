@@ -47,7 +47,7 @@ h1 {
 
 /* CHART */
 .chart {
-  background-color: #BADA55;
+  background-color: #eaeae96b;
   position: relative;
   width: 676px;
   margin: 0 auto;
@@ -56,7 +56,7 @@ h1 {
 .chart-svg-container {
   height: 196px;
   position: relative;
-  background-color: gray;
+  background-color: #00f1fc3b;
 }
 
 #chart-vertical-line-container {
