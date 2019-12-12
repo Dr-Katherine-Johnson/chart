@@ -75,7 +75,7 @@ h1 {
 #chart-datetime-container {
   text-align: center;
   background-color: tan;
-  width: 150px;
+  width: 200px;
   /* TODO: better way to do this? it feels hacky ... */
   margin-left: -75px;
 }

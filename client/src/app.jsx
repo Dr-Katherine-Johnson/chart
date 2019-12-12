@@ -5,7 +5,7 @@ import ChartHat from './charthat.jsx';
 import Chart from './chart.jsx';
 import utils from './utils.js';
 
-import _ from 'lodash';
+import moment from 'moment';
 
 class App extends React.Component {
   constructor(props) {
@@ -39,6 +39,7 @@ class App extends React.Component {
       dataPointCount: 1680,
       timeFrameIndex: null,
       activeDateTime: null,
+      displayDateTime: null,
       activePrice: null,
       fittedSVGCoords: null,
       chartOffsetY: null
@@ -63,12 +64,33 @@ class App extends React.Component {
       }
 
       let timeFrameIndex = utils.calcHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
-      const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
       const chartOffsetY = this.state.fittedSVGCoords[timeFrameIndex][1];
+
+      let activeDateTime = this.state.prices[timeFrameIndex].dateTime;
+      const timeFrame = this.state.timeFrame;
+      let format;
+      // TODO: WET with function below ... refactor??
+      switch (timeFrame) {
+        case '1D':
+          format = 'H:m A Z';
+          break;
+        case '1W':
+          format = 'H:m A, MMM D Z';
+          break;
+        case '1M':
+        case '3M':
+          format = 'H:00 A, MMM D Z';
+          break;
+        case '1Y':
+          format = 'MMM D, YYYY';
+          break;
+      }
+
+      const displayDateTime = moment(activeDateTime).format(format);
 
       this.setState((state, props) => {
         let newActivePrice = state.prices[timeFrameIndex].open;
-        return { offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice: newActivePrice, chartOffsetY }
+        return { offsetX, offsetY, timeFrameIndex, activeDateTime, displayDateTime, activePrice: newActivePrice, chartOffsetY }
       });
   }
 
@@ -127,6 +149,7 @@ class App extends React.Component {
       success: (ticker) => {
         ticker.prices.forEach(price => {
           // converts the ISO8601 string into a Date object in the local timezone
+          // TODO: is this necessary to do now that I'm using moment.js??
           price.dateTime = new Date(new Date(price.dateTime).getTime() + new Date().getTimezoneOffset() * 60 * 1000);
         });
 
@@ -168,7 +191,7 @@ class App extends React.Component {
           mouseLeave={this.mouseLeave}
           offsetX={this.state.offsetX}
           offsetY={this.state.offsetY}
-          activeDateTime={this.state.activeDateTime}
+          displayDateTime={this.state.displayDateTime}
           chartOffsetY={this.state.chartOffsetY}
         >
         </Chart>

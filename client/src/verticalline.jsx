@@ -1,6 +1,6 @@
 import React from 'react';
 
-const VerticalLine = ({ offsetX, offsetY, activeDateTime }) => {
+const VerticalLine = ({ offsetX, offsetY, displayDateTime }) => {
   // when offsetX OR offsetY is null, hide the whole VerticalLineContainer with CSS
   let style = {}
   let visible = 'hidden';
@@ -16,7 +16,7 @@ const VerticalLine = ({ offsetX, offsetY, activeDateTime }) => {
       className={visible}
     >
       <div id="chart-datetime-container">
-        {activeDateTime ? activeDateTime.toDateString() : null}
+        {displayDateTime}
       </div>
       <div id="chart-vertical-line"></div>
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import VerticalLine from './verticalline.jsx';
 
-const Chart = ({ path, mouseMove, mouseLeave, offsetX, offsetY, activeDateTime, chartOffsetY }) => {
+const Chart = ({ path, mouseMove, mouseLeave, offsetX, offsetY, displayDateTime, chartOffsetY }) => {
   const circleIsHidden = offsetX === null && chartOffsetY === null;
 
   return (
@@ -13,7 +13,7 @@ const Chart = ({ path, mouseMove, mouseLeave, offsetX, offsetY, activeDateTime, 
     <VerticalLine
       offsetX={offsetX}
       offsetY={offsetY}
-      activeDateTime={activeDateTime}
+      displayDateTime={displayDateTime}
     />
     </div>
   );
