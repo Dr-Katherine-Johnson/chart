@@ -40,6 +40,8 @@ class App extends React.Component {
       timeFrameIndex: null,
       activeDateTime: null,
       activePrice: null,
+      fittedSVGCoords: null,
+      chartOffsetY: null
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -48,8 +50,6 @@ class App extends React.Component {
   }
 
   mouseMove(e) {
-
-
       const chartSvgContainer = document.querySelector('.chart-svg-container');
       const clientWidth = chartSvgContainer.clientWidth
       const leftMargin = chartSvgContainer.getBoundingClientRect().left;
@@ -64,17 +64,18 @@ class App extends React.Component {
 
       let timeFrameIndex = utils.calcHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
       const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
+      const chartOffsetY = this.state.fittedSVGCoords[timeFrameIndex][1];
 
       this.setState((state, props) => {
         let newActivePrice = state.prices[timeFrameIndex].open;
-        return { offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice: newActivePrice }
+        return { offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice: newActivePrice, chartOffsetY }
       });
   }
 
   // TODO: are more tests necessary here??
   mouseLeave(e) {
     // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
-    this.setState({ offsetX: null, offsetY: null });
+    this.setState({ offsetX: null, offsetY: null, chartOffsetY: null });
   }
 
 
@@ -101,13 +102,19 @@ class App extends React.Component {
 
     let path = 'M0 196';
     let price = null;
+    let fittedSVGCoords = [[0, 196]];
+    let x;
+    let y;
 
     for (let i = 0; i < dataPointCount; i++) {
       price = this.state.prices[i];
-      path += ` L${utils.calcX(dataPointCount, i, this.state.width)} ${utils.calcY(price.open, this.state.height, this.state.low, this.state.priceRange)}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
+      x = utils.calcX(dataPointCount, i, this.state.width);
+      y = utils.calcY(price.open, this.state.height, this.state.low, this.state.priceRange);
+      fittedSVGCoords.push([x, y]);
+      path += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
     }
 
-    this.setState({ path, timeFrame, dataPointCount });
+    this.setState({ path, timeFrame, dataPointCount, fittedSVGCoords });
   }
 
   // TODO: need additional tests for this ??
@@ -162,6 +169,7 @@ class App extends React.Component {
           offsetX={this.state.offsetX}
           offsetY={this.state.offsetY}
           activeDateTime={this.state.activeDateTime}
+          chartOffsetY={this.state.chartOffsetY}
         >
         </Chart>
         <div className="chart-footer">
