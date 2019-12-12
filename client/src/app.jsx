@@ -97,7 +97,7 @@ class App extends React.Component {
 
   // TODO: are more tests necessary here??
   mouseLeave(e) {
-    // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
+    // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplishes this on re-render)
     this.setState({ offsetX: null, offsetY: null, chartOffsetY: null });
   }
 
@@ -133,13 +133,6 @@ class App extends React.Component {
     let group = 0;
     let lastPosition = '';
 
-    // TODO: combine with loop below
-    // TODO:
-      // if timeframe is 1W, split the path into multiple paths inside <g> elements
-      // create 5 path
-      // if dataPointCount is 35 AND i % 7 === 0
-
-
     for (let i = 0; i < dataPointCount; i++) {
       price = this.state.prices[i];
       x = utils.calcX(dataPointCount, i, this.state.width);
@@ -156,15 +149,6 @@ class App extends React.Component {
       lastPosition = `${x} ${y}`;
       path[group] += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
     }
-
-    // for (let i = 0; i < dataPointCount; i++) {
-    //   price = this.state.prices[i];
-    //   x = utils.calcX(dataPointCount, i, this.state.width);
-    //   y = utils.calcY(price.open, this.state.height, this.state.low, this.state.priceRange);
-    //   fittedSVGCoords.push([x, y]); // this is for displaying the y position of the ball
-
-    //   path[group] += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
-    // }
 
     this.setState({ path, timeFrame, dataPointCount, fittedSVGCoords, strokeDashArrayGap });
   }
@@ -225,6 +209,7 @@ class App extends React.Component {
           chartOffsetY={this.state.chartOffsetY}
           strokeDashArrayGap={this.state.strokeDashArrayGap}
           timeFrame={this.state.timeFrame}
+          timeFrameIndex={this.state.timeFrameIndex}
         >
         </Chart>
         <div className="chart-footer">
