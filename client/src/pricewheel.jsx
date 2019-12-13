@@ -3,6 +3,7 @@ import React from 'react';
 const PriceWheel = ({ activePrice }) => {
      let oneDigitPriceWheel = ['$', '.', 9, 8, 7, 6, 5, 4, 3, 2, 1, 0].map((num, i) => <div key={i}>{num}</div>);
 
+     // TODO: will this approach work?? change this so that priceWheel always ends up as an array with a specific length, and what's different for every price is which divs in the array have display: none or not, and there are transitions between those states
      let priceWheel = null;
      if (activePrice !== null) {
        priceWheel = new String(activePrice).split('');

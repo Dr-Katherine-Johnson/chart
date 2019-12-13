@@ -98,12 +98,15 @@ class App extends React.Component {
   // TODO: are more tests necessary here??
   mouseLeave(e) {
     // when the mouse leaves the chart area, on re-render
-    this.setState({
-      // hides the vertical bar
-      offsetX: null,
-      offsetY: null,
-      chartOffsetY: null,
-      timeFrameIndex: null // removes any color from a certain section of the price chart
+    this.setState((state, props) => {
+      return {
+        // hides the vertical bar
+        offsetX: null,
+        offsetY: null,
+        chartOffsetY: null,
+        timeFrameIndex: null, // removes any color from a certain section of the price chart
+        activePrice: state.prices[state.prices.length - 1].open // display the last price
+      }
     });
   }
 
