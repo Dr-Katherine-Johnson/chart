@@ -18,7 +18,7 @@ const Chart = ({ path, mouseMove, mouseLeave, offsetX, offsetY, displayDateTime,
     const MAX = ((i + 1) * 7) - 1
     const MIN = i * 7
 
-    if (timeFrame === '1W' && timeFrameIndex <= MAX && timeFrameIndex >= MIN) {
+    if (timeFrame === '1W' && timeFrameIndex !== null && timeFrameIndex <= MAX && timeFrameIndex >= MIN) {
       strokeColor = 'pink';
     }
 
