@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const seed = require('../seeds/seed.js');
+const config = require('config.js');
 
-mongoose.connect(`mongodb://127.0.0.1:27017/robinhood`, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(`${config.DATABASE_URL}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 
