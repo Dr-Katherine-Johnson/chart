@@ -5,5 +5,5 @@ module.exports = {
   DATABASE_PORT: `27017`,
   DATABASE_NAME: `robinhood`,
   SERVICE_API_URL: `http://localhost`,
-  SERVICE_API_URL: `4444`
+  SERVICE_API_PORT: `4444`
 };

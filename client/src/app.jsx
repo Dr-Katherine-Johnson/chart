@@ -4,7 +4,7 @@ import $ from 'jquery';
 import ChartHat from './charthat.jsx';
 import Chart from './chart.jsx';
 import utils from './utils.js';
-import config from '../../config.js';
+import config from '../../env.config.js';
 
 import moment from 'moment';
 
@@ -168,7 +168,6 @@ class App extends React.Component {
     const ticker = this.state.ticker;
     $.ajax({
       // TODO: will the port part of this url become unnecessary to specify when deployed??
-      url: `http://localhost:4444/price/${ticker}`,
       url: `${config.SERVICE_API_URL}:${config.SERVICE_API_PORT}/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
