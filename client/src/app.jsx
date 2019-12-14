@@ -4,7 +4,7 @@ import $ from 'jquery';
 import ChartHat from './charthat.jsx';
 import Chart from './chart.jsx';
 import utils from './utils.js';
-import config from 'config.js';
+import config from '../../config.js';
 
 import moment from 'moment';
 
