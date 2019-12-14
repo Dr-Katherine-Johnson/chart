@@ -1,8 +1,11 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.port || 4444;
+const config = require('../env.config.js');
+const PORT = config.PORT;
 const controller = require('../controller/index.js');
+const cors = require('cors');
 
+app.use(cors());
 app.use(express.static('client/dist'));
 app.use(express.static('client/public'));
 

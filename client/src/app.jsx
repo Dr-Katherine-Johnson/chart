@@ -4,6 +4,9 @@ import $ from 'jquery';
 import ChartHat from './charthat.jsx';
 import Chart from './chart.jsx';
 import utils from './utils.js';
+import config from '../../env.config.js';
+
+import moment from 'moment';
 
 class App extends React.Component {
   constructor(props) {
@@ -30,15 +33,18 @@ class App extends React.Component {
       priceRange: 0,
       ratingPercent: `81%`,
       peopleOwn: 2500,
-      path: '',
+      path: [''],
       offsetX: null,
       offsetY: null,
       timeFrame: '1Y',
       dataPointCount: 1680,
       timeFrameIndex: null,
       activeDateTime: null,
+      displayDateTime: null,
       activePrice: null,
-      prevActivePrice: null
+      fittedSVGCoords: null,
+      chartOffsetY: null,
+      strokeDashArrayGap: null
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -46,58 +52,68 @@ class App extends React.Component {
     this.mouseLeave = this.mouseLeave.bind(this);
   }
 
-  // TODO: add tests
   mouseMove(e) {
-    // offsetX & offsetY are the distance of the cursor from the edge of the chart
-    let offsetX = e.nativeEvent.offsetX;
-    let offsetY = e.nativeEvent.offsetY;
+      const chartSvgContainer = document.querySelector('.chart-svg-container');
+      const clientWidth = chartSvgContainer.clientWidth
+      const leftMargin = chartSvgContainer.getBoundingClientRect().left;
 
+      let offsetX = utils.calcLeftOffset(e.pageX, leftMargin)
+      let offsetY = e.nativeEvent.offsetY;
 
-    // TODO: this seems to improve - but not solve - the flickering issue ... why is this needed??
-    if (offsetX === -1 || offsetY === -0) {
-      return;
-    }
+      // if either value is outside the svg chart
+      if (offsetX < 0 || offsetX > 676 || offsetX === -0 || offsetY < 0 || offsetY > 196 || offsetY === -0) {
+        return;
+      }
 
-    // console.log('offsetX: ', offsetX, '\n',
-    //             'offsetY: ', offsetY);
+      let timeFrameIndex = utils.calcHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
+      const chartOffsetY = this.state.fittedSVGCoords[timeFrameIndex][1];
 
-    // TODO: where do null and -0 come from??
-    // if either value is outside the svg chart, set null
-    if (offsetX < 0 || offsetX > 676 || offsetX === -0) {
-      return;
-    }
+      let activeDateTime = this.state.prices[timeFrameIndex].dateTime;
+      const timeFrame = this.state.timeFrame;
+      let format;
+      // TODO: WET with function below ... refactor??
+      switch (timeFrame) {
+        case '1D':
+          format = 'H:m A Z';
+          break;
+        case '1W':
+          format = 'H:m A, MMM D Z';
+          break;
+        case '1M':
+        case '3M':
+          format = 'H:00 A, MMM D Z';
+          break;
+        case '1Y':
+          format = 'MMM D, YYYY';
+          break;
+      }
 
-    if (offsetY < 0 || offsetY > 196 || offsetY === -0) {
-      return;
-    }
+      const displayDateTime = moment(activeDateTime).format(format);
 
-    let timeFrameIndex = utils.calculateHoveredTimeFrame(this.state.dataPointCount, offsetX, this.state.width);
-    const activeDateTime = this.state.prices[timeFrameIndex].dateTime;
+      this.setState((state, props) => {
+        let newActivePrice = state.prices[timeFrameIndex].open;
+        return { offsetX, offsetY, timeFrameIndex, activeDateTime, displayDateTime, activePrice: newActivePrice, chartOffsetY }
+      });
+  }
 
-    // // TODO: generates different values for offsetX when hover to the right (-0) VS hover to the left (null) why?? ... need to remove returns from around line 70 to see this ...
-    // console.log('this.state.timeFrameIndex: ', this.state.timeFrameIndex, '\n',
-    //             'timeFrameIndex: ', timeFrameIndex, '\n',
-    //             'this.state.offsetX: ', this.state.offsetX, '\n',
-    //             'offsetX: ', offsetX, '\n',
-    //             'this.state.offsetY: ', this.state.offsetY, '\n',
-    //             'offsetY: ', offsetY);
-
-
+  // TODO: are more tests necessary here??
+  mouseLeave(e) {
+    // when the mouse leaves the chart area, on re-render
     this.setState((state, props) => {
-      let newActivePrice = state.prices[timeFrameIndex].open;
-      let prevActivePrice = state.activePrice;
-      return { offsetX, offsetY, timeFrameIndex, activeDateTime, activePrice: newActivePrice, prevActivePrice }
+      return {
+        // hides the vertical bar
+        offsetX: null,
+        offsetY: null,
+        chartOffsetY: null,
+        timeFrameIndex: null, // removes any color from a certain section of the price chart
+        activePrice: state.prices[state.prices.length - 1].open // display the last price
+      }
     });
   }
 
-  // TODO: add tests
-  mouseLeave(e) {
-    // when the mouse leaves the chart area, hide the vertical bar (null's for those values accomplish this on re-render)
-    this.setState({ offsetX: null, offsetY: null });
-  }
-
 
   // TODO: add tests
+  // TODO: I think this default value for dataPointCount is unnecessary ...
   updateTimeFrame(e, dataPointCount = 1680) {
     const timeFrame = e.target.textContent;
     switch (timeFrame) {
@@ -118,15 +134,33 @@ class App extends React.Component {
         break;
     }
 
-    let path = 'M0 196';
+    let path = ['M0 196'];
     let price = null;
+    let fittedSVGCoords = [[0, 196]];
+    let x;
+    let y;
+    const strokeDashArrayGap = 676 / dataPointCount;
+    let group = 0;
+    let lastPosition = '';
 
     for (let i = 0; i < dataPointCount; i++) {
       price = this.state.prices[i];
-      path += ` L${utils.calculateX(dataPointCount, i, this.state.width)} ${utils.calculateY(price.open, this.state.height, this.state.low, this.state.priceRange)}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
+      x = utils.calcX(dataPointCount, i, this.state.width);
+      y = utils.calcY(price.open, this.state.height, this.state.low, this.state.priceRange);
+      fittedSVGCoords.push([x, y]); // this is for displaying the y position of the ball
+
+      if (dataPointCount === 35 && i !== 0 && i % 7 === 0) {
+        // increment the index in the array where the paths are getting collected
+        ++group;
+        // put the last path's positions as the starting position in the new group's path
+        path.push(`M${lastPosition}`);
+      }
+
+      lastPosition = `${x} ${y}`;
+      path[group] += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
     }
 
-    this.setState({ path, timeFrame, dataPointCount });
+    this.setState({ path, timeFrame, dataPointCount, fittedSVGCoords, strokeDashArrayGap });
   }
 
   // TODO: need additional tests for this ??
@@ -134,15 +168,16 @@ class App extends React.Component {
     const ticker = this.state.ticker;
     $.ajax({
       // TODO: will the port part of this url become unnecessary to specify when deployed??
-      url: `http://localhost:4444/price/${ticker}`,
+      url: `${config.SERVICE_API_URL}:${config.SERVICE_API_PORT}/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
         ticker.prices.forEach(price => {
           // converts the ISO8601 string into a Date object in the local timezone
+          // TODO: is this necessary to do now that I'm using moment.js??
           price.dateTime = new Date(new Date(price.dateTime).getTime() + new Date().getTimezoneOffset() * 60 * 1000);
         });
 
-        const highLow = utils.calculateHighAndLow(ticker.prices);
+        const highLow = utils.calcHighAndLow(ticker.prices);
 
         this.setState({
           ticker: ticker.ticker,
@@ -168,7 +203,6 @@ class App extends React.Component {
         <ChartHat
           ticker={this.state.ticker}
           activePrice={this.state.activePrice}
-          prevActivePrice={this.state.prevActivePrice}
         >
         </ChartHat>
         <div className="chart-top-right">
@@ -181,16 +215,20 @@ class App extends React.Component {
           mouseLeave={this.mouseLeave}
           offsetX={this.state.offsetX}
           offsetY={this.state.offsetY}
-          activeDateTime={this.state.activeDateTime}
+          displayDateTime={this.state.displayDateTime}
+          chartOffsetY={this.state.chartOffsetY}
+          strokeDashArrayGap={this.state.strokeDashArrayGap}
+          timeFrame={this.state.timeFrame}
+          timeFrameIndex={this.state.timeFrameIndex}
         >
         </Chart>
         <div className="chart-footer">
           <div onClick={this.updateTimeFrame} className="chart-timeframes">
-            <span>1D</span>
-            <span>1W</span>
-            <span>1M</span>
-            <span>3M</span>
-            <span>1Y</span>
+            <span className="chart-1D">1D</span>
+            <span className="chart-1W">1W</span>
+            <span className="chart-1M">1M</span>
+            <span className="chart-3M">3M</span>
+            <span className="chart-1Y">1Y</span>
           </div>
           <div>Expand</div>
         </div>
@@ -199,4 +237,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App></App>, document.querySelector('#root'));
+ReactDOM.render(<App></App>, document.querySelector('#chart'));

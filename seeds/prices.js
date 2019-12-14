@@ -32,7 +32,7 @@ module.exports = {
       open = this.lessThanTenPercentDifferent(previousPrice.close);
     }
 
-    // calculate three prices of lessThanTenPercentDifferent
+    // calc three prices of lessThanTenPercentDifferent
     let maybeHigh = this.lessThanTenPercentDifferent(open, 1);
     let maybeLow = this.lessThanTenPercentDifferent(open, 0)
     let close = this.lessThanTenPercentDifferent(open)

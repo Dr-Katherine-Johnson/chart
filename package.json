@@ -11,19 +11,24 @@
   "scripts": {
     "dev": "webpack -w",
     "start": "nodemon server/server.js",
-    "test": "jest --watchAll",
-    "test:coverage": "jest --coverage --colors",
+    "seed": "node seeds/start.js",
+    "test": "jest --watchAll --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
+    "test:all": "jest",
+    "test:coverage": "jest --watchAll --coverage --colors --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
+    "coverage": "open ./coverage/lcov-report/index.html",
     "test:api": "jest --watch endpoints.test.js",
     "test:utils": "jest --watch utils.test.js",
+    "test:app": "jest --watch app.test.js",
     "test:chart": "jest --watch chart.test.js",
     "test:charthat": "jest --watch charthat.test.js",
     "test:verticalline": "jest --watch verticalline.test.js",
-    "test:pricewheel": "jest --watch pricewheel.test.js",
-    "seed": "node seeds/start.js"
+    "test:pricewheel": "jest --watch pricewheel.test.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "jquery": "^3.4.1",
+    "moment": "^2.24.0",
     "mongodb": "^3.3.4",
     "mongoose": "^5.7.11",
     "react": "^16.12.0",
@@ -41,6 +46,7 @@
     "faker": "^4.1.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
+    "puppeteer": "^2.0.0",
     "request": "^2.88.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"

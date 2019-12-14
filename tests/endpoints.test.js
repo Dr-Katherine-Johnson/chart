@@ -1,13 +1,14 @@
 const db = require('../db/index.js');
 const request = require('request');
 const seed = require('../seeds/seed.js');
+const PORT = process.env.PORT || 4444;
 
 // ENDPOINT TESTS
 describe('GET /price/:ticker', () => {
   const tickerList = seed.start();
   // get a random ticker from the list
   const tickerObj = tickerList[Math.floor(Math.random() * tickerList.length)]
-  const url = `http://localhost:3000/price/${tickerObj.ticker}`;
+  const url = `http://localhost:${PORT}/price/${tickerObj.ticker}`;
 
   // check that the response is equal to the original ticker
   it(`Should return a JSON object of that ticker's price data`, (done) => {

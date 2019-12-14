@@ -1,5 +1,15 @@
 body {
   margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin: 0;
+}
+
+/* UTILITY */
+.hidden {
+  visibility: hidden;
 }
 
 /* CHART HAT */
@@ -37,7 +47,7 @@ body {
 
 /* CHART */
 .chart {
-  background-color: #BADA55;
+  background-color: #eaeae96b;
   position: relative;
   width: 676px;
   margin: 0 auto;
@@ -46,10 +56,10 @@ body {
 .chart-svg-container {
   height: 196px;
   position: relative;
-  background-color: gray;
+  background-color: #00f1fc3b;
 }
 
-#chart-chart-vertical-line-container {
+#chart-vertical-line-container {
   position: absolute;
   top: -20px;
   height: 216px;
@@ -65,7 +75,7 @@ body {
 #chart-datetime-container {
   text-align: center;
   background-color: tan;
-  width: 150px;
+  width: 200px;
   /* TODO: better way to do this? it feels hacky ... */
   margin-left: -75px;
 }
