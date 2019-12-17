@@ -1,0 +1,9 @@
+node_modules
+coverage
+ec2-start-script
+mongodb-org-4.2
+
+# Testing
+tests
+jest.config.js
+babel.config.js

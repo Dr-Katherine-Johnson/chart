@@ -1,0 +1,16 @@
+version: '3'
+services:
+  chart:
+    build: ./
+    depends_on:
+      - mongo
+    ports:
+      - '4444:4444'
+    links:
+      - "mongo:db"
+      - "mongo:database"
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - '1000:27017'
