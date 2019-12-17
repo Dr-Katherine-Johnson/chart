@@ -19,6 +19,7 @@
 ## Usage
 
 > Some usage instructions
+> Run docker-compose up from the root directory to create the containers. Then run docker exec chart_chart_1 node server/server.js to start the api in the container.
 
 ## Requirements
 
