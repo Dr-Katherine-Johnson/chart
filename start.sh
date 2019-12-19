@@ -1,5 +1,5 @@
-# TODO: It's not executing both commands in the container ...
 # Execute this file once once docker is installed
-docker-compose up
+docker-compose up -d
 # TODO: workaround because docker-compose doesn't seem to be executing multiple shell commands in one line ...
-docker exec chart_chart_1 node server/server.js
+docker exec -d chart_chart_1 node seeds/start.js
+exit

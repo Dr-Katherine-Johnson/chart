@@ -1,9 +1,13 @@
 {
-  "name": "",
-  "version": "",
-  "description": "",
+  "name": "chart",
+  "version": "1.0.0",
+  "description": "A clone of the stock price chart service from Robinhood.com's stock detail page",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dr-Wing/chart.git"
+  },
   "author": "",
-  "license": "",
+  "license": "MIT",
   "engines": {
     "node": ">=6.13.0"
   },
@@ -13,7 +17,7 @@
     "start-dev": "nodemon server/server.js",
     "build": "webpack",
     "start": "node server/server.js",
-    "start-docker": "node seeds/start.js && node server/server.js",
+    "start-docker": "node server/server.js && node seeds/start.js",
     "sample": "node sample.js && node sample1.js",
     "seed": "node seeds/start.js",
     "test": "jest --watchAll --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
@@ -36,7 +40,8 @@
     "mongodb": "^3.3.4",
     "mongoose": "^5.7.11",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "faker": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
@@ -47,7 +52,6 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
-    "faker": "^4.1.0",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
     "puppeteer": "^2.0.0",
