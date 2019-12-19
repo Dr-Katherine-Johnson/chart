@@ -23,7 +23,7 @@
 > Run the slush file with the command bash start.sh
 > The app is now running in a container at port 4444.
 > The mongo database is available at port 1000
-
+> docker-compose down -v to stop the app and (clean up after yourself!)
 
 ## Requirements
 

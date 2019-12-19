@@ -1,5 +1,4 @@
 # This would be the Dockerfile to use with docker-compose
-
 FROM node:10.16.3
 RUN mkdir -p /app
 WORKDIR /app
