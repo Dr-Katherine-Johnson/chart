@@ -6,6 +6,7 @@ module.exports = {
   // DATABASE_URL: `mongodb://localhost`,
   // DATABASE_PORT: `27017`, // unneeded because using docker-compose ??
   DATABASE_NAME: `robinhood`,
-  SERVICE_API_URL: process.env.url || `http://localhost`,
+  // TODO: how to get environment variables into the front end code??
+  SERVICE_API_URL: process.env.URL || `http://localhost`,
   SERVICE_API_PORT: `4444`
 };
