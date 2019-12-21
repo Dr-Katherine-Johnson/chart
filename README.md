@@ -1,7 +1,6 @@
 # Chart
 
-> Chart for this particular stock
-
+> Price chart for this particular stock
 
 ## Related Projects
 
@@ -18,22 +17,26 @@
 
 ## Usage
 
-> Some usage instructions
+> To start the app:
+> From the root directory
+> Install docker
+> Run the slush file with the command bash start.sh
+> The app is now running in a container at port 4444.
+> The mongo database is available at port 1000
+> docker-compose down -v to stop the app and (clean up after yourself!)
 
 ## Requirements
 
-An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
-
-- Node 6.13.0
-- etc
+- Docker
 
 ## Development
 
 ### Installing Dependencies
 
-From within the root directory:
+- none needed if using Docker
+
+Otherwise, from within the root directory:
 
 ```sh
-npm install -g webpack
 npm install
 ```

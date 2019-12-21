@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+
+# Testing
+tests
+coverage
+jest.config.js
+babel.config.js
+
+# AWS
+awscli-bundle
+
+# Source Files
+client/src
+
+# Generated Files
+package-lock.json
+
+# Guides
+STYLE-GUIDE.md
+README.md
+
+# Other
+sample.js
+sample1.js
+sampledata
+ec2-start-script
+mongodb-org-4.2

@@ -166,9 +166,14 @@ class App extends React.Component {
   // TODO: need additional tests for this ??
   componentDidMount() {
     const ticker = this.state.ticker;
+
+    console.log(`config.SERVICE_API_URL: `, config.SERVICE_API_URL);
+
     $.ajax({
       // TODO: will the port part of this url become unnecessary to specify when deployed??
-      url: `${config.SERVICE_API_URL}:${config.SERVICE_API_PORT}/price/${ticker}`,
+      // url: `${config.SERVICE_API_URL}:${config.SERVICE_API_PORT}/price/${ticker}`,
+      // TODO: using relative urls, how will this scale??
+      url: `/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
         ticker.prices.forEach(price => {
