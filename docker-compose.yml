@@ -1,7 +1,13 @@
 version: '3'
 services:
   chart:
-    image: bellcd/robinhood:chart
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    volumes:
+      - .:/app
+    # image: bellcd/robinhood:chart
     depends_on:
       - mongo
     ports:
@@ -10,7 +16,7 @@ services:
       - "mongo:db"
       - "mongo:database"
     env_file:
-      - chart.env
+      - .env
   mongo:
     image: mongo
     restart: always
