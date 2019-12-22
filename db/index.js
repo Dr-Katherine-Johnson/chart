@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const seed = require('../seeds/seed.js');
 const config = require('../env.config.js');
 
-
 // TODO: need to change to creating the database programmatically?? or stay with doing it manually when the ec2 instance is created??
 mongoose.connect(`${config.DATABASE_URL}:/${config.DATABASE_NAME}`, { useNewUrlParser: true, useUnifiedTopology: true });
 

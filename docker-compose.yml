@@ -9,6 +9,8 @@ services:
     links:
       - "mongo:db"
       - "mongo:database"
+    env_file:
+      - chart.env
   mongo:
     image: mongo
     restart: always
