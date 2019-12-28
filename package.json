@@ -16,7 +16,7 @@
     "dev": "webpack -w",
     "start-dev": "nodemon server/server.js",
     "build": "webpack",
-    "start": "node server/server.js",
+    "start": "nodemon server/server.js",
     "start-docker": "node server/server.js && node seeds/start.js",
     "sample": "node sample.js && node sample1.js",
     "seed": "node seeds/start.js",

@@ -57,6 +57,9 @@ h1 {
   height: 196px;
   position: relative;
   background-color: #00f1fc3b;
+
+  /* TODO: for testing development changes */
+  /* background-color: red; */
 }
 
 #chart-vertical-line-container {
