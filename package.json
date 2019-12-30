@@ -17,7 +17,7 @@
     "start-dev": "nodemon server/server.js",
     "build": "webpack",
     "start": "nodemon server/server.js",
-    "start-docker": "node server/server.js && node seeds/start.js",
+    "start-docker": "node seeds/start.js && node server/server.js",
     "sample": "node sample.js && node sample1.js",
     "seed": "node seeds/start.js",
     "test": "jest --watchAll --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
