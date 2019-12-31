@@ -9,8 +9,8 @@ services:
     links:
       - "mongo:db"
       - "mongo:database"
-    env_file:
-      - .env
+    environment:
+      - NODE_ENV=production
   mongo:
     image: mongo
     restart: always

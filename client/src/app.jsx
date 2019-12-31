@@ -167,10 +167,19 @@ class App extends React.Component {
   componentDidMount() {
     const ticker = this.state.ticker;
 
-    console.log(`config.SERVICE_API_URL: `, config.SERVICE_API_URL);
+    console.log('config: ', config);
+
+    let urlThroughPort;
+    if (config.SERVICE_API_URL === null) {
+      urlThroughPort = window.location.origin;
+    } else {
+      urlThroughPort = `${config.SERVICE_API_URL}:${config.SERVICE_API_PORT}`;
+    }
+
+    console.log(`urlThroughPort: `, urlThroughPort);
 
     $.ajax({
-      url: `${config.SERVICE_API_URL}:${config.SERVICE_API_PORT}/price/${ticker}`,
+      url: `${urlThroughPort}/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
         ticker.prices.forEach(price => {

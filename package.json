@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "webpack -w",
     "start-dev": "nodemon server/server.js",
-    "build": "webpack",
+    "build": "webpack -p && docker build -t bellcd/robinhood:chart . && docker push bellcd/robinhood:chart",
     "start": "nodemon server/server.js",
     "start-docker": "node seeds/start.js && node server/server.js",
     "seed": "node seeds/start.js",
