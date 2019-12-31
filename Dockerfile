@@ -4,6 +4,6 @@ ARG NODE_ENV=production
 RUN mkdir -p /app
 WORKDIR /app
 COPY . /app
-RUN if [ "$NODE_ENV" = production ] ; then npm install --production && echo 'doing production build' ; else npm install && echo 'doing development build' ; fi
+RUN npm install --production
 EXPOSE 4444
-CMD if [ "$NODE_ENV" = production ] ; then npm run start-docker ; else npm run start-dev ; fi
+CMD npm run start-docker

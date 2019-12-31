@@ -1,15 +1,7 @@
 version: '3.2'
 services:
   chart:
-    build:
-      context: .
-      args:
-        - NODE_ENV=development
-    volumes:
-      - type: bind
-        source: .
-        target: /app
-    # image: bellcd/robinhood:chart
+    image: bellcd/robinhood:chart
     depends_on:
       - mongo
     ports:

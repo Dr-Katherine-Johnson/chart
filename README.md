@@ -32,6 +32,10 @@ docker-compose down -v --rmi all
 
 ## Development
 ### With Docker
+NEW VERSION
+- create a .env file with `SERVICE_API_URL=` environment variable set to the fully qualified URL of the deployed service
+
+OLD VERSION
 - Follow directions to install the Watchman utility https://facebook.github.io/watchman/docs/install.html
 - Install the https://pypi.org/project/pywatchman/ dependency to use watchman-make
 - `watchman-make` watches for changes in the project root directory, and runs a script that relaunches `docker-compose`
@@ -46,4 +50,12 @@ watchman-make -p '*' --run 'bash relaunch.sh'
 - From within the root directory:
 ```sh
 npm install
+  ```
+
+  ```sh
+npm run dev
+  ```
+
+  ```sh
+npm run start-dev
   ```
