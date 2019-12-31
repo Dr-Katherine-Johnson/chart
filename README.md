@@ -14,13 +14,40 @@
 1. [Development](#development)
 
 ## Usage
-> To start the app - from the root directory, run the slush file with (requires docker and docker-compose)
+- If it does not already exist, create a `.env` file in the project root directory with:
+- `SERVICE_API_URL` environment variable set to the fully qualified URL of the deployed instance
+- `NODE_ENV=production`
+
+- From your LOCAL computer:
 ```sh
-bash start.sh
+bash ec2-move-files.sh EC2_INSTANCE_URL_GOES_HERE
 ```
-> The app is now running in a container at port 4444. The mongo database is available at port 1000. To stop the app and (clean up after yourself!)
+
+- ssh into the ec2 instance like so:
+```sh
+ssh -i ~/aws/Administrator-key-pair-useast1.pem ec2-user@EC2_INSTANCE_URL_GOES_HERE
+```
+
+- From the ec2 instance
+```sh
+bash ec2-install.sh
+```
+
+- Logout of the ec2 instance with `exit` and log back in using the command above
+- Again from the ec2 instance
+```sh
+docker-compose up
+```
+
+> The app is now running in a container at port 4444. The mongo database is available at port 1000. To stop the app (and clean up after yourself!), run this command from the ec2 instance:
 ```sh
 docker-compose down -v --rmi all
+```
+
+### If Needed
+- To connect to the mongo db running in the mongo container (ie, check if there is data there, etc ...), from the ec2 instance, run
+```sh
+docker exec -i ec2-user_mongo_1 mongo "mongodb://localhost"
 ```
 
 ## Requirements
@@ -32,9 +59,6 @@ docker-compose down -v --rmi all
 
 ## Development
 ### With Docker
-NEW VERSION
-- create a .env file with `SERVICE_API_URL=` environment variable set to the fully qualified URL of the deployed service
-
 OLD VERSION
 - Follow directions to install the Watchman utility https://facebook.github.io/watchman/docs/install.html
 - Install the https://pypi.org/project/pywatchman/ dependency to use watchman-make

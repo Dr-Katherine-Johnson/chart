@@ -20,6 +20,9 @@ package-lock.json
 STYLE-GUIDE.md
 README.md
 
+# Deployment
+.env
+
 # Other
 sampledata
 ec2-start-script
