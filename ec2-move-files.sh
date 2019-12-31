@@ -4,5 +4,5 @@
 # $1 should be the public url of the EC2 instance you have running
 publicDNS=$1
 
-# Moves these 5 files onto that instance
-scp -i ~/aws/Administrator-key-pair-useast1.pem ./docker-compose.yml ./.env ./ec2-install.sh ./ec2-connect.sh ./ec2-move-files.sh ec2-user@$publicDNS:~
+# Moves this directory onto that instance
+scp -i ~/aws/Administrator-key-pair-useast1.pem -r ./instance ec2-user@$publicDNS:~/chart

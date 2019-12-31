@@ -5,8 +5,6 @@ const PORT = config.SERVICE_API_PORT;
 const controller = require('../controller/index.js');
 const cors = require('cors');
 
-// enables pre-flight requests for all routes
-app.options('*', cors());
 app.use(cors());
 app.use(express.static('client/dist'));
 app.use(express.static('client/public'));

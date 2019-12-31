@@ -169,17 +169,17 @@ class App extends React.Component {
 
     console.log('config: ', config);
 
-    let urlThroughPort;
+    let chartUrl;
     if (config.SERVICE_API_URL === null) {
-      urlThroughPort = window.location.origin;
+      chartUrl = `${window.location.protocol}//${window.location.hostname}`;
     } else {
-      urlThroughPort = `${config.SERVICE_API_URL}:${config.SERVICE_API_PORT}`;
+      chartUrl = `${config.SERVICE_API_URL}`;
     }
 
-    console.log(`urlThroughPort: `, urlThroughPort);
+    console.log(`chartUrl: `, chartUrl);
 
     $.ajax({
-      url: `${urlThroughPort}/price/${ticker}`,
+      url: `${chartUrl}:${config.SERVICE_API_PORT}/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
         ticker.prices.forEach(price => {

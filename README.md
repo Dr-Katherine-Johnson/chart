@@ -18,12 +18,17 @@
 
 - From your LOCAL computer:
 ```sh
-bash ec2-move-files.sh EC2_INSTANCE_URL_GOES_HERE
+bash ec2-move-files.sh EC2_INSTANCE_URL
 ```
 
 - ssh into the ec2 instance like so:
 ```sh
-ssh -i ~/aws/Administrator-key-pair-useast1.pem ec2-user@EC2_INSTANCE_URL_GOES_HERE
+ssh -i ~/aws/Administrator-key-pair-useast1.pem ec2-user@EC2_INSTANCE_URL
+```
+
+- change directory to `chart`
+```sh
+cd chart
 ```
 
 - From the ec2 instance
@@ -32,12 +37,13 @@ bash ec2-install.sh
 ```
 
 - Logout of the ec2 instance with `exit` and log back in using the command above
-- Again from the ec2 instance
+
+- Again from the ec2 instance, `chart` directory
 ```sh
-docker-compose up -d
+docker-compose up
 ```
 
-> The app is now running in a container at port 4444. The mongo database is available at port 1000. To stop the app (and clean up after yourself!), run this command from the ec2 instance:
+> The app is now running in a container at port 4444. The mongo database is available at port 1000. To stop the app (and clean up after yourself!), run this command from the `chart` directory of the ec2 instance:
 ```sh
 docker-compose down -v --rmi all
 ```
@@ -49,32 +55,10 @@ docker exec -i ec2-user_mongo_1 mongo "mongodb://localhost"
 ```
 
 ## Requirements
-### With Docker
 - docker
 - docker-compose
-### Without Docker
-- node, npm, and mongo
 
 ## Development
-
-### Build
-- creates a webpack bundle, build a docker image, and pushes it to dockerhub
-```sh
-npm run build
-```
-### With Docker
-OLD VERSION
-- Follow directions to install the Watchman utility https://facebook.github.io/watchman/docs/install.html
-- Install the https://pypi.org/project/pywatchman/ dependency to use watchman-make
-- `watchman-make` watches for changes in the project root directory, and runs a script that relaunches `docker-compose`
-
-```sh
-watchman-make -p '*' --run 'bash relaunch.sh'
-```
-
-- Use the flag `--build-arg NODE_ENV=development` to build an image from which to run containers that contain all development dependencies (defaults to building an image with only production dependencies)
-
-### Without Docker
 - From within the root directory:
 ```sh
 npm install
@@ -87,3 +71,9 @@ npm run dev
   ```sh
 npm run start-dev
   ```
+
+## Build
+- creates a webpack bundle, build a docker image, and pushes it to dockerhub
+```sh
+npm run build
+```
