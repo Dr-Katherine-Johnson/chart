@@ -11,3 +11,5 @@ module.exports = {
 
 // 2 (3?) sets of env variables depending on whether this is running in development, production on my AWS numbers, or is being deployed on someone else's AWS account
 // reads the value of NODE_ENV from the shell environment
+
+// a new comment

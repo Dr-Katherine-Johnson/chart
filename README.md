@@ -31,10 +31,19 @@ docker-compose down -v --rmi all
 - node, npm, and mongo
 
 ## Development
-### Installing Dependencies
-- none needed if using Docker.
--  Otherwise, from within the root directory:
+### With Docker
+- Follow directions to install the Watchman utility https://facebook.github.io/watchman/docs/install.html
+- Install the https://pypi.org/project/pywatchman/ dependency to use watchman-make
+- `watchman-make` watches for changes in the project root directory, and runs a script that relaunches `docker-compose`
+
+```sh
+watchman-make -p '*' --run 'bash relaunch.sh'
+```
+
+- Use the flag `--build-arg NODE_ENV=development` to build an image from which to run containers that contain all development dependencies (defaults to building an image with only production dependencies)
+
+### Without Docker
+- From within the root directory:
 ```sh
 npm install
   ```
-- Use the flag `--build-arg NODE_ENV=development` to build an image from which to run containers that contain all development dependencies (defaults to building an image with only production dependencies)

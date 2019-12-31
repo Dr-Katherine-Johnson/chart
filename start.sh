@@ -1,2 +1,2 @@
-# Execute this file once once docker is installed
+# Execute this file once docker is installed
 docker-compose up -d
