@@ -34,4 +34,4 @@ const dropAll = () => {
   return Ticker.deleteMany({});
 }
 
-module.exports = { db, Ticker, dropAll }
+module.exports = { db, Ticker, dropAll };

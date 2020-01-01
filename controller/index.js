@@ -28,6 +28,8 @@ module.exports = {
     });
   },
 
+  // TODO: address situation where last two prices were the same, and divide by 0 condition
+  // TODO: add tests
   getPercentChange(req, res, next) {
     db.Ticker.findOne({ ticker: req.params.ticker }, (err, result) => {
       if (err) {
@@ -39,7 +41,13 @@ module.exports = {
         const pricesLength = result.prices.length
         const lastClosePrice = result.prices[pricesLength - 1].close
         const penultimateClosePrice = result.prices[pricesLength - 2].close
-        const percentChange = (lastClosePrice - penultimateClosePrice) / penultimateClosePrice;
+        let percentChange = (lastClosePrice - penultimateClosePrice) / penultimateClosePrice;
+
+        if (isNaN(percentChange)) {
+          percentChange = 0;
+        }
+
+        percentChange = percentChange.toFixed(4);
         res.send({ percentChange });
       }
     });
