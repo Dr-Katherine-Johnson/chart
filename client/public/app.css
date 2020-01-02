@@ -2,10 +2,12 @@
 :root {
   --green: #21ce99;
   --green-light: #1ae9aa;
+  --green-partially-transparent: rgba(33, 206, 153, 0.1);
   --orange: #f45531;
   --orange-light: #ff6340;
   --gray-dark: #1b1b1b;
-  --gray-light: #8c8c8e;
+  --gray-light: #000000;
+  --white: #fff;
 
   /* --green: rgb(33, 206, 153); */
   /* --green-light: rgb(26, 233, 170); */
@@ -96,16 +98,28 @@ body {
   margin: 0 0.6rem 0 0;
 }
 
-.chart-tag-list-item[data-theme="dark"] { color: var(--green); }
-.chart-tag-list-item[data-theme="light"] { color: var(--orange); }
-
-.chart-tag-list-item:hover {
+.chart-tag-list-item[data-theme="dark"]:hover, .chart-tag-list-item[data-theme="light"] {
   border-radius: 30px;
-  color: black;
 }
 
-.chart-tag-list-item[data-theme="dark"]:hover { background-color: var(--green); }
-.chart-tag-list-item[data-theme="light"]:hover { background-color: var(--orange); }
+.chart-tag-list-item[data-theme="light"] {
+  background-color: var(--green-partially-transparent);
+  color: var(--green);
+}
+
+.chart-tag-list-item[data-theme="light"]:hover {
+  background-color: var(--green);
+  color: var(--white);
+}
+
+.chart-tag-list-item[data-theme="dark"] {
+  color: var(--green);
+}
+
+.chart-tag-list-item[data-theme="dark"]:hover {
+  background-color: var(--green);
+  color: black;
+}
 
 /* CHART */
 .chart {

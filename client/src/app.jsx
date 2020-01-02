@@ -16,7 +16,7 @@ class App extends React.Component {
     this.state = {
       ticker: 'ABCD',
       name: 'ABCD Company',
-      theme: 'dark',
+      theme: 'light',
       prices: [
         {
           dateTime: new Date("2019-11-16T22:27:19.319Z"),
