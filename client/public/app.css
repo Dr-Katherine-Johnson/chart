@@ -1,10 +1,45 @@
+/* COLORS */
+:root {
+  --green: #21ce99;
+  --green-light: #1ae9aa;
+  --orange: #f45531;
+  --orange-light: #ff6340;
+  --gray: #8c8c8e;
+
+  /* --green: rgb(33, 206, 153); */
+  /* --green-light: rgb(26, 233, 170); */
+  /* --orange: rgb(244, 85, 49); */
+  /* --orange-light: rgb(255, 99, 64); */
+}
+
+/* THEMES */
+.pab-theme-closed-up {
+  color: var(--green);
+}
+
+.pab-theme-closed-down {
+ color: var(--orange);
+}
+
 body {
   margin: 0;
   padding: 0;
 }
 
-h1 {
+/* SERVICE */
+#chart {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  line-height: 19px;
+}
+
+#chart h1 {
   margin: 0;
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.29px;
+  line-height: 42px;
 }
 
 /* UTILITY */
@@ -46,9 +81,34 @@ h1 {
 
 }
 
+/* TAGS */
+.tag-list {
+  display: flex;
+  list-style: none;
+  justify-content: flex-start;
+  margin: 0 0 0 -0.7rem;
+  padding: 0;
+}
+
+.chart-tag-list-item {
+  padding: 0.5rem 0.7rem;
+  margin: 0 0.6rem 0 0;
+}
+
+.chart-tag-list-item[data-theme="dark"] { color: var(--green); }
+.chart-tag-list-item[data-theme="light"] { color: var(--orange); }
+
+.chart-tag-list-item:hover {
+  border-radius: 30px;
+  color: black;
+}
+
+.chart-tag-list-item[data-theme="dark"]:hover { background-color: var(--green); }
+.chart-tag-list-item[data-theme="light"]:hover { background-color: var(--orange); }
+
 /* CHART */
 .chart {
-  background-color: #eaeae96b;
+  /* background-color: #eaeae96b; */
   position: relative;
   width: 676px;
   margin: 0 auto;
@@ -57,7 +117,7 @@ h1 {
 .chart-svg-container {
   height: 196px;
   position: relative;
-  background-color: #00f1fc3b;
+  /* background-color: #00f1fc3b; */
 
   /* TODO: for testing development changes */
   /* background-color: red; */
@@ -73,12 +133,12 @@ h1 {
 #chart-vertical-line {
   width: 0;
   height: 196px;
-  border: 1px solid red;
+  border: 1px solid var(--gray);
 }
 
 #chart-datetime-container {
   text-align: center;
-  background-color: tan;
+  /* background-color: tan; */
   width: 200px;
   /* TODO: better way to do this? it feels hacky ... */
   margin-left: -75px;
@@ -91,7 +151,7 @@ h1 {
 /* CHART FOOTER */
 .chart-footer {
   display: flex;
-  background-color: lightblue;
+  /* background-color: lightblue; */
   justify-content: space-between;
   padding: 7px;
   border-bottom: 2px solid black;
