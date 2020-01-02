@@ -240,6 +240,7 @@ class App extends React.Component {
             strokeDashArrayGap={this.state.strokeDashArrayGap}
             timeFrame={this.state.timeFrame}
             timeFrameIndex={this.state.timeFrameIndex}
+            theme={this.state.theme}
           >
           </Chart>
           <div className="chart-footer">

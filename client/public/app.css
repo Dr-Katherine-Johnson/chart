@@ -4,7 +4,8 @@
   --green-light: #1ae9aa;
   --orange: #f45531;
   --orange-light: #ff6340;
-  --gray: #8c8c8e;
+  --gray-dark: #1b1b1b;
+  --gray-light: #8c8c8e;
 
   /* --green: rgb(33, 206, 153); */
   /* --green-light: rgb(26, 233, 170); */
@@ -133,7 +134,7 @@ body {
 #chart-vertical-line {
   width: 0;
   height: 196px;
-  border: 1px solid var(--gray);
+  border: 1px solid var(--gray-light);
 }
 
 #chart-datetime-container {
