@@ -24,7 +24,5 @@ coverage
 client/dist
 
 # Deployment
-ec2-start-script.txt
-mongodb-org-4.2.repo
 awscli-bundle/
 .env
