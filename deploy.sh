@@ -1,15 +1,18 @@
 #!/bin/bash
-# This script is part 1 of setting up a docker installation of a Robinhood clone service on EC2
+# This script sets up a docker-compose installation of the chart service of a Robinhood clone on EC2
 
-instance=$1
-pathToPEM=$2
-first=${3:-0} # defaults to 0
+pathToPEM=$1
+instance=$2
+install=${3:-0} # defaults to 0
 
-# Moves this directory onto that instance
-scp -i $pathToPEM -r ./instance ec2-user@$instance:~/chart
+# Create the chart directory if it doesn't exist
+ssh -i $pathToPEM ec2-user@$instance 'mkdir -p chart'
+
+# Moves these files onto that instance
+scp -i $pathToPEM ./docker-compose.yml .env ec2-user@$instance:~/chart
 
 # This section should only be run once per instance
-if test $first -eq 1
+if test $install -eq 1
 then
   # Moves the install script onto the instance
   scp -i $pathToPEM ./ec2-install.sh ec2-user@$instance:~
@@ -17,6 +20,3 @@ then
   # Runs the file ec2-install.sh (that you just moved to the instance), on that instance
   ssh -i $pathToPEM ec2-user@$instance bash ec2-install.sh
 fi
-
-# Starts the docker container
-ssh -i $pathToPEM ec2-user@$instance 'cd chart && docker-compose up'

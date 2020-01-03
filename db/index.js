@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const seed = require('../seeds/seed.js');
 const config = require('../env.config.js');

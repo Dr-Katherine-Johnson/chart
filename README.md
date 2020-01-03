@@ -19,7 +19,10 @@
   - [Earnings Chart](https://github.com/Dr-Wing/earnings)
 
 ## Deployment
-- Create a file in the project directory named `.env`, based on `.env.template`. This file will need the URL of the deployed EC2 instance, as well as the absolute path to the private key file in order to authenticate into that instance.
+- Create a file in the project directory named `.env`, based on `.env.template`. This file will need:
+  1. The URL of the deployed EC2 instance for this service
+  2. The URL of the deployed EC2 instance for the price chart service
+  3. The absolute path to the private key file in order to authenticate into that instance.
 
 - From your LOCAL computer
 ```sh
@@ -29,21 +32,27 @@ export $(cat .env)
 
 ```sh
 # Only include the 1 at the end if this is the first time you've run this script on this instance (installs things like docker, docker-compose, etc...)
-bash deploy.sh $instance $pathToPEM 1
+bash deploy.sh $pathToPEM $instance 1 && bash compose.sh $pathToPEM $instance
 ```
 
-- Enter yes at the prompt. This process may take a little while (90s or so)
+- (if needed) Enter yes at the prompt.
 
 - The app is now running on the instance in a container at port 4444. The mongo database is available in its own container at port 1000.
 
 ### If Needed
-- To stop the app (and clean up after yourself!), run this command from the `chart` directory of the ec2 instance:
+- To stop (and clean up after yourself!) or restart the app, run these commands from your local machine (respectively)
 ```sh
-docker-compose down -v --rmi all
+bash compose.sh $pathToPEM $instance 1
 ```
+
+- To restart the app:
+```sh
+bash compose.sh $pathToPEM $instance
+```
+
 - To connect to the mongo db running in the mongo container (ie, check if there is data there, etc ...), from the ec2 instance, run
 ```sh
-docker exec -i ec2-user_mongo_1 mongo "mongodb://localhost"
+docker exec -i chart_mongo_1 mongo "mongodb://localhost"
 ```
 
 ## Requirements
