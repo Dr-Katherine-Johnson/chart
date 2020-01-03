@@ -9,7 +9,7 @@ const Chart = ({ path, mouseMove, mouseLeave, offsetX, offsetY, displayDateTime,
   // only display <line> if timeFrame is one day
   const line = timeFrame === '1D' ? <line x1="0" y1="50" x2="676" y2="50" stroke="black" strokeDasharray={`1 ${strokeDashArrayGap}`} strokeDashoffset="1"></line> : null
 
-  let strokeColor = theme === `dark` ? `#21ce99` : `#f45531`;
+  let strokeColor = `#21ce99`;
   let opacity;
 
   // Highlights the hovered over <g> in the 1W timeframe, timeFrameIndex 0-34
@@ -39,7 +39,7 @@ const Chart = ({ path, mouseMove, mouseLeave, offsetX, offsetY, displayDateTime,
     </g>;
   })
 
-  let circleFill = theme === `dark` ? `#21ce99` : `#f45531`;
+  let circleFill = `#21ce99`;
   let circleStroke = theme === `dark` ? `#1b1b1b` : `white`;
 
   return (

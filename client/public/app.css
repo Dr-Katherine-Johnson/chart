@@ -15,15 +15,6 @@
   /* --orange-light: rgb(255, 99, 64); */
 }
 
-/* THEMES */
-.pab-theme-closed-up {
-  color: var(--green);
-}
-
-.pab-theme-closed-down {
- color: var(--orange);
-}
-
 body {
   margin: 0;
   padding: 0;
