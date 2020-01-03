@@ -1,12 +1,16 @@
-// TODO: which / all of these get provided by the ec2 instance??
-module.exports = {
-  PORT: process.env.port || 4444,
-  // TODO: changed from 127.0.0.1 to database b/c it's being used with docker-compose
-  DATABASE_URL: `mongodb://database`,
-  // DATABASE_URL: `mongodb://localhost`,
-  // DATABASE_PORT: `27017`, // unneeded because using docker-compose ??
-  DATABASE_NAME: `robinhood`,
-  // TODO: how to get environment variables into the front end code??
-  SERVICE_API_URL: process.env.URL || `http://localhost`,
-  SERVICE_API_PORT: `4444`
+let obj = {
+  DATABASE_NAME: 'robinhood',
+  SERVICE_API_PORT: `4444`,
+  DATABASE_URL: `mongodb://localhost`,
+  SERVICE_API_URL: `http://localhost`,
 };
+
+if (process.env.NODE_ENV === 'production') {
+  obj = Object.assign({}, obj, {
+    DATABASE_URL: 'mongodb://database',
+    // the client will the get deployed url from the browser, as it's running
+    SERVICE_API_URL: null,
+  });
+}
+
+module.exports = obj;

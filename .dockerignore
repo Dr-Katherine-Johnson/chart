@@ -20,9 +20,10 @@ package-lock.json
 STYLE-GUIDE.md
 README.md
 
+# Deployment
+.env
+
 # Other
-sample.js
-sample1.js
 sampledata
 ec2-start-script
 mongodb-org-4.2

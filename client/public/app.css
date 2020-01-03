@@ -1,10 +1,39 @@
+/* COLORS */
+:root {
+  --green: #21ce99;
+  --green-light: #1ae9aa;
+  --green-partially-transparent: rgba(33, 206, 153, 0.1);
+  --orange: #f45531;
+  --orange-light: #ff6340;
+  --gray-dark: #1b1b1b;
+  --gray-light: #000000;
+  --white: #fff;
+
+  /* --green: rgb(33, 206, 153); */
+  /* --green-light: rgb(26, 233, 170); */
+  /* --orange: rgb(244, 85, 49); */
+  /* --orange-light: rgb(255, 99, 64); */
+}
+
 body {
   margin: 0;
   padding: 0;
 }
 
-h1 {
+/* SERVICE */
+#chart {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  line-height: 19px;
+}
+
+#chart h1 {
   margin: 0;
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.29px;
+  line-height: 42px;
 }
 
 /* UTILITY */
@@ -18,6 +47,7 @@ h1 {
   padding-top: 1.3rem;
   padding-bottom: 1.3rem;
   position: relative;
+  line-height: 40px;
   overflow: hidden;
 }
 
@@ -45,9 +75,46 @@ h1 {
 
 }
 
+/* TAGS */
+.tag-list {
+  display: flex;
+  list-style: none;
+  justify-content: flex-start;
+  margin: 0 0 0 -0.7rem;
+  padding: 0;
+}
+
+.chart-tag-list-item {
+  padding: 0.5rem 0.7rem;
+  margin: 0 0.6rem 0 0;
+}
+
+.chart-tag-list-item[data-theme="dark"]:hover, .chart-tag-list-item[data-theme="light"] {
+  border-radius: 30px;
+}
+
+.chart-tag-list-item[data-theme="light"] {
+  background-color: var(--green-partially-transparent);
+  color: var(--green);
+}
+
+.chart-tag-list-item[data-theme="light"]:hover {
+  background-color: var(--green);
+  color: var(--white);
+}
+
+.chart-tag-list-item[data-theme="dark"] {
+  color: var(--green);
+}
+
+.chart-tag-list-item[data-theme="dark"]:hover {
+  background-color: var(--green);
+  color: black;
+}
+
 /* CHART */
 .chart {
-  background-color: #eaeae96b;
+  /* background-color: #eaeae96b; */
   position: relative;
   width: 676px;
   margin: 0 auto;
@@ -56,7 +123,10 @@ h1 {
 .chart-svg-container {
   height: 196px;
   position: relative;
-  background-color: #00f1fc3b;
+  /* background-color: #00f1fc3b; */
+
+  /* TODO: for testing development changes */
+  /* background-color: red; */
 }
 
 #chart-vertical-line-container {
@@ -69,12 +139,12 @@ h1 {
 #chart-vertical-line {
   width: 0;
   height: 196px;
-  border: 1px solid red;
+  border: 1px solid var(--gray-light);
 }
 
 #chart-datetime-container {
   text-align: center;
-  background-color: tan;
+  /* background-color: tan; */
   width: 200px;
   /* TODO: better way to do this? it feels hacky ... */
   margin-left: -75px;
@@ -87,7 +157,7 @@ h1 {
 /* CHART FOOTER */
 .chart-footer {
   display: flex;
-  background-color: lightblue;
+  /* background-color: lightblue; */
   justify-content: space-between;
   padding: 7px;
   border-bottom: 2px solid black;

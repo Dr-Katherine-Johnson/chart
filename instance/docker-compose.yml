@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 services:
   chart:
     image: bellcd/robinhood:chart
@@ -9,6 +9,8 @@ services:
     links:
       - "mongo:db"
       - "mongo:database"
+    environment:
+      - NODE_ENV=production
   mongo:
     image: mongo
     restart: always

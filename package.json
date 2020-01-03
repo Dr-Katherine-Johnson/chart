@@ -9,16 +9,15 @@
   "author": "",
   "license": "MIT",
   "engines": {
-    "node": ">=6.13.0"
+    "node": "10.18.0"
   },
   "main": "./server/server.js",
   "scripts": {
     "dev": "webpack -w",
     "start-dev": "nodemon server/server.js",
-    "build": "webpack",
-    "start": "node server/server.js",
-    "start-docker": "node server/server.js && node seeds/start.js",
-    "sample": "node sample.js && node sample1.js",
+    "build": "webpack -p && docker build -t bellcd/robinhood:chart . && docker push bellcd/robinhood:chart",
+    "start": "nodemon server/server.js",
+    "start-docker": "node seeds/start.js && node server/server.js",
     "seed": "node seeds/start.js",
     "test": "jest --watchAll --testPathIgnorePatterns=/node_modules/, ./tests.seeding.test.js",
     "test:all": "jest",
@@ -34,14 +33,16 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "dotenv-webpack": "^1.7.0",
     "express": "^4.17.1",
+    "faker": "^4.1.0",
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "mongodb": "^3.3.4",
     "mongoose": "^5.7.11",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "faker": "^4.1.0"
+    "react-dom": "^16.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",

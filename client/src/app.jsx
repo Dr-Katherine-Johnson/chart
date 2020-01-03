@@ -16,6 +16,7 @@ class App extends React.Component {
     this.state = {
       ticker: 'ABCD',
       name: 'ABCD Company',
+      theme: 'light',
       prices: [
         {
           dateTime: new Date("2019-11-16T22:27:19.319Z"),
@@ -167,13 +168,19 @@ class App extends React.Component {
   componentDidMount() {
     const ticker = this.state.ticker;
 
-    console.log(`config.SERVICE_API_URL: `, config.SERVICE_API_URL);
+    console.log('config: ', config);
+
+    let chartUrl;
+    if (config.SERVICE_API_URL === null) {
+      chartUrl = `${window.location.protocol}//${window.location.hostname}`;
+    } else {
+      chartUrl = `${config.SERVICE_API_URL}`;
+    }
+
+    console.log(`chartUrl: `, chartUrl);
 
     $.ajax({
-      // TODO: will the port part of this url become unnecessary to specify when deployed??
-      // url: `${config.SERVICE_API_URL}:${config.SERVICE_API_PORT}/price/${ticker}`,
-      // TODO: using relative urls, how will this scale??
-      url: `/price/${ticker}`,
+      url: `${chartUrl}:${config.SERVICE_API_PORT}/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
         ticker.prices.forEach(price => {
@@ -204,40 +211,50 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="chart">
-        <ChartHat
-          ticker={this.state.ticker}
-          activePrice={this.state.activePrice}
-        >
-        </ChartHat>
-        <div className="chart-top-right">
-          <span className="chart-rating-percent">{this.state.ratingPercent} Hold</span>
-          <span className="chart-people-own">{this.state.peopleOwn}</span>
+      <>
+       <div id="tags">
+          <ul className="tag-list">
+            <li data-theme={this.state.theme} className="chart-tag-list-item">Computer Hardware</li>
+            <li data-theme={this.state.theme} className="chart-tag-list-item">100 Most Popular</li>
+            <li data-theme={this.state.theme} className="chart-tag-list-item">Computer Software</li>
+          </ul>
         </div>
-        <Chart
-          path={this.state.path}
-          mouseMove={this.mouseMove}
-          mouseLeave={this.mouseLeave}
-          offsetX={this.state.offsetX}
-          offsetY={this.state.offsetY}
-          displayDateTime={this.state.displayDateTime}
-          chartOffsetY={this.state.chartOffsetY}
-          strokeDashArrayGap={this.state.strokeDashArrayGap}
-          timeFrame={this.state.timeFrame}
-          timeFrameIndex={this.state.timeFrameIndex}
-        >
-        </Chart>
-        <div className="chart-footer">
-          <div onClick={this.updateTimeFrame} className="chart-timeframes">
-            <span className="chart-1D">1D</span>
-            <span className="chart-1W">1W</span>
-            <span className="chart-1M">1M</span>
-            <span className="chart-3M">3M</span>
-            <span className="chart-1Y">1Y</span>
+        <div className="chart">
+          <ChartHat
+            ticker={this.state.ticker}
+            activePrice={this.state.activePrice}
+          >
+          </ChartHat>
+          <div className="chart-top-right">
+            <span className="chart-rating-percent">{this.state.ratingPercent} Hold</span>
+            <span className="chart-people-own">{this.state.peopleOwn}</span>
           </div>
-          <div>Expand</div>
+          <Chart
+            path={this.state.path}
+            mouseMove={this.mouseMove}
+            mouseLeave={this.mouseLeave}
+            offsetX={this.state.offsetX}
+            offsetY={this.state.offsetY}
+            displayDateTime={this.state.displayDateTime}
+            chartOffsetY={this.state.chartOffsetY}
+            strokeDashArrayGap={this.state.strokeDashArrayGap}
+            timeFrame={this.state.timeFrame}
+            timeFrameIndex={this.state.timeFrameIndex}
+            theme={this.state.theme}
+          >
+          </Chart>
+          <div className="chart-footer">
+            <div onClick={this.updateTimeFrame} className="chart-timeframes">
+              <span className="chart-1D">1D</span>
+              <span className="chart-1W">1W</span>
+              <span className="chart-1M">1M</span>
+              <span className="chart-3M">3M</span>
+              <span className="chart-1Y">1Y</span>
+            </div>
+            <div>Expand</div>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }
