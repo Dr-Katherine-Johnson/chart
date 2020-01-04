@@ -214,6 +214,7 @@ class App extends React.Component {
           <ChartHat
             ticker={this.state.ticker}
             activePrice={this.state.activePrice}
+            firstPrice={this.state.prices[0].open}
           >
           </ChartHat>
           <div className="chart-top-right">
