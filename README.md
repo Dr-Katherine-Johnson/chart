@@ -1,57 +1,58 @@
 # Chart
-> Price chart for this particular stock
-
-## Related Projects
-  ###### Reverse Proxy that interacts with the other microservices
-  - https://github.com/Dr-Wing/chart-proxy
-
-  ###### Microservices
-  - https://github.com/Dr-Wing/about-microservice
+> Price chart microservice for a Service-oriented architecture clone of the [stock detail page from Robinhood.com](https://robinhood.com/stocks/AAPL)
 
 ## Table of Contents
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
+- [Chart](#chart)
+  - [Table of Contents](#table-of-contents)
+  - [Related Projects](#related-projects)
+  - [Deployment](#deployment)
+    - [If Needed](#if-needed)
+  - [Requirements](#requirements)
+  - [Development](#development)
+  - [Build](#build)
 
-## Usage
-- No .env file is required. The client side code gets the service URL from the browser it's running on.
+## Related Projects
+- [Reverse Proxy](https://github.com/Dr-Wing/chart-proxy) that interacts with the other microservices
+- Microservices
+  - [About](https://github.com/Dr-Wing/about-microservice)
+  - [People Also Bought](https://github.com/Dr-Wing/people-also-bought)
+  - [Earnings Chart](https://github.com/Dr-Wing/earnings)
 
-- From your LOCAL computer:
+## Deployment
+- Create a file in the project directory named `.env`, based on `.env.template`. This file will need:
+  1. The URL of the deployed EC2 instance for this service
+  2. The URL of the deployed EC2 instance for the price chart service
+  3. The absolute path to the private key file in order to authenticate into that instance.
+
+- From your LOCAL computer
 ```sh
-bash ec2-move-files.sh EC2_INSTANCE_URL
+# Makes the environment variables you just defined in `.env` available in your current shell
+export $(cat .env)
 ```
 
-- ssh into the ec2 instance like so:
 ```sh
-ssh -i ~/aws/Administrator-key-pair-useast1.pem ec2-user@EC2_INSTANCE_URL
+# Only include the 1 at the end if this is the first time you've run this script on this instance (installs things like docker, docker-compose, etc...)
+bash deploy.sh $pathToPEM $instance 1 && bash compose.sh $pathToPEM $instance
 ```
 
-- change directory to `chart`
-```sh
-cd chart
-```
+- (if needed) Enter yes at the prompt.
 
-- From the ec2 instance
-```sh
-bash ec2-install.sh
-```
-
-- Logout of the ec2 instance with `exit` and log back in using the command above
-
-- Again from the ec2 instance, `chart` directory
-```sh
-docker-compose up
-```
-
-> The app is now running in a container at port 4444. The mongo database is available at port 1000. To stop the app (and clean up after yourself!), run this command from the `chart` directory of the ec2 instance:
-```sh
-docker-compose down -v --rmi all
-```
+- The app is now running on the instance in a container at port 4444. The mongo database is available in its own container at port 1000.
 
 ### If Needed
+- To stop (and clean up after yourself!) or restart the app, run these commands from your local machine (respectively)
+```sh
+bash compose.sh $pathToPEM $instance 1
+```
+
+- To restart the app:
+```sh
+bash compose.sh $pathToPEM $instance
+```
+
 - To connect to the mongo db running in the mongo container (ie, check if there is data there, etc ...), from the ec2 instance, run
 ```sh
-docker exec -i ec2-user_mongo_1 mongo "mongodb://localhost"
+docker exec -i chart_mongo_1 mongo "mongodb://localhost"
 ```
 
 ## Requirements
@@ -73,7 +74,7 @@ npm run start-dev
   ```
 
 ## Build
-- creates a webpack bundle, build a docker image, and pushes it to dockerhub
+- Creates a webpack bundle, Builds a docker image, and pushes it to dockerhub
 ```sh
 npm run build
 ```

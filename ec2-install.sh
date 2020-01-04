@@ -16,6 +16,3 @@ sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-c
 
 # Adjusts permissions
 sudo chmod +x /usr/local/bin/docker-compose
-
-# Logs out of the ec2 instance (needed to access docker properly)
-exit 0

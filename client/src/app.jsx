@@ -170,17 +170,8 @@ class App extends React.Component {
 
     console.log('config: ', config);
 
-    let chartUrl;
-    if (config.SERVICE_API_URL === null) {
-      chartUrl = `${window.location.protocol}//${window.location.hostname}`;
-    } else {
-      chartUrl = `${config.SERVICE_API_URL}`;
-    }
-
-    console.log(`chartUrl: `, chartUrl);
-
     $.ajax({
-      url: `${chartUrl}:${config.SERVICE_API_PORT}/price/${ticker}`,
+      url: `${config.SERVICE_CHART_URL}:${config.SERVICE_CHART_PORT}/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
         ticker.prices.forEach(price => {
