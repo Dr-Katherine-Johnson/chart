@@ -1,6 +1,6 @@
 let obj = {
   DATABASE_URL: `mongodb://localhost`,
-  DATABASE_NAME: 'robinhood',
+  DATABASE_NAME: 'robinhood-price-chart',
   SERVICE_CHART_URL: `http://localhost`,
   SERVICE_CHART_PORT: `4444`,
 };
