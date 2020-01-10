@@ -166,3 +166,8 @@ body {
 .chart-timeframes > span {
   margin-right: 10px;
 }
+
+.chart-expand-button {
+  /* TODO: Add fullscreen charting functionality */
+  visibility: hidden;
+}

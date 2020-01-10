@@ -32,8 +32,6 @@ class App extends React.Component {
       high: 0,
       low: 0,
       priceRange: 0,
-      ratingPercent: `81%`,
-      peopleOwn: 2500,
       path: [''],
       offsetX: null,
       offsetY: null,
@@ -166,6 +164,22 @@ class App extends React.Component {
 
   // TODO: need additional tests for this ??
   componentDidMount() {
+    // TODO: this should come from the other microservice when it's ready ...
+    const random = Math.random();
+    let rating;
+    if (random <= 0.3) {
+      rating = 'Buy';
+    } else if (random <= 0.6) {
+      rating = 'Hold';
+    } else {
+      rating = 'Sell';
+    }
+    // random number between 50 and 100
+    const ratingPercent = parseInt(((Math.random() * 50) + 50).toFixed());
+
+    // random integer in the thousands
+    const peopleOwn = parseInt(Math.random() * 100000);
+
     const ticker = this.state.ticker;
 
     console.log('config: ', config);
@@ -189,7 +203,10 @@ class App extends React.Component {
           high: highLow[0],
           low: highLow[1],
           priceRange: highLow[0] - highLow[1],
-          activePrice: ticker.prices[0].open // defaults to displaying the first price
+          activePrice: ticker.prices[0].open, // defaults to displaying the first price
+          rating,
+          ratingPercent,
+          peopleOwn
         });
 
         this.updateTimeFrame({ target: { textContent: '1Y' }}); // defaults to displaying 1Y timeframe
@@ -218,7 +235,7 @@ class App extends React.Component {
           >
           </ChartHat>
           <div className="chart-top-right">
-            <span className="chart-rating-percent">{this.state.ratingPercent} Hold</span>
+            <span className="chart-rating-percent">{this.state.ratingPercent}% {this.state.rating}</span>
             <span className="chart-people-own">{this.state.peopleOwn}</span>
           </div>
           <Chart
@@ -243,7 +260,7 @@ class App extends React.Component {
               <span className="chart-3M">3M</span>
               <span className="chart-1Y">1Y</span>
             </div>
-            <div>Expand</div>
+            <div className="chart-expand-button">Expand</div>
           </div>
         </div>
       </>
