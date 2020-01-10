@@ -195,7 +195,7 @@ describe('utils', () => {
 
   describe('calcLeftOffset', () => {
     const validArgs = [[0, 0], [100, 0], [676, 42]];
-    const invalidArgs = [[10, 40], [-1, -1], [5, -9], [null, null], [undefined, undefined], [NaN, NaN], [true, true], [false, false], ['', ''], ['salmon', 'salmon'], [[], []], [{}, {}]];
+    const invalidArgs = [[-1, -1], [5, -9], [null, null], [undefined, undefined], [NaN, NaN], [true, true], [false, false], ['', ''], ['salmon', 'salmon'], [[], []], [{}, {}]];
 
     it('Should return a number greater than or equal to 0 with valid arguments', () => {
       let result;
@@ -206,7 +206,7 @@ describe('utils', () => {
       });
     });
 
-    it('Should throw an error when leftMargin is greater than dLM OR dLM or leftMargin is NOT a number greater than or equal to 0', () => {
+    it('Should throw an error when dM or leftMargin is NOT a number greater than or equal to 0', () => {
       invalidArgs.forEach(invalid => {
         const fn = () => {
           utils.calcLeftOffset(invalid[0], invalid[1])
