@@ -1,13 +1,13 @@
 import React from 'react';
 import PriceWheel from './pricewheel.jsx';
 
-const ChartHat = ({ ticker, activePrice, firstPrice }) => {
+const ChartHat = ({ name, activePrice, firstPrice }) => {
 const absoluteChange = activePrice - firstPrice;
 const percentChange = (absoluteChange / firstPrice) * 100
 
   return (
     <>
-      <h1>{ticker}</h1>
+      <h1>{name}</h1>
       <div id="chart-active-price">
         <PriceWheel
           activePrice={activePrice}

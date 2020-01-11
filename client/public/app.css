@@ -84,7 +84,7 @@ body {
   padding: 0;
 }
 
-.chart-tag-list-item {
+.chart-tag-list-item, .chart-rating-details {
   padding: 0.5rem 0.7rem;
   margin: 0 0.6rem 0 0;
 }
@@ -112,9 +112,43 @@ body {
   color: black;
 }
 
+/* RATINGS */
+.chart-rating-details {
+  border-radius: 30px;
+}
+
+.chart-rating-details[data-theme="light"] { background-color: var(--gray-light); color: black; }
+.chart-rating-details[data-theme="dark"] { background-color: black; color: white; }
+
+.chart-rating-details[data-theme="light"]:hover { background-color: black; color: white; }
+.chart-rating-details[data-theme="dark"]:hover { background-color: white; color: black; }
+
+.chart-rating-column {
+  display: flex;
+  align-items: center;
+}
+.chart-rating-icon {
+  margin-right: 0.4rem;
+}
+
+/* RATINGS TOOLTIPS */
+.chart-rating-tooltip-container {
+  background-color: rgba(0, 0, 0, 0.9);
+  visibility: hidden;
+  padding: 0.7rem 1.2rem;
+  position: absolute;
+  max-width: 9rem;
+  top: 3rem;
+  margin-left: -3.2rem;
+  border-radius: 0.3rem;
+}
+
+.chart-active {
+  visibility: visible;
+}
+
 /* CHART */
 .chart {
-  /* background-color: #eaeae96b; */
   position: relative;
   width: 676px;
   margin: 0 auto;
@@ -123,10 +157,6 @@ body {
 .chart-svg-container {
   height: 196px;
   position: relative;
-  /* background-color: #00f1fc3b; */
-
-  /* TODO: for testing development changes */
-  /* background-color: red; */
 }
 
 #chart-vertical-line-container {
@@ -144,7 +174,6 @@ body {
 
 #chart-datetime-container {
   text-align: center;
-  /* background-color: tan; */
   width: 200px;
   /* TODO: better way to do this? it feels hacky ... */
   margin-left: -75px;
@@ -157,7 +186,6 @@ body {
 /* CHART FOOTER */
 .chart-footer {
   display: flex;
-  /* background-color: lightblue; */
   justify-content: space-between;
   padding: 7px;
   border-bottom: 2px solid black;
