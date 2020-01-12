@@ -43,12 +43,15 @@ class App extends React.Component {
       activePrice: null,
       fittedSVGCoords: null,
       chartOffsetY: null,
-      strokeDashArrayGap: null
+      strokeDashArrayGap: null,
+      displayTooltipRating: false,
+      displayTooltipPeopleOwn: false
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
     this.mouseMove = this.mouseMove.bind(this);
     this.mouseLeave = this.mouseLeave.bind(this);
+    this.ratingMouseEnterOrLeave = this.ratingMouseEnterOrLeave.bind(this);
   }
 
   mouseMove(e) {
@@ -95,7 +98,7 @@ class App extends React.Component {
       });
   }
 
-  // TODO: are more tests necessary here??
+  // TODO: additional tests
   mouseLeave(e) {
     // when the mouse leaves the chart area, on re-render
     this.setState((state, props) => {
@@ -111,7 +114,6 @@ class App extends React.Component {
   }
 
   // TODO: add tests
-  // TODO: I think this default value for dataPointCount is unnecessary ...
   updateTimeFrame(e, dataPointCount = 1680) {
     const timeFrame = e.target.textContent;
     switch (timeFrame) {
@@ -155,13 +157,13 @@ class App extends React.Component {
       }
 
       lastPosition = `${x} ${y}`;
-      path[group] += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... should this be an average of some sort??
+      path[group] += ` L${x} ${y}`; // TODO: displaying the open price for each timeframe ... change to an average of some sort
     }
 
     this.setState({ path, timeFrame, dataPointCount, fittedSVGCoords, strokeDashArrayGap });
   }
 
-  // TODO: need additional tests for this ??
+  // TODO: additional tests
   componentDidMount() {
     // TODO: this should come from the other microservice when it's ready ...
     const random = Math.random();
@@ -189,7 +191,6 @@ class App extends React.Component {
       success: (ticker) => {
         ticker.prices.forEach(price => {
           // converts the ISO8601 string into a Date object in the local timezone
-          // TODO: is this necessary to do now that I'm using moment.js??
           price.dateTime = new Date(new Date(price.dateTime).getTime() + new Date().getTimezoneOffset() * 60 * 1000);
         });
 
@@ -218,7 +219,18 @@ class App extends React.Component {
   }
 
   ratingMouseEnterOrLeave(e) {
-    e.target.querySelector('.chart-rating-tooltip-container').classList.toggle('chart-active');
+    // if target is the tooltip container, return
+    if (e.target.classList.contains('chart-rating-tooltip-container')) {
+      return;
+    } else if (e.type === 'mouseenter') {
+      if (e.target.dataset.info === 'rating') {
+        this.setState({ displayTooltipRating: true });
+      } else if (e.target.dataset.info === 'peopleOwn') {
+        this.setState({ displayTooltipPeopleOwn: true });
+      }
+    } else if (e.type === 'mouseleave') {
+      this.setState({ displayTooltipRating: false, displayTooltipPeopleOwn: false })
+    }
   }
 
   render() {
@@ -244,6 +256,7 @@ class App extends React.Component {
               data-theme={this.state.theme}
               onMouseEnter={this.ratingMouseEnterOrLeave}
               onMouseLeave={this.ratingMouseEnterOrLeave}
+              data-info="rating"
             >
               <div className="chart-rating-column">
                 <svg className="chart-rating-icon" width="15" height="15" viewBox="0 0 20 20" fill="currentColor">
@@ -253,7 +266,7 @@ class App extends React.Component {
                 </svg>
                 <span>{this.state.ratingPercent}% {this.state.rating}</span>
               </div>
-              <div className="chart-rating-tooltip-container">
+              <div className={`chart-rating-tooltip-container ${this.state.displayTooltipRating ? 'chart-active' : ''}`}>
                 <span className="chart-rating-tooltip-summary" data-theme={this.state.theme}>
                   {this.state.ratingPercent}% of analysts rate <span className="chart-rating-tooltip-summary-name">{this.state.name}</span> as a {this.state.rating}.
                 </span>
@@ -264,6 +277,7 @@ class App extends React.Component {
               data-theme={this.state.theme}
               onMouseEnter={this.ratingMouseEnterOrLeave}
               onMouseLeave={this.ratingMouseEnterOrLeave}
+              data-info="peopleOwn"
             >
               <div className="chart-rating-column">
                 <svg className="chart-rating-icon" width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
@@ -275,7 +289,7 @@ class App extends React.Component {
                 </svg>
                 <span>{this.state.peopleOwnFormatted}</span>
               </div>
-              <div className="chart-rating-tooltip-container">
+              <div className={`chart-rating-tooltip-container ${this.state.displayTooltipPeopleOwn ? 'chart-active' : ''}`}>
                 <span className="chart-rating-tooltip-summary" data-theme={this.state.theme}>
                   {this.state.peopleOwnFormatted} people own <span className="chart-rating-tooltip-summary-name">{this.state.name}</span> on Robinhood.
                 </span>

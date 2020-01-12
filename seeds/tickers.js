@@ -1,7 +1,8 @@
 module.exports = {
   createTickers() {
     // returns the same array of 100 unique strings (tickers)
-      // each ticker is 3 - 4 characters in length // TODO: vary the ticker length
+      // each ticker is 3 - 4 characters in length
+      // TODO: vary the ticker length
       // each ticker is made up of the letters A - Z
 
       let seed = 1;

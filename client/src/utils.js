@@ -1,4 +1,4 @@
-// TODO: Adjust error workflow?
+// TODO: Adjust error workflow
 module.exports = {
   /**
    *
@@ -107,7 +107,6 @@ module.exports = {
    * @param {Number} leftMargin Distance from the visible left edge of the page to the left edge of chartDiv
    * @returns {Number} The left offset of the cursor from the chartDiv
    */
-  // TODO: formalize this function into utils module & add tests
   calcLeftOffset(dM, leftMargin) {
     const validdM = Number.isFinite(dM) && dM >= 0;
     const validLeftMargin = Number.isFinite(leftMargin) && leftMargin >= 0;

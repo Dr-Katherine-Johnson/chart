@@ -16,7 +16,7 @@ describe('GET /price/:ticker', () => {
     request({ url, json: true }, (err, response, body) => {
       if (err) { return console.log(err); }
 
-      // TODO: expects database to be seeded already??
+      // TODO: does this expect the database to be seeded already
       expect(body.ticker).toEqual(tickerObj.ticker);
       expect(body.name).toEqual(expect.any(String));
       expect(body.prices[Math.floor(Math.random() * 1750)].volume).toEqual(expect.any(Number));

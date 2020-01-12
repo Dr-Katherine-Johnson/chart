@@ -11,8 +11,8 @@ module.exports = {
     });
   },
 
-  // TODO: need to add tests
-  // TODO: a bit WET, there's a better way to refactor these functions ...
+  // TODO: add tests
+  // TODO: a bit WET, refactor
   getCurrentPrice(req, res, next) {
     db.Ticker.findOne({ ticker: req.params.ticker }, (err, result) => {
       if (err) {

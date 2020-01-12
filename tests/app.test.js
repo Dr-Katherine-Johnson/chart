@@ -38,7 +38,7 @@ describe('App', () => {
       // console.log('d: ', d);
       // await page.click('.chart-1D');
       await page.waitFor(2000);
-      console.log('d: ', d); // TODO: why is this showing undefined??
+      console.log('d: ', d);
       console.log('undefined: ', undefined);
       console.log('null: ', null);
       // await expect(d.value.split(' ')).toHaveLength(16);
