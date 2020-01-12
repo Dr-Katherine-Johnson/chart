@@ -15,4 +15,3 @@ module.exports = {
       }
   }
 };
-// TODO: Jest requires a Babel config file?? it doesn't use Babel via Webpack?? is that accurate??

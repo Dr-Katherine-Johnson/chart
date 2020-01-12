@@ -11,8 +11,8 @@ module.exports = {
     });
   },
 
-  // TODO: need to add tests
-  // TODO: a bit WET, there's a better way to refactor these functions ...
+  // TODO: add tests
+  // TODO: a bit WET, refactor
   getCurrentPrice(req, res, next) {
     db.Ticker.findOne({ ticker: req.params.ticker }, (err, result) => {
       if (err) {
@@ -53,3 +53,30 @@ module.exports = {
     });
   }
 }
+
+  // // TODO: start of tests for percentChange ...
+  // xit('Displays percentChange as a string containing a positive or negative number', () => {
+  //   const percents = [
+  //     0,
+  //     0.0001,
+  //     0.0010,
+  //     0.0100,
+  //     0.1000,
+
+  //     0.0361,
+  //     -0.1602,
+  //     -0.0752,
+  //     0.0253,
+  //     0,
+  //     -0.0362,
+  //     0.0054,
+  //     -0.0405
+  //   ];
+  //   percents.forEach(percent => {
+  //     const wrapper = shallow(<Card percentChange={percent}></Card>);
+  //     const string = wrapper.find('.pab-percent-change').textContent;
+  //     expect(string).stringMatching(/[+|-]\d*[.\d|.\d\d]?%$/);
+  //     // dot is optional
+  //     // but if there is a dot, need to have 1 or 2 digits after it
+  //   });
+  // });

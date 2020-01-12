@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   chart:
-    image: bellcd/robinhood:chart
+    image: bellcd/robinhood:price-chart
     depends_on:
       - mongo
     ports:

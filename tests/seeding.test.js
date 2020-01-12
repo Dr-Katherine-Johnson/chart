@@ -218,5 +218,5 @@ describe('Seeding Script', () => {
     });
   });
 
-  // TODO: delete ALL the documents in the testing database after each test run??
+  // TODO: delete ALL the documents in the testing database after each test run
 });

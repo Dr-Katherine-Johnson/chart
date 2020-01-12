@@ -1,3 +1,4 @@
+// TODO: Adjust error workflow
 module.exports = {
   /**
    *
@@ -102,18 +103,16 @@ module.exports = {
   /**
    *
    * The offsetX mouse event property (e.offset) does NOT work here because it gives the offsets to e.target ... which is not necessarily chartDiv (the needed element). Calculating the value with the following two arguments does not require chartDiv to be centered on the page.
-   * @param {Number} dLM Distance from the visible left edge of the page to the mouse cursor
+   * @param {Number} dM Distance from the visible left edge of the page to the mouse cursor
    * @param {Number} leftMargin Distance from the visible left edge of the page to the left edge of chartDiv
    * @returns {Number} The left offset of the cursor from the chartDiv
    */
-  // TODO: formalize this function into utils module & add tests
-  calcLeftOffset(dLM, leftMargin) {
-    const validdLM = Number.isFinite(dLM) && dLM >= 0;
+  calcLeftOffset(dM, leftMargin) {
+    const validdM = Number.isFinite(dM) && dM >= 0;
     const validLeftMargin = Number.isFinite(leftMargin) && leftMargin >= 0;
-    if (validdLM && validLeftMargin && leftMargin <= dLM) {
-      return dLM - leftMargin;
+    if (validdM && validLeftMargin) {
+      return dM - leftMargin;
     } else {
-      debugger;
       throw new Error();
     }
   }

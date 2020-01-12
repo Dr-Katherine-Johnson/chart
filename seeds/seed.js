@@ -35,24 +35,25 @@ module.exports = {
     });
   },
 
-  // TODO: is this possible to refactor with async / await? does it have the same memory implications?
+  // TODO: refactor with async / await? (consider memory implications)
   lightLoad(cb) {
     const tickerList = tickers.createTickers();
-    const recursiveFn = (tickerList) => {
+    const recursiveFn = (tickerList, counter = 0) => {
       if (tickerList.length === 0) {
         console.log(`Prices seeded to database`);
         cb();
         return;
       }
         const ticker = tickerList.pop();
+        ++counter;
         const obj = {
           ticker,
           name: prices.generateName(),
           prices: prices.generatePricesList()
         };
         db.Ticker.create(obj, (result) => {
-            console.log(`${ticker} seeded to database`);
-            recursiveFn(tickerList);
+            console.log(`${counter}: ${ticker} seeded to database`);
+            recursiveFn(tickerList, counter);
         });
     }
     recursiveFn(tickerList);

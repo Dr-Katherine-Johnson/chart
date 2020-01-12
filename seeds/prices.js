@@ -63,7 +63,7 @@ module.exports = {
       high,
       low,
       close,
-      // TODO: more realistic volume patterns??
+      // TODO: more realistic volume patterns
       volume: Math.round(Math.random() * 1000000)
     };
   },
