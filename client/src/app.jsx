@@ -45,7 +45,8 @@ class App extends React.Component {
       chartOffsetY: null,
       strokeDashArrayGap: null,
       displayTooltipRating: false,
-      displayTooltipPeopleOwn: false
+      displayTooltipPeopleOwn: false,
+      isLoading: true
     }
 
     this.updateTimeFrame = this.updateTimeFrame.bind(this);
@@ -55,6 +56,9 @@ class App extends React.Component {
   }
 
   mouseMove(e) {
+      // return if the chart data hasn't loaded yet
+      if (this.state.isLoading) { return; }
+
       const chartSvgContainer = document.querySelector('.chart-svg-container');
       const clientWidth = chartSvgContainer.clientWidth
       const leftMargin = chartSvgContainer.getBoundingClientRect().left;
@@ -207,7 +211,8 @@ class App extends React.Component {
           rating,
           ratingPercent,
           peopleOwn,
-          peopleOwnFormatted: Number(peopleOwn).toLocaleString()
+          peopleOwnFormatted: Number(peopleOwn).toLocaleString(),
+          isLoading: false
         });
 
         this.updateTimeFrame({ target: { textContent: '1Y' }}); // defaults to displaying 1Y timeframe
