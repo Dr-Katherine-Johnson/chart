@@ -62,6 +62,8 @@ docker exec -i chart_mongo_1 mongo "mongodb://localhost"
 ## Development using Docker
 Make sure you have docker running on your machine.
 
+### Mount
+
 - From within the root directory:
 
 Mount an external volume where dependencies will be installed
@@ -69,11 +71,35 @@ Mount an external volume where dependencies will be installed
 make setup
   ```
 
+### Dependencies
+
 Install binary dependencies
   ```sh
 make install
   ```
 
+If you're installing new packages first start a shell in the container
+running node. Find the CONTAINER_NAME corresponding with the node image with:
+  ```sh
+docker ps
+  ```
+
+Then start a shell in the container
+  ```sh
+docker exec -ti CONTAINER_NAME /bin/bash
+  ```
+
+You'll see something like:
+  ```sh
+root@2e3dba3578ae:/usr/src/service#
+  ```
+
+You can then run your
+  ```sh
+npm install PACKAGE --save
+  ```
+
+### Develop
 To start a development environment
   ```sh
 make dev
