@@ -12,4 +12,10 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+if (process.env.NODE_ENV === 'development') {
+  obj = Object.assign({}, obj, {
+    DATABASE_URL: 'mongodb://database',
+  });
+}
+
 module.exports = obj;
