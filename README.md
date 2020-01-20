@@ -59,18 +59,30 @@ docker exec -i chart_mongo_1 mongo "mongodb://localhost"
 - docker
 - docker-compose
 
-## Development
+## Development using Docker
+Make sure you have docker running on your machine.
+
 - From within the root directory:
+
+Mount an external volume where dependencies will be installed
 ```sh
-npm install
+make setup
   ```
 
+Install binary dependencies
   ```sh
-npm run dev
+make install
   ```
 
+To start a development environment
   ```sh
-npm run start-dev
+make dev
+  ```
+
+For other commands see docker-compose.builder.yml and Makefile. Example:
+Build webpack bundle
+  ```sh
+make bundle
   ```
 
 ## Build
