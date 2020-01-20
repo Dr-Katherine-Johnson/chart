@@ -3,9 +3,16 @@ services:
   chart:
     # since it's dev mode we just need a node image
     image: node:10.18
+    # we want to be able to modify our files locally and use the conatainers to run our source code
+    # Mount the current directory to where the nodemodules are installed and our code can run
     volumes:
+      - nodemodules:/usr/src/service/node_modules
       - .:/usr/src/service
+    # the following will make sure the uri points to mongodb://database
+    environment:
+        - NODE_ENV=development
     working_dir: /usr/src/service
+    # seed the database and start the server
     command: npm run dev
     depends_on:
       - mongo
@@ -14,12 +21,12 @@ services:
     links:
       - "mongo:db"
       - "mongo:database"
-    environment:
-      - NODE_ENV=development
-    env_file:
-      - .env
   mongo:
     image: mongo
     restart: always
     ports:
       - '1000:27017'
+# we mounted an external volume for the node modules with docker volume create nodemodules
+volumes:
+  nodemodules:
+    external: true
