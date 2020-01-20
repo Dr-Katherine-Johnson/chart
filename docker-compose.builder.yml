@@ -1,0 +1,25 @@
+# in order to use docker for development we use version 2 to install dependencies
+# without using bash -c "npm install && npm run dev"
+version: '2'
+services:
+  base:
+    # base image
+    image: node:10.18
+    # If we are using this for development, when our files change, the files in the container also need to change.
+    # we will mount our current directory to /usr/src/service in the container
+    volumes:
+      - .:/usr/src/service
+    working_dir: /usr/src/service
+  # our package dependencies
+  install:
+    extends:
+      service: base
+    command: npm i
+  build:
+    extends:
+      service: base
+    command: npm run build
+  create-bundles:
+    extends:
+      service: base
+    command: npm run create-bundles

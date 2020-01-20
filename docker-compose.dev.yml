@@ -1,0 +1,25 @@
+version: '3'
+services:
+  chart:
+    # since it's dev mode we just need a node image
+    image: node:10.18
+    volumes:
+      - .:/usr/src/service
+    working_dir: /usr/src/service
+    command: npm run dev
+    depends_on:
+      - mongo
+    ports:
+      - '4444:4444'
+    links:
+      - "mongo:db"
+      - "mongo:database"
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - '1000:27017'
