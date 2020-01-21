@@ -8,8 +8,12 @@
   - [Deployment](#deployment)
     - [If Needed](#if-needed)
   - [Requirements](#requirements)
-  - [Development](#development)
+  - [Development using Docker](#development-using-docker)
   - [Build](#build)
+  - [API](#api)
+    - [Prices](#prices)
+    - [Current price](#current-price)
+    - [Percent change](#percent-change)
 
 ## Related Projects
 - [Reverse Proxy](https://github.com/Dr-Wing/chart-proxy) that interacts with the other microservices
@@ -55,6 +59,12 @@ bash compose.sh $pathToPEM $instance
 docker exec -i chart_mongo_1 mongo "mongodb://localhost"
 ```
 
+## Additional Documentation
+
+For documentation related to the database see:
+
+- Mongoose (^5.7) https://mongoosejs.com/docs/api.html
+
 ## Requirements
 - docker
 - docker-compose
@@ -84,9 +94,9 @@ running node. Find the CONTAINER_NAME corresponding with the node image with:
 docker ps
   ```
 
-Then start a shell in the container
+Then start a shell in the container with the name "chart_chart1"
   ```sh
-docker exec -ti CONTAINER_NAME /bin/bash
+docker exec -ti chart_chart1 /bin/bash
   ```
 
 You'll see something like:
@@ -116,3 +126,116 @@ make bundle
 ```sh
 npm run build
 ```
+
+## API
+
+### Prices
+
+<table>
+  <tr>
+    <td>Endpoint</td>
+    <td>Output</td>
+    <td>Shape (JSON)</td>
+    <td>Example Resonse</td>
+  </tr>
+  <tr>
+    <td>GET /price/:ticker</td>
+    <td>Returns all the prices for a ticker as objects in the prices array</td>
+    <td>
+      <pre lang="json">
+      {
+        "ticker": "APPL",
+        "name": "Apple",
+        "prices": [
+          {
+            "dateTime": "2019-11-16T22:27:19.319Z",
+            "open": "264.03",
+            "high": "264.40",
+            "low": "264.02",
+            "close": "264.35",
+            "volume": "96770"
+          },
+          // ... about 1750 more prices
+        ]
+      }
+      </pre>
+    </td>
+    <td>
+      <pre lang="json">
+      {
+        "ticker": String,
+        "name": String,
+        "prices": [
+          {
+            "dateTime": String, // ISO 8601
+            "open": Number,
+            "high": Number,
+            "low": Number,
+            "close": Number,
+            "volume": Number,
+          },
+          // ... about 1750 more prices
+        ]
+      }
+      </pre>
+    </td>
+  </tr>
+</table>
+
+### Current Price
+
+<table>
+  <tr>
+    <td>Endpoint</td>
+    <td>Output</td>
+    <td>Shape (JSON)</td>
+    <td>Example Resonse</td>
+  </tr>
+  <tr>
+    <td>GET /price/:ticker</td>
+    <td>Returns the last available price for that stock</td>
+    <td>
+      <pre lang="json">
+        {
+          "price": NUMBER
+        }
+      </pre>
+    </td>
+    <td>
+      <pre lang="json">
+        {
+          "price": "264.35"
+        }
+      </pre>
+    </td>
+  </tr>
+</table>
+
+### Percent change
+
+<table>
+  <tr>
+    <td>Endpoint</td>
+    <td>Output</td>
+    <td>Shape (JSON)</td>
+    <td>Example Resonse</td>
+  </tr>
+  <tr>
+    <td>GET /percent-change/:ticker</td>
+    <td>Returns the percent change between the last available price and the price immediately before that (ie, the penultimate data point)</td>
+    <td>
+      <pre lang="json">
+        {
+          "percentChange": NUMBER
+        }
+      </pre>
+    </td>
+    <td>
+      <pre lang="json">
+        {
+          "percentChange": "-0.0014"
+        }
+      </pre>
+    </td>
+  </tr>
+</table>
