@@ -27,6 +27,19 @@ const tickerSchema = new mongoose.Schema({
   ]
 });
 
+tickerSchema.statics.addOne = (tickerData, cb) => {
+  return Ticker.exists({ ticker: tickerData.ticker })
+    .then(exists => {
+      if (exists) {
+        cb('duplicate')
+      } else {
+        return Ticker.create(tickerData);
+      }
+    })
+    .then(newTicker => cb(null, newTicker))
+    .catch(err => cb(err));
+}
+
 const Ticker = mongoose.model('Ticker', tickerSchema);
 
 const dropAll = () => {
