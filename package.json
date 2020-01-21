@@ -35,6 +35,7 @@
     "test:pricewheel": "jest --watch pricewheel.test.js"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^1.7.0",
