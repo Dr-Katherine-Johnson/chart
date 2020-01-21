@@ -10,7 +10,29 @@ module.exports = {
        res.send(result);
     });
   },
-
+  // Post ticker
+  addTicker(req, res, next) {
+    // get data from body, see docs for right shape
+    console.log(req.body);
+    const tickerData = {
+      ticker: req.params.ticker,
+      name: req.body.name,
+      prices: req.body.prices
+    }
+    // we use a custom function that checks if already in database then adds
+    db.Ticker.addOne(tickerData, (err, result) => {
+      if (err) {
+        console.error(err)
+        if (err === 'duplicate') {
+          res.status(409).send('Ticker already exists')
+        } else {
+          res.status(400).send(err);
+        }
+      } else {
+        res.status(201).send(result);
+      }
+    })
+  },
   // TODO: add tests
   // TODO: a bit WET, refactor
   getCurrentPrice(req, res, next) {
@@ -51,7 +73,7 @@ module.exports = {
         res.send({ percentChange });
       }
     });
-  }
+  },
 }
 
   // // TODO: start of tests for percentChange ...
