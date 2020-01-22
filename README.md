@@ -180,6 +180,34 @@ npm run build
       </pre>
     </td>
   </tr>
+  <tr>
+    <td>POST /price/:ticker</td>
+    <td>Creates a ticker with corresponding prices</td>
+    <td>
+      body
+      <pre lang="json">
+      {
+        "ticker": String,
+        "name": String,
+        "prices": [
+          {
+            "dateTime": String, // ISO 8601
+            "open": Number,
+            "high": Number,
+            "low": Number,
+            "close": Number,
+            "volume": Number,
+          },
+          // ... about 1750 more prices
+        ]
+      }
+      </pre>
+    </td>
+    <td>
+      201 ticker saved successfully
+      401
+    </td>
+  </tr>
 </table>
 
 ### Current Price
@@ -192,7 +220,7 @@ npm run build
     <td>Example Resonse</td>
   </tr>
   <tr>
-    <td>GET /price/:ticker</td>
+    <td>GET /current-price/:ticker</td>
     <td>Returns the last available price for that stock</td>
     <td>
       <pre lang="json">
