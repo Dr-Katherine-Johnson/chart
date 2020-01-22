@@ -1,37 +1,44 @@
 const db = require('../db/index.js');
 
+// generate data from req and body of req, see docs for right shape
+var Ticker = function(req) {
+  console.log('Req Body', req.body);
+  let tickerData = {};
+  tickerData.ticker = req.params.ticker;
+  tickerData.name = req.body.name ? req.body.name : null;
+  tickerData.prices = req.body.prices ? req.body.prices : [];
+  return tickerData;
+}
+
 module.exports = {
   getTicker(req, res, next) {
     db.Ticker.findOne({ ticker: req.params.ticker }, (err, result) => {
       if (err) {
         console.log(err);
-        res.send(err);
+        res.status(400).send(err);
        }
-       res.send(result);
+      console.log(result);
+      res.status(200).send(result);
     });
   },
-  // Post ticker
   addTicker(req, res, next) {
-    // get data from body, see docs for right shape
-    const tickerData = {
-      ticker: req.params.ticker,
-      name: req.body.name,
-      prices: req.body.prices
-    }
-    // we use a custom function that checks if already in database then adds
+    const newTicker = new Ticker(req);
+    // Check if not already in database then add ticker
     // TODO add tests
-    db.Ticker.addOne(tickerData, (err, result) => {
-      if (err) {
-        console.error(err)
-        if (err === 'duplicate') {
-          res.status(409).send('Ticker already exists')
+    return db.Ticker.exists({ ticker: newTicker.ticker })
+      .then(duplicate => {
+        if(duplicate) {
+          res.status(409).send('Ticker already exists');
         } else {
-          res.status(400).send(err);
+          return db.Ticker.create(tickerData)
+            .then(result => {
+              res.status(201).send(result);
+            })
         }
-      } else {
-        res.status(201).send(result);
-      }
-    })
+      })
+      .catch(err => {
+        res.status(400).send(err);
+      })
   },
   // TODO: add tests
   // TODO: a bit WET, refactor
@@ -49,7 +56,16 @@ module.exports = {
       }
     });
   },
-
+  addCurrentPrice(req, res, next) {
+    // since GET returns the last available price for the stock
+    // the POST would add new price for the stock
+    const newTicker = new Ticker(req);
+    db.Ticker.findOne( { ticker: newTicker.ticker }, (err, result) => {
+      if (err) {
+        res.status(400).send(err)
+      }
+    })
+  },
   // TODO: address situation where last two prices were the same, and divide by 0 condition
   // TODO: add tests
   getPercentChange(req, res, next) {
