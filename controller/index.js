@@ -59,12 +59,15 @@ module.exports = {
   addCurrentPrice(req, res, next) {
     // since GET returns the last available price for the stock
     // the POST would add new price for the stock
-    const newTicker = new Ticker(req);
-    db.Ticker.findOne( { ticker: newTicker.ticker }, (err, result) => {
-      if (err) {
-        res.status(400).send(err)
-      }
-    })
+    // we'll have to first get the document
+    // TODO how to handle error with await?
+    var tickerDoc = await Ticker.findOne({ ticker: req.params.ticker }).exec();
+    // then add the new price to the prices array
+	  return tickerDoc.prices.push({key: "lucky", value: 7});
+      .then(result => {
+        // what is the result of pushing to an array?
+      })
+      .catch(err => res.status(400).send(err))
   },
   // TODO: address situation where last two prices were the same, and divide by 0 condition
   // TODO: add tests
