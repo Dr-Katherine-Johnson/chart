@@ -13,13 +13,13 @@ module.exports = {
   // Post ticker
   addTicker(req, res, next) {
     // get data from body, see docs for right shape
-    console.log(req.body);
     const tickerData = {
       ticker: req.params.ticker,
       name: req.body.name,
       prices: req.body.prices
     }
     // we use a custom function that checks if already in database then adds
+    // TODO add tests
     db.Ticker.addOne(tickerData, (err, result) => {
       if (err) {
         console.error(err)
