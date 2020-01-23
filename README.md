@@ -9,6 +9,10 @@
     - [If Needed](#if-needed)
   - [Requirements](#requirements)
   - [Development using Docker](#development-using-docker)
+    - [Mount](#mount)
+    - [Dependencies](#dependencies)
+    - [Develop](#develop)
+    - [Run a MongoDB shell](#run-a-mongo-shell)
   - [Build](#build)
   - [API](#api)
     - [Prices](#prices)
@@ -62,10 +66,10 @@ docker exec -i chart_mongo_1 mongo "mongodb://localhost"
 ## Additional Documentation
 
 For documentation related to the database see:
-
 - Mongoose (^5.7) https://mongoosejs.com/docs/api.html
 
 ## Requirements
+- CLI like Bash
 - docker
 - docker-compose
 
@@ -93,8 +97,7 @@ running node. Find the CONTAINER_NAME corresponding with the node image with:
   ```sh
 docker ps
   ```
-
-Then start a shell in the container with the name "chart_chart1"
+If make install ran successfully you should see "chart_chart1". Start a shell in the container:
   ```sh
 docker exec -ti chart_chart1 /bin/bash
   ```
@@ -104,22 +107,31 @@ You'll see something like:
 root@2e3dba3578ae:/usr/src/service#
   ```
 
-You can then run your
+You can then install additional dependencies with the command
   ```sh
 npm install PACKAGE --save
   ```
+where `PACKAGE` is the name of your npm package.
 
 ### Develop
-To start a development environment
+To start a development environment, use the commmand
   ```sh
 make dev
   ```
+This will create a bundle.js, start the server, seed the database and connect the server to the database.
 
 For other commands see docker-compose.builder.yml and Makefile. Example:
 Build webpack bundle
   ```sh
 make bundle
   ```
+
+### Run a MongoDB shell
+From the root directory in your terminal, once your Mongo container is running (it should be called `chart_mongo_1`), you can run an interactive shell to query the database:
+  ```sh
+  docker exec -ti chart_mongo_1 mongo
+  ```
+
 
 ## Build
 - Creates a webpack bundle, Builds a docker image, and pushes it to dockerhub
@@ -205,7 +217,8 @@ npm run build
     </td>
     <td>
       201 ticker saved successfully
-      401
+      400 could not save
+      409 trying to post a duplicate ticker
     </td>
   </tr>
 </table>
@@ -220,6 +233,24 @@ npm run build
     <td>Example Resonse</td>
   </tr>
   <tr>
+    <td>GET /current-price/:ticker</td>
+    <td>Returns the last available price for that stock</td>
+    <td>
+      <pre lang="json">
+        {
+          "price": NUMBER
+        }
+      </pre>
+    </td>
+    <td>
+      <pre lang="json">
+        {
+          "price": "264.35"
+        }
+      </pre>
+    </td>
+  </tr>
+    <tr>
     <td>GET /current-price/:ticker</td>
     <td>Returns the last available price for that stock</td>
     <td>
