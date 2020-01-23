@@ -3,6 +3,8 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const expect = chai.expect;
+const sinonTest = require('sinon-test');
+const test = sinonTest(sinon);
 const faker = require("faker");
 
 //////////////////////////////////////////////////
@@ -15,48 +17,64 @@ const { Ticker } = require('../db/index.js');
 // To create valid sample request objects
 // might not need this
 const testData = require('./testdata.js');
-const sampleTicker = require('../sampledata/price.js');
+
+// FIX ERROR: Cannot log after tests are done. Did you forget to wait for something async in your test?
 
 // Create functions
-describe('Create', function() {
-  let status, json, res;
+describe('addTicker function', function() {
+  // required on all tests: contains unchanged body and params
   const req = {
     params: {
-      ticker: 'Sample Ticker'
+      ticker: 'SMPL'
     },
     body: {
-      ticker: 'Sample Ticker'
+      ticker: 'SMPL',
+      name: 'Sample Ticker',
+      prices: [
+        {
+          dateTime: new Date("2019-11-16T22:27:19.319Z"),
+          open: 264.03,
+          high: 264.40,
+          low: 264.02,
+          close: 264.35,
+          volume: 96770
+        }
+      ]
     }
   };
+  // server error
+  var error = new Error({ error: "Error text" });
+  var res = {};
+  var expectedResult;
   beforeEach(() => {
     // stubbing the res.status and spying on res.json:
     // Question: how to stub chained res.status.send?
+    // https://www.techighness.com/post/unit-testing-expressjs-controller-part-1/
     status = sinon.stub();
-    json = sinon.spy();
-    res = { json, status };
-    status.returns(res);
+    status.returns({ send: sinon.spy() });
+    res = {
+      status
+    }
   });
 
-  it('should have an addTicker method that creates a document', async function() {
-    const stubValue = {
-      id: faker.random.uuid(),
-      ticker: 'Sample Ticker',
-      prices: []
-    }
-    const stub = sinon.stub(Ticker, "create").returns(stubValue);
-    await controller.addTicker(req, res);
-    expect(stub.calledOnce).to.be.true;
+  it('should return created Ticker object and 201 success status', test(function() {
+    const expectedResult = req.body;
+    // addTicker calls exists first, but we're testing for create so we'll
+    // stub it to return false
+    sinon.stub(Ticker, 'exists').yields(null, false);
+    const stub = sinon.stub(Ticker, 'create').yields(null, expectedResult);
+    controller.addTicker(req, res);
+    sinon.assert.calledWith(Ticker.create, req.body);
     expect(status.calledOnce).to.be.true;
     expect(status.args[0][0]).to.equal(201);
-    expect(json.calledOnce).to.be.true;
-    expect(json.args[0][0].data).to.equal(stubValue);
-  });
-  xit('addTicker method does not add duplicates', function() {
+    sinon.assert.calledWith(res.status(201).send, sinon.match({ ticker: req.body.ticker }));
+  }));
+  xit('Should return a 409 error when trying to add duplicates', function() {
     // do addTicker(req, res)
     // do it again
     // second time should get back an error
   });
-  xit('should handle errors', function() {
+  xit('should return 500 on server error', function() {
     // send a badly formed post
     // check get errors back
   });
