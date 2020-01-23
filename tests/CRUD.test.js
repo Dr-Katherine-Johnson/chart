@@ -1,77 +1,79 @@
+/////////////// Testing framework ////////////////
+
+const chai = require('chai');
+const sinon = require('sinon');
+const expect = chai.expect;
+const faker = require("faker");
+
+//////////////////////////////////////////////////
+
 // Test CRUD operations in controller
 const controller = require('../controller/index.js');
-// schema is in db.Ticker
+// Model
 const { Ticker } = require('../db/index.js');
 
-//////// Testing framework //////////////
-// To stub functions which query the database
-const sinon = require('sinon')
-// to test chained model methods
-require('sinon-mongoose');
-const chai, { expect } = require('chai');
-// Sinon–Chai provides a set of custom assertions for using the Sinon.JS spy, stub, and mocking framework with the Chai assertion library.
-const sinonChai = require('sinon-chai');
-// Simple request and response mock objects to pass into Express routes when testing using Sinon.
-const { mockReq, mockRes } = require('sinon-express-mock');
-chai.use(sinonChai);
-// To creaate valid request objects
+// To create valid sample request objects
+// might not need this
 const testData = require('./testdata.js');
+const sampleTicker = require('../sampledata/price.js');
 
-describe('/price/:ticker', () => {
-  it('should foo the bar', () => {
-    const request = {
-      body: {
-        foo: 'bar',
-      },
-    }
-    const req = mockReq(request)
-    const res = mockRes()
-
-    route(req, res)
-
-    expect(res.json).to.be.calledWith({ foo: request.body.foo })
-  })
-})
-// Create
+// Create functions
 describe('Create', function() {
-  beforeEach(function() {
-    sinon.stub(Ticker, 'find');
+  let status, json, res;
+  const req = {
+    params: {
+      ticker: 'Sample Ticker'
+    },
+    body: {
+      ticker: 'Sample Ticker'
+    }
+  };
+  beforeEach(() => {
+    // stubbing the res.status and spying on res.json:
+    // Question: how to stub chained res.status.send?
+    status = sinon.stub();
+    json = sinon.spy();
+    res = { json, status };
+    status.returns(res);
   });
 
-
-  afterEach(function() {
-      Meme.find.restore();
+  it('should have an addTicker method that creates a document', async function() {
+    const stubValue = {
+      id: faker.random.uuid(),
+      ticker: 'Sample Ticker',
+      prices: []
+    }
+    const stub = sinon.stub(Ticker, "create").returns(stubValue);
+    await controller.addTicker(req, res);
+    expect(stub.calledOnce).to.be.true;
+    expect(status.calledOnce).to.be.true;
+    expect(status.args[0][0]).to.equal(201);
+    expect(json.calledOnce).to.be.true;
+    expect(json.args[0][0].data).to.equal(stubValue);
   });
-  it('should have an addTicker method that creates a document', sinon.test(function() {
-
-  }));
-  it('addTicker method does not add duplicates', sinon.test(function() {
-
-  }));
-  it('should handle errors', sinon.test(function() {
-
-  }));
+  xit('addTicker method does not add duplicates', function() {
+    // do addTicker(req, res)
+    // do it again
+    // second time should get back an error
+  });
+  xit('should handle errors', function() {
+    // send a badly formed post
+    // check get errors back
+  });
 });
 // Read
 describe('Read', function() {
-  beforeEach(function() {
-    sinon.stub(Ticker, 'find');
+  xit('should have a getTicker method that returns the prices for that Ticker', function() {
+
+
   });
+  xit('should have a getCurrentPrice method that returns the last price for that Ticker', function() {
 
-
-  afterEach(function() {
-      Ticker.find.restore();
   });
-  it('should have a getTicker method that returns the prices for that Ticker', sinon.test(function() {
+  xit('should have a getPercentChange method that returns the percent change between the last available price and the price immediately before that', function() {
 
-  }));
-  it('should have a getCurrentPrice method that returns the last price for that Ticker', sinon.test(function() {
+  });
+  xit('should handle errors', function() {
 
-  }));
-  it('should have a getPercentChange method that returns the percent change between the last available price and the price immediately before that', sinon.test(function() {
-
-  }));
-  it('should handle errors', sinon.test(function() {
-
-  }));
+  });
 });
