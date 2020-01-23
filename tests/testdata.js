@@ -4,8 +4,10 @@ const createTickers = require('../seeds/seed.js');
 // There is a function that generates a list of tickers
 const tickers = createTickers.start();
 
-module.exports.validTicker = function() {
-  // we generate a valid random ticker
-  var randomTickerIdx = Math.floor(Math.random()*tickers.length);
-  return tickers[randomTickerIdx];
-};
+module.exports = {
+  validTicker () {
+    // we generate a valid random ticker
+    var randomTickerIdx = Math.floor(Math.random()*tickers.length);
+    return tickers[randomTickerIdx];
+  },
+}
