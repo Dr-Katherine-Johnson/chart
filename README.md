@@ -97,9 +97,9 @@ running node. Find the CONTAINER_NAME corresponding with the node image with:
   ```sh
 docker ps
   ```
-If make install ran successfully you should see "chart_chart1". Start a shell in the container:
+If make install ran successfully you should see "chart_chart_1". Start a shell in the container:
   ```sh
-docker exec -ti chart_chart1 /bin/bash
+docker exec -ti chart_chart_1 /bin/bash
   ```
 
 You'll see something like:
