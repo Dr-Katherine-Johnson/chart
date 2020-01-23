@@ -25,25 +25,20 @@ module.exports = {
   addTicker(req, res, next) {
     const newTicker = new Ticker(req);
     // Check if not already in database then add ticker
-    console.log('checking for duplicate', newTicker.ticker, typeof newTicker.ticker);
-    return db.Ticker.exists({ ticker: newTicker.ticker })
-      .then(duplicate => {
-        console.log('Is it a duplicate?', duplicate);
-        if(duplicate) {
-          res.status(409).send('Ticker already exists');
-        } else {
-          console.log('creating new ticker doc');
-          return db.Ticker.create(newTicker)
-            .then(result => {
-              console.log('ticker created', result);
-              res.status(201).send(result);
-            })
-            .catch(err=>console.log('ERROR creating ticker doc', err))
-        }
-      })
-      .catch(err => {
-        res.status(400).send(err);
-      })
+    console.log('checking for duplicate', newTicker.ticker);
+    return db.Ticker.exists({ ticker: newTicker.ticker }, (err, duplicate) => {
+      if (duplicate) {
+        res.status(409).send('Ticker already exists');
+      } else {
+        return db.Ticker.create(newTicker, (err, result) => {
+          res.status(201).send(result);
+        })
+      }
+    });
+    next();
+  },
+  updateTicker(req, res, next) {
+    // return db.Ticker.findOneAndUpdate({ options })
   },
   // TODO: add tests
   // TODO: a bit WET, refactor
@@ -66,14 +61,17 @@ module.exports = {
     // the POST would add new price for the stock
     // we'll have to first get the document
     // TODO how to handle error with await?
-    var tickerDoc = Ticker.findOne({ ticker: req.params.ticker }).exec();
+    // var tickerDoc = Ticker.findOne({ ticker: req.params.ticker }).exec();
     // then add the new price to the prices array
-	  return tickerDoc.prices.push({key: "lucky", value: 7})
-      .then(result => {
-        // what is the result of pushing to an array?
-        console.log(result);
-      })
-      .catch(err => res.status(400).send(err))
+	  // return tickerDoc.prices.push({key: "lucky", value: 7})
+    //   .then(result => {
+    //     // what is the result of pushing to an array?
+    //     console.log(result);
+    //   })
+    //   .catch(err => res.status(400).send(err))
+  },
+  updateCurrentPrice(req, res, next) {
+    // find ticker with the same time stamp and update that one
   },
   // TODO: address situation where last two prices were the same, and divide by 0 condition
   // TODO: add tests
@@ -98,7 +96,7 @@ module.exports = {
         res.send({ percentChange });
       }
     });
-  },
+  }
 }
 
   // // TODO: start of tests for percentChange ...
