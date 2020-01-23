@@ -54,26 +54,27 @@ describe('addTicker function', function() {
     status.returns({ send: sinon.spy() });
     res = {
       status
-    }
+    };
   });
 
   it('should return created Ticker object and 201 success status', test(function() {
-    const expectedResult = req.body;
+    expectedResult = req.body;
     // addTicker calls exists first, but we're testing for create so we'll
     // stub it to return false
-    sinon.stub(Ticker, 'exists').yields(null, false);
-    const stub = sinon.stub(Ticker, 'create').yields(null, expectedResult);
+    this.stub(Ticker, 'exists').yields(null, false);
+    const stub = this.stub(Ticker, 'create').yields(null, expectedResult);
     controller.addTicker(req, res);
     sinon.assert.calledWith(Ticker.create, req.body);
     expect(status.calledOnce).to.be.true;
-    expect(status.args[0][0]).to.equal(201);
     sinon.assert.calledWith(res.status(201).send, sinon.match({ ticker: req.body.ticker }));
   }));
-  xit('Should return a 409 error when trying to add duplicates', function() {
-    // do addTicker(req, res)
-    // do it again
-    // second time should get back an error
-  });
+  it('Should return a 409 error and message when trying to add duplicates', test(function() {
+    this.stub(Ticker, 'exists').yields(null, true);
+    controller.addTicker(req, res);
+    sinon.assert.calledWith(Ticker.exists, { ticker: req.params.ticker });
+    expect(status.calledOnce).to.be.true;
+    sinon.assert.calledWith(res.status(409).send, 'Ticker already exists');
+  }));
   xit('should return 500 on server error', function() {
     // send a badly formed post
     // check get errors back
