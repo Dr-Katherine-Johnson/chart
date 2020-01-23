@@ -1,11 +1,12 @@
 const db = require('../db/index.js');
+const exampleTicker = require('../sampledata/price.js');
 
 // generate data from req and body of req, see docs for right shape
 var Ticker = function(req) {
-  console.log('Req Body', req.body);
   let tickerData = {};
   tickerData.ticker = req.params.ticker;
   tickerData.name = req.body.name ? req.body.name : null;
+  // QUESTION: for the prices do we need to convert the dates to a Date type to insert into collection?
   tickerData.prices = req.body.prices ? req.body.prices : [];
   return tickerData;
 }
@@ -24,16 +25,20 @@ module.exports = {
   addTicker(req, res, next) {
     const newTicker = new Ticker(req);
     // Check if not already in database then add ticker
-    // TODO add tests
+    console.log('checking for duplicate', newTicker.ticker, typeof newTicker.ticker);
     return db.Ticker.exists({ ticker: newTicker.ticker })
       .then(duplicate => {
+        console.log('Is it a duplicate?', duplicate);
         if(duplicate) {
           res.status(409).send('Ticker already exists');
         } else {
-          return db.Ticker.create(tickerData)
+          console.log('creating new ticker doc');
+          return db.Ticker.create(newTicker)
             .then(result => {
+              console.log('ticker created', result);
               res.status(201).send(result);
             })
+            .catch(err=>console.log('ERROR creating ticker doc', err))
         }
       })
       .catch(err => {
@@ -61,11 +66,12 @@ module.exports = {
     // the POST would add new price for the stock
     // we'll have to first get the document
     // TODO how to handle error with await?
-    var tickerDoc = await Ticker.findOne({ ticker: req.params.ticker }).exec();
+    var tickerDoc = Ticker.findOne({ ticker: req.params.ticker }).exec();
     // then add the new price to the prices array
-	  return tickerDoc.prices.push({key: "lucky", value: 7});
+	  return tickerDoc.prices.push({key: "lucky", value: 7})
       .then(result => {
         // what is the result of pushing to an array?
+        console.log(result);
       })
       .catch(err => res.status(400).send(err))
   },
