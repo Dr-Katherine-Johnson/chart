@@ -20,8 +20,5 @@ module.exports = {
       alphaNums.push(char);
     }
     return alphaNums;
-  },
-  getNtickers() {
-
   }
 };
