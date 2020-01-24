@@ -1,36 +1,38 @@
 const tickerUtils = require('../seeds/tickerUtils.js');
+const _ = require('lodash');
 
 describe('Generate Char Codes Function', () => {
-  const charCodes = tickerUtils.getAlphaNumericCodes();
+  const chars = tickerUtils.getAlphaNumeric();
 
   it('Should generate an array of numbers', () => {
-    charCodes.forEach(ticker => {
-      expect(typeof ticker).toBe('number');
+    chars.forEach(ticker => {
+      expect(typeof ticker).toBe('string');
     })
   })
   it('The first 26 codes should correspond to letters A through Z', () => {
-    const firstUpperCaseLetter = String.fromCharCode(charCodes[0]);
-    const lastUpperCaseLetter = String.fromCharCode(charCodes[25]);
+    const firstUpperCaseLetter = chars[0];
+    const lastUpperCaseLetter = chars[25];
     expect(firstUpperCaseLetter).toBe('A');
     expect(lastUpperCaseLetter).toBe('Z');
   });
   it('The second 26 codes should correspond to codes lower case letters a through z', () => {
-    const firstLowerCaseLetter = String.fromCharCode(charCodes[26]);
-    const lastLowerCaseLetter = String.fromCharCode(charCodes[51]);
+    const firstLowerCaseLetter = chars[26];
+    const lastLowerCaseLetter = chars[51];
     expect(firstLowerCaseLetter).toBe('a');
     expect(lastLowerCaseLetter).toBe('z');
   });
   it('The last 10 codes should correspond to codes 47 to 58', () => {
-    const firstNumber = String.fromCharCode(charCodes[52]);
-    const lastNumber = String.fromCharCode(charCodes[61]);
+    const firstNumber = chars[52];
+    const lastNumber = chars[61];
     expect(firstNumber).toBe("0");
     expect(lastNumber).toBe("9");
   });
   it('Should generate 62 codes', () => {
-    expect(charCodes).toHaveLength(62);
+    expect(chars).toHaveLength(62);
   });
   it('On repeated calls, should generate the same codes, in the same order', () => {
-    const charCodes2 = tickerUtils.getAlphaNumericCodes();
-    expect(JSON.stringify(charCodes)).toBe(JSON.stringify(charCodes2));
+    const chars2 = tickerUtils.getAlphaNumeric();
+    expect(JSON.stringify(chars)).toBe(JSON.stringify(chars2));
   });
 });
+
