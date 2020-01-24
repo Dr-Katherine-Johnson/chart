@@ -1,19 +1,27 @@
+const _ = require('lodash');
+
 module.exports = {
   // We'll generate charCodes in order of Uppercase letters, Lowercase Letters, and then Numbers 0-9
-  getAlphaNumericCodes () {
-    let alphaNumericCodes = [];
+  getAlphaNumeric () {
+    let alphaNums = [];
     // [65 - 90]  upper alpha (A-Z)
     for (let i = 65; i < 91; i++) {
-      alphaNumericCodes.push(i);
+      var char = String.fromCharCode(i);
+      alphaNums.push(char);
     }
-    // [96 -123]  lower alpha (a-z)
+    // [97 -122]  lower alpha (a-z)
     for (let i = 97; i < 123; i++) {
-      alphaNumericCodes.push(i);
+      var char = String.fromCharCode(i);
+      alphaNums.push(char);
     }
-    // [47 - 58]  numeric (0-9)
+    // [48 - 57]  numeric (0-9)
     for (let i = 48; i < 58; i++) {
-      alphaNumericCodes.push(i);
+      var char = String.fromCharCode(i);
+      alphaNums.push(char);
     }
-    return alphaNumericCodes;
+    return alphaNums;
+  },
+  getNtickers() {
+
   }
 };
