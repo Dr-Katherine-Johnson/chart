@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import VerticalLine from '../client/src/verticalline.jsx'
+import VerticalLine from '../../client/src/verticalline.jsx'
 
 describe('Vertical Line', () => {
   let wrapper = shallow(<VerticalLine offsetX={250} offsetX={45} />);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import PriceWheel from '../client/src/pricewheel.jsx';
+import PriceWheel from '../../client/src/pricewheel.jsx';
 
 describe('PriceWheel', () => {
   let wrapper = shallow(<PriceWheel activePrice={null} />)
