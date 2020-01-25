@@ -74,10 +74,10 @@ module.exports = {
     var stringLength = 52;
     var k = 5;
     // we can represent letters+numbers in a string 'A...Za...z0...9'
-    var alphaNumString = tickerUtils.getAlphaNumeric().slice(0,stringLength).join('');
+    var alphaNumString = utils.getAlphaNumeric().slice(0,stringLength).join('');
     // get all unique combinations from alphanum string
-    const tickers = tickerUtils.chooseKCombos(alphaNumString, k);
-    return tickers;
+    const tickers = utils.chooseKCombos(alphaNumString, k);
+    return tickers.slice(0,n);
   }
 };
 
