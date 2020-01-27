@@ -38,4 +38,19 @@
 //
 // Put them in an array
 // Loop over the array and create a line protocol string
+// the prices functions contain
+// {
+//   name: prices.generateName(),
+//   prices: prices.generatePricesList()
+// };
+// So we'd loop over the tickers array from tickers.createNTickers(n)
+  // initialize measurement to be 'prices' for all
+  // create the first part of the string string that looks like
+  // measurement,ticker='CURRENT_TICKER',name=prices.generateName()
+  // then generate a list of prices with generatePriceList
+  // loop over the prices
+    // create a line protocol string with concat:
+    // first part + open=price.open,high=price.low + space + price.timeDate
+    // at a new line at the end
+    // and then add that to our big string
 
