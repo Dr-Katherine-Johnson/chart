@@ -18,45 +18,42 @@ const { Ticker } = require('../db/index.js');
 // might not need this
 const testData = require('./testdata.js');
 
-// FIX ERROR: Cannot log after tests are done. Did you forget to wait for something async in your test?
-
 // Create functions
 describe('CRUD functions', function() {
   describe('Create', function() {
-    describe('addTicker function', function() {
-      // required on all tests: contains unchanged body and params
-      const req = {
-        params: {
-          ticker: 'SMPL'
-        },
-        body: {
-          ticker: 'SMPL',
-          name: 'Sample Ticker',
-          prices: [
-            {
-              dateTime: new Date("2019-11-16T22:27:19.319Z"),
-              open: 264.03,
-              high: 264.40,
-              low: 264.02,
-              close: 264.35,
-              volume: 96770
-            }
-          ]
-        }
+    // required on all tests: contains unchanged body and params
+    var req = {
+      params: {
+        ticker: 'SMPL'
+      },
+      body: {
+        ticker: 'SMPL',
+        name: 'Sample Ticker',
+        prices: [
+          {
+            dateTime: new Date("2019-11-16T22:27:19.319Z"),
+            open: 264.03,
+            high: 264.40,
+            low: 264.02,
+            close: 264.35,
+            volume: 96770
+          }
+        ]
+      }
+    };
+    var res = {};
+    var expectedResult;
+    beforeEach(() => {
+      // stubbing the res.status and spying on res.json:
+      // Question: how to stub chained res.status.send?
+      // https://www.techighness.com/post/unit-testing-expressjs-controller-part-1/
+      status = sinon.stub();
+      status.returns({ send: sinon.spy() });
+      res = {
+        status
       };
-      var res = {};
-      var expectedResult;
-      beforeEach(() => {
-        // stubbing the res.status and spying on res.json:
-        // Question: how to stub chained res.status.send?
-        // https://www.techighness.com/post/unit-testing-expressjs-controller-part-1/
-        status = sinon.stub();
-        status.returns({ send: sinon.spy() });
-        res = {
-          status
-        };
-      });
-
+    });
+    describe('addTicker function', function() {
       it('should return created Ticker object and 201 success status', test(function() {
         expectedResult = req.body;
         // addTicker calls exists first, but we're testing for create so we'll
@@ -81,36 +78,21 @@ describe('CRUD functions', function() {
       });
     });
     describe('addCurrentPrice function', function() {
-      // required on all tests: contains unchanged body and params
-      // add to documentation
-      const req = {
-        params: {
-          ticker: 'SMPL'
-        },
-        body: {
-          price:{
-            dateTime: new Date("2019-11-16T22:27:19.319Z"),
-            open: 264.03,
-            high: 264.40,
-            low: 264.02,
-            close: 264.35,
-            volume: 96770
-          }
-        }
-      };
-      var res = {};
-      var expectedResult;
-      beforeEach(() => {
-        // stubbing the res.status and spying on res.json:
-        // Question: how to stub chained res.status.send?
-        // https://www.techighness.com/post/unit-testing-expressjs-controller-part-1/
-        status = sinon.stub();
-        status.returns({ send: sinon.spy() });
-        res = {
-          status
+      it('Should return 404 for non-existing ticker', test( function() {
+        req = {
+          params: {
+            ticker: 'NOTINDBS'
+          },
+          body: {}
         };
-      });
-      // it('should', test( function() {}))
+        this.stub(Ticker, 'findOne').yields(null, null);
+        controller.addCurrentPrice(req, res);
+        sinon.assert.calledWith(Ticker.findOne, { ticker: req.params.ticker });
+        sinon.assert.calledWith(res.status(404).send, 'There is no ticker with that value');
+      }));
+      xit('Should add a new price to an existing ticker', test( function() {
+
+      }));
     })
   })
   // Read
