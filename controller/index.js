@@ -56,12 +56,19 @@ module.exports = {
       }
     });
   },
+  // TODO: update /post to /current-price endpoint req syntax
+  // in tests assumes that body also has ticker, name keys
   addCurrentPrice(req, res, next) {
     // since GET returns the last available price for the stock
     // the POST would add new price for the stock
     // we'll have to first get the document
     // TODO how to handle error with await?
-    // var tickerDoc = Ticker.findOne({ ticker: req.params.ticker }).exec();
+    // var tickerDoc = await Ticker.findOne({ ticker: req.params.ticker }).exec();
+    return db.Ticker.findOne({ ticker: req.params.ticker }, function (err, ticker) {
+      if (!ticker) {
+          return res.status(404).send('There is no ticker with that value');
+      }
+    });
     // then add the new price to the prices array
 	  // return tickerDoc.prices.push({key: "lucky", value: 7})
     //   .then(result => {
