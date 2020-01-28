@@ -69,12 +69,12 @@ module.exports = {
       var currentTicker = uniqueTickers[i];
       var tickerName = prices.generateName();
       var tagSet = `ticker=${currentTicker},name=${tickerName} `; // add a space at the end for syntax compliance
-      var prices = prices.generatePricesList();
+      var pricesList = prices.generatePricesList();
       // Second loop over all the prices
-      for (let j = 0; j < prices.length; j++) {
+      for (let j = 0; j < pricesList.length; j++) {
         var fieldSet = '';
         // we want to generate the field set dynamically with the price object keys => the fields (open, high, low...)
-        var priceObject = prices[j];
+        var priceObject = pricesList[j];
         var fields = Object.keys(priceObject);
         for (let k = 0; k < fields.length; k++) {
           // The priceObject also includes dateTime, make sure it's skipped and added at the end
