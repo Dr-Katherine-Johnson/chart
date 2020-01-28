@@ -47,9 +47,9 @@
  * |<measurement> | ","   comma | ticker=<ticker_ID>, | Space   | open=<price>,  | Space   |Unix        |
  * |              |             | name=<ticker_name>  |         | high=<price>,  |         |nanosecond  |
  * |  string      |             |         string      |         | low=<price>,   |         |timestamp   |
- * |              |             |                     |         | close=<price>, |         |            |
- * |              |             |                     |         | volume=<price> |         |            |
- * |              |             |                     |         |         float  |         |            |
+ * |              |             |         should use  |         | close=<price>, |         |            |
+ * |              |             |         quotes like |         | volume=<price> |         |            |
+ * |              |             |  ex: name="A name"  |         |         float  |         |            |
  *
  * Strings are case senstive and float is a IEEE-754 64-bit floating-point numbers
  */
@@ -67,6 +67,9 @@ module.exports = {
     // This means we'll have to double loop, once over the tickers and once over the prices array
     for (let i = 0; i < series; i++) {
       var currentTicker = uniqueTickers[i];
+      // will faker generate enought random names?
+      // TODO need to cleanup tickerName to escape commas and spaces
+      // can probably use .replace
       var tickerName = prices.generateName();
       var tagSet = `ticker=${currentTicker},name=${tickerName} `; // add a space at the end for syntax compliance
       var pricesList = prices.generatePricesList();
@@ -89,7 +92,7 @@ module.exports = {
           }
         }
         // now we can create the whole line protocol with the right separators
-        var timeStamp = priceObject.timeDate;
+        var timeStamp = priceObject.dateTime;
         var dataPoint = `${measurement},${tagSet} ${fieldSet} ${timeStamp}`
         // To write multiple lines in one request, each line of line protocol must be delimited by a new line (\n).
         lineProtocolString += `${dataPoint}\n`
