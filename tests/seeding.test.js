@@ -42,14 +42,27 @@ describe('Mongo Seeding Script', () => {
 });
 
 describe('Influx Seeding Script', () => {
-  const lineProtocol = influxSeed.getLineProtocolString('prices',100);
-  it('Should return a string', () => {
-    expect(typeof lineProtocol).toBe('string');
+  const oneTickerData = influxSeed.getLineProtocolString('prices',1);
+  xit('Should return a string', () => {
+    expect(typeof oneTickerData).toBe('string');
   });
-  xit('Should return an InfluxDb protocol line string', () => {
-    // TODO
+  it('Should return an InfluxDB protocol line string', () => {
+    // not sure if this should be split up into separate tests
+    // or if these tests are really testing for the right syntax
+    var onePointlinePrtcl = oneTickerData.split('\n')[0];
+    var measurement = onePointlinePrtcl.split(' ')[0].split(',')[0];
+    var tagSet = onePointlinePrtcl.split(' ')[0].split(',').slice(1);
+    var fieldSet = onePointlinePrtcl.split(' ')[0].split(',')[1];
+    var timeStamp = onePointlinePrtcl.split(' ')[0].split(',')[2];
+    var isMeasurement = /^[a-z]+$/.test(measurement);
+    var istagSet; // test that there are two tags
+    var istag; // test that each tag has an equal sign with strings on each side
+    var isFieldSet; // test that there are 5 fields
+    var isField; // test that each field has an <string><equal sign><float>
+    var isTimeStamp; // test that the time stamp is in the right format
+    expect(isMeasurement).toBe(true);
   });
-  xit('Should return multiple protocol lines separated by a new line \\n', () => {
+  xit('Should return multiple protocol lines separated by a new line', () => {
     // TODO
   });
   xit('Should return 1750 protocol lines for each ticker', () => {
