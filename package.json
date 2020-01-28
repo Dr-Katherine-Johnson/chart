@@ -30,7 +30,8 @@
     "test:chart": "jest --watch chart.test.js",
     "test:charthat": "jest --watch charthat.test.js",
     "test:verticalline": "jest --watch verticalline.test.js",
-    "test:pricewheel": "jest --watch pricewheel.test.js"
+    "test:pricewheel": "jest --watch pricewheel.test.js",
+    "test:seed": "jest --watch ./tests/seeding.test.js"
   },
   "dependencies": {
     "@influxdata/influx": "^0.5.5",
