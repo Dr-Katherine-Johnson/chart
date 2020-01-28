@@ -37,7 +37,7 @@ module.exports = {
 
   // TODO: refactor with async / await? (consider memory implications)
   lightLoad(cb) {
-    const tickerList = tickers.createTickers();
+    const tickerList = tickers.create100Tickers();
     const recursiveFn = (tickerList, counter = 0) => {
       if (tickerList.length === 0) {
         console.log(`Prices seeded to database`);
