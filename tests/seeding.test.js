@@ -43,24 +43,26 @@ describe('Mongo Seeding Script', () => {
 
 describe('Influx Seeding Script', () => {
   const oneTickerData = influxSeed.getLineProtocolString('prices',1);
-  xit('Should return a string', () => {
+  it('Should return a string', () => {
     expect(typeof oneTickerData).toBe('string');
   });
   it('Should return an InfluxDB protocol line string', () => {
     // not sure if this should be split up into separate tests
     // or if these tests are really testing for the right syntax
-    var onePointlinePrtcl = oneTickerData.split('\n')[0];
-    var measurement = onePointlinePrtcl.split(' ')[0].split(',')[0];
-    var tagSet = onePointlinePrtcl.split(' ')[0].split(',').slice(1);
-    var fieldSet = onePointlinePrtcl.split(' ')[0].split(',')[1];
-    var timeStamp = onePointlinePrtcl.split(' ')[0].split(',')[2];
+    var onePointlinePrtcl = oneTickerData.split('\n')[3];
+    var lineProtocolData = onePointlinePrtcl.split(' ');
+    var measurement = lineProtocolData[0].split(',')[0];
+    var timeStamp = lineProtocolData[lineProtocolData.length - 1];
     var isMeasurement = /^[a-z]+$/.test(measurement);
+    var isTimeStamp = /^[0-9]{13}$/.test(timeStamp); // test that the time stamp is in the right format 13 digits = milliseconds?
+    var tagSet // TO DO
+    var fieldSet // TO DO
     var istagSet; // test that there are two tags
     var istag; // test that each tag has an equal sign with strings on each side
     var isFieldSet; // test that there are 5 fields
     var isField; // test that each field has an <string><equal sign><float>
-    var isTimeStamp; // test that the time stamp is in the right format
     expect(isMeasurement).toBe(true);
+    expect(isTimeStamp).toBe(true);
   });
   xit('Should return multiple protocol lines separated by a new line', () => {
     // TODO
