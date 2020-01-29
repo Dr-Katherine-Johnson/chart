@@ -63,14 +63,15 @@ module.exports = {
     var lineProtocolString = '';
     // get all the unique tickers that will become one of our tags
     const uniqueTickers = tickers.createNTickers(series);
-    // For each ticker, there will be n data points pr line protocol strings that correspond to the number of prices
+    // For each ticker, there will be n data points or line protocol strings that correspond to the number of prices
     // This means we'll have to double loop, once over the tickers and once over the prices array
     for (let i = 0; i < series; i++) {
       var currentTicker = uniqueTickers[i];
-      // will faker generate enought random names?
-      // TODO need to cleanup tickerName to escape commas and spaces
-      // can probably use .replace
-      var tickerName = prices.generateName();
+      // QUESTION: Will faker generate enought random names?
+      // Ticker generates names for companies, some of them contain commas and spaces
+      // Line protocol for tag values should escape both commas and spaces
+      var escapeCharacters = /[, ]/g;
+      var tickerName = prices.generateName().replace(escapeCharacters, (match) => `\\${match}`);
       var tagSet = `ticker=${currentTicker},name=${tickerName} `; // add a space at the end for syntax compliance
       var pricesList = prices.generatePricesList();
       // Second loop over all the prices
@@ -86,13 +87,18 @@ module.exports = {
             continue;
           } else {
             // make sure that if we're done with all the fields our separator is an empty string
-            var separator = (k === fields.length - 1) ? '' : ',';
+            var separator = (currentField === 'volume') ? '' : ',';
             var fieldValue = priceObject[currentField];
             fieldSet += `${currentField}=${fieldValue}${separator}`
           }
         }
         // now we can create the whole line protocol with the right separators
-        var timeStamp = priceObject.dateTime;
+        // we need to make sure time is in the right format
+        var timeInISO8601 = new Date(priceObject.dateTime);
+        // Should be in Unix Time
+        // InfluxDB expects default time in ns
+        // So we'll have to make sure to pass that precision into the options on the requests
+        var timeStamp = timeInISO8601.getTime();
         var dataPoint = `${measurement},${tagSet} ${fieldSet} ${timeStamp}`
         // To write multiple lines in one request, each line of line protocol must be delimited by a new line (\n).
         lineProtocolString += `${dataPoint}\n`
@@ -101,4 +107,3 @@ module.exports = {
     return lineProtocolString;
   }
 }
-
