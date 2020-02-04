@@ -11,6 +11,7 @@ var Ticker = function(req) {
   return tickerData;
 }
 
+// QUESTION: why is there a next on these functions, but it's never called?
 module.exports = {
   getTicker(req, res, next) {
     db.Ticker.findOne({ ticker: req.params.ticker }, (err, result) => {
@@ -40,6 +41,7 @@ module.exports = {
   },
   // TODO: add tests
   // TODO: a bit WET, refactor
+  // QUESTION: why are the functions just being called and not returned?
   getCurrentPrice(req, res, next) {
     db.Ticker.findOne({ ticker: req.params.ticker }, (err, result) => {
       if (err) {
@@ -78,6 +80,17 @@ module.exports = {
               }
             });
         }
+      }
+    });
+  },
+  // you would want to be able to delete the whole ticker
+  // QUESTION: would you also want to be able to delete a specific price?
+  deleteTicker(req, res, next) {
+    return db.Ticker.deleteOne({ ticker: req.params.ticker }, function (err, ticker) {
+      if (err) {
+        return res.status(500).end();
+      } else {
+        return res.status(201).json(ticker);
       }
     });
   },
