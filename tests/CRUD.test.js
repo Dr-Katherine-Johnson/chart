@@ -81,25 +81,7 @@ describe('CRUD functions', function() {
   describe('Read', function() {
     // we'll have to save a sample ticker to the database so we can test the GET
     beforeEach(() => {
-      var req = {
-        params: {
-          ticker: 'SMPL'
-        },
-        body: {
-          ticker: 'SMPL',
-          name: 'Sample Ticker',
-          prices: [
-            {
-              dateTime: new Date("2019-11-16T22:27:19.319Z"),
-              open: 264.03,
-              high: 264.40,
-              low: 264.02,
-              close: 264.35,
-              volume: 96770
-            }
-          ]
-        }
-      };
+      // controller.addTicker(req, res)?
     })
     xit('should have a getTicker method that returns the prices for that Ticker', function() {
       // should return the closing price
@@ -191,7 +173,8 @@ describe('CRUD functions', function() {
         this.stub(Ticker, 'findOne').yields(null, req.body);
         controller.updateTicker(newPriceReq, res);
         sinon.assert.calledWith(Ticker.findOne, { ticker: req.params.ticker });
-        // !!!! FIX !!! Test not passing here when adding a new price object to prices array
+        /////// !!!! FIX !!! ///////
+        // Test not passing here when adding a new price object to prices array
         sinon.assert.calledWith(Ticker.findOneAndUpdate, req.params.ticker, { $addToSet: { prices: req.body } }, { new: true });
         sinon.assert.calledWith(res.json, sinon.match({ prices: expectedResult.prices }));
       }));
@@ -209,24 +192,17 @@ describe('CRUD functions', function() {
             dateTime: invalidNewDate,
           }
         }
-        // you shouldn't be able to add it to the prices array
+        // TODO you shouldn't be able to add it to the prices array
       }));
     })
   });
   // Delete
   describe('Delete', function() {
-    xit('should have a getTicker method that returns the prices for that Ticker', function() {
-
-
+    xit('Should return status 500 on server error (finding ticker)', function()
+      // TODO
     });
-    xit('should have a getCurrentPrice method that returns the last price for that Ticker', function() {
-
-    });
-    xit('should have a getPercentChange method that returns the percent change between the last available price and the price immediately before that', function() {
-
-    });
-    xit('should handle errors', function() {
-
+    xit('Should delete existing ticker', function() {
+      // TODO
     });
   });
 });
