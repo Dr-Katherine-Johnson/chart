@@ -25,6 +25,7 @@ module.exports = {
   addTicker(req, res, next) {
     const newTicker = new Ticker(req);
     // Check if not already in database then add ticker
+    // QUESTION: is there a better way to check for trying to add a duplicate?
     console.log('checking for duplicate', newTicker.ticker);
     return db.Ticker.exists({ ticker: newTicker.ticker }, (err, duplicate) => {
       if (duplicate) {
@@ -36,9 +37,6 @@ module.exports = {
       }
     });
     next();
-  },
-  updateTicker(req, res, next) {
-    // return db.Ticker.findOneAndUpdate({ options })
   },
   // TODO: add tests
   // TODO: a bit WET, refactor
@@ -56,29 +54,32 @@ module.exports = {
       }
     });
   },
-  // TODO: update /post to /current-price endpoint req syntax
-  // in tests assumes that body also has ticker, name keys
-  addCurrentPrice(req, res, next) {
-    // since GET returns the last available price for the stock
-    // the POST would add new price for the stock
-    // we'll have to first get the document
-    // TODO how to handle error with await?
-    // var tickerDoc = await Ticker.findOne({ ticker: req.params.ticker }).exec();
+  // TODO: update PUT to /ticker endpoint req syntax
+  updateTicker(req, res, next) {
     return db.Ticker.findOne({ ticker: req.params.ticker }, function (err, ticker) {
-      if (!ticker) {
-          return res.status(404).send('There is no ticker with that value');
+      if (err) {
+        return res.status(500).end();
+      } else if (!ticker) {
+        return res.status(404).send('There is no ticker with that value');
+      } else {
+        // QUESTION: would it also be possible to assign it a time when it's saved to the database?
+        const pricesLength = ticker.prices.length;
+        const previousTime = new Date(ticker.prices[pricesLength - 1].dateTime);
+        const newTime = new Date(req.body.dateTime);
+        if (previousTime > newTime) {
+          return res.status(403).send('Invalid current price');
+        } else {
+            return db.Ticker.findOneAndUpdate({ ticker: req.params.ticker }, { $addToSet: { prices: req.body }}, { new: true }, function (err, price) {
+              if (err) {
+                return res.status(500).end();
+              }
+              else {
+                return res.json(price);
+              }
+            });
+        }
       }
     });
-    // then add the new price to the prices array
-	  // return tickerDoc.prices.push({key: "lucky", value: 7})
-    //   .then(result => {
-    //     // what is the result of pushing to an array?
-    //     console.log(result);
-    //   })
-    //   .catch(err => res.status(400).send(err))
-  },
-  updateCurrentPrice(req, res, next) {
-    // find ticker with the same time stamp and update that one
   },
   // TODO: address situation where last two prices were the same, and divide by 0 condition
   // TODO: add tests
