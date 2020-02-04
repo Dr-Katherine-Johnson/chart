@@ -93,21 +93,26 @@ make install
   ```
 
 If you're installing new packages first start a shell in the container
-running node. Find the CONTAINER_NAME corresponding with the node image with:
+running node. 
+
+1. Find the CONTAINER_NAME corresponding with the node image with:
   ```sh
 docker ps
   ```
+
 If make install ran successfully you should see "chart_chart_1". Start a shell in the container:
+
+2. Then start a shell in the container
   ```sh
 docker exec -ti chart_chart_1 /bin/bash
   ```
 
-You'll see something like:
+ - You'll see something like:
   ```sh
 root@2e3dba3578ae:/usr/src/service#
   ```
 
-You can then install additional dependencies with the command
+3. You can then install additional dependencies with the command
   ```sh
 npm install PACKAGE --save
   ```
