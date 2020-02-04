@@ -18,5 +18,7 @@ app.get('/percent-change/:ticker', controller.getPercentChange);
 
 // Create a new item
 app.post('/price/:ticker', controller.addTicker);
+// Add a new price, update ticker
+app.put('/price/:ticker', controller.updateTicker);
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
