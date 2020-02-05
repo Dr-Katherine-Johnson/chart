@@ -41,17 +41,20 @@ describe('CRUD functions', function() {
   };
   var res = {};
   var expectedResult;
+  beforeEach(() => {
+    // stubbing the res.status and spying on res.status.json, res.status.send, res.status.end:
+    // Question: how to stub chained res.status.send?
+    // https://www.techighness.com/post/unit-testing-expressjs-controller-part-1/
+    status = sinon.stub();
+    status.returns({ send: sinon.spy(), end: sinon.spy(), json: sinon.spy() });
+    res = {
+      status
+    };
+  });
+  afterEach(() => {
+    Ticker.remove({ ticker: 'SMPL' });
+  })
   describe('Create', function() {
-    beforeEach(() => {
-      // stubbing the res.status and spying on res.status.json, res.status.send, res.status.end:
-      // Question: how to stub chained res.status.send?
-      // https://www.techighness.com/post/unit-testing-expressjs-controller-part-1/
-      status = sinon.stub();
-      status.returns({ send: sinon.spy(), end: sinon.spy(), json: sinon.spy() });
-      res = {
-        status
-      };
-    });
     describe('addTicker function', function() {
       it('should return created Ticker object and 201 success status', test(function() {
         expectedResult = req.body;
@@ -71,10 +74,23 @@ describe('CRUD functions', function() {
         expect(status.calledOnce).to.be.true;
         sinon.assert.calledWith(res.status(409).send, 'Ticker already exists');
       }));
-      xit('should return 500 on server error', function() {
+      it('should return 500 on server error', test(function() {
         // send a badly formed post
+        var badReq = {
+          params: {
+            ticker: 'BADTICKER'
+          },
+          body: {}
+        };
         // check get errors back
-      });
+        const error = new Error({ error: "Some Error" });
+        this.stub(Ticker, 'exists').yields(error);
+        controller.addTicker(badReq, res);
+        sinon.assert.calledWith(Ticker.exists, { ticker: badReq.params.ticker });
+        expect(status.calledOnce).to.be.true;
+        sinon.assert.calledWith(res.status, 500);
+        sinon.assert.calledOnce(res.status(500).end);
+      }));
     });
   })
   // Read
@@ -165,17 +181,17 @@ describe('CRUD functions', function() {
         }
         var existingTicker = req.body;
         expectedResult = {
-          prices: [
-            req.body,
-            newPriceReq.body
-          ]
-        }
+          n: 1,
+          nModified: 1,
+          ok: 1
+        };
         this.stub(Ticker, 'findOne').yields(null, req.body);
+        this.stub(Ticker, 'updateOne').yields(null, expectedResult);
         controller.updateTicker(newPriceReq, res);
-        sinon.assert.calledWith(Ticker.findOne, { ticker: req.params.ticker });
+        sinon.assert.calledWith(Ticker.findOne, { ticker: newPriceReq.params.ticker });
         /////// !!!! FIX !!! ///////
         // Test not passing here when adding a new price object to prices array
-        sinon.assert.calledWith(Ticker.findOneAndUpdate, req.params.ticker, { $addToSet: { prices: req.body } }, { new: true });
+        sinon.assert.calledWith(Ticker.updateOne, {ticker: newPriceReq.params.ticker}, { $push: { prices: newPriceReq.body }});
         sinon.assert.calledWith(res.json, sinon.match({ prices: expectedResult.prices }));
       }));
       xit('Should return status 403 with a message that it can\'t add an invalid current price', test( function() {
@@ -198,11 +214,28 @@ describe('CRUD functions', function() {
   });
   // Delete
   describe('Delete', function() {
-    xit('Should return status 500 on server error (finding ticker)', function()
-      // TODO
-    });
-    xit('Should delete existing ticker', function() {
-      // TODO
+    describe('deleteTicker function', function() {
+      it('Should return status 500 on server error (finding ticker)', test( function() {
+        var badTicker = {
+          params: {
+            ticker: 'NOTINDBS'
+          },
+          body: {}
+        };
+        const error = new Error({ error: "Some Error" });
+        this.stub(Ticker, 'deleteOne').yields(error);
+        controller.deleteTicker(badTicker, res);
+        sinon.assert.calledWith(Ticker.deleteOne, { ticker: badTicker.params.ticker });
+        sinon.assert.calledWith(res.status(500).end);
+      }));
+      it('Should delete existing ticker', test(function() {
+        // add a ticker
+        controller.addTicker(req, res);
+        this.stub(Ticker, 'deleteOne').yields(null, req.body);
+        controller.deleteTicker(req, res);
+        sinon.assert.calledWith(Ticker.deleteOne, { ticker: req.params.ticker });
+        sinon.assert.calledWith(res.status(201).json, sinon.match({ ticker: req.body.ticker }))
+      }));
     });
   });
 });
