@@ -29,7 +29,9 @@ module.exports = {
     // QUESTION: is there a better way to check for trying to add a duplicate?
     console.log('checking for duplicate', newTicker.ticker);
     return db.Ticker.exists({ ticker: newTicker.ticker }, (err, duplicate) => {
-      if (duplicate) {
+      if (err) {
+        res.status(500).end();
+      } else if (duplicate) {
         res.status(409).send('Ticker already exists');
       } else {
         return db.Ticker.create(newTicker, (err, result) => {
@@ -59,6 +61,7 @@ module.exports = {
   // TODO: update PUT to /ticker endpoint req syntax
   updateTicker(req, res, next) {
     return db.Ticker.findOne({ ticker: req.params.ticker }, function (err, ticker) {
+      console.log(ticker);
       if (err) {
         return res.status(500).end();
       } else if (!ticker) {
@@ -66,17 +69,18 @@ module.exports = {
       } else {
         // QUESTION: would it also be possible to assign it a time when it's saved to the database?
         const pricesLength = ticker.prices.length;
-        const previousTime = new Date(ticker.prices[pricesLength - 1].dateTime);
+        const previousTime = (pricesLength > 0) ? new Date(ticker.prices[pricesLength - 1].dateTime) : null;
         const newTime = new Date(req.body.dateTime);
-        if (previousTime > newTime) {
+        if (previousTime !== null && previousTime > newTime) {
           return res.status(403).send('Invalid current price');
         } else {
-            return db.Ticker.findOneAndUpdate({ ticker: req.params.ticker }, { $addToSet: { prices: req.body }}, { new: true }, function (err, price) {
+            console.log('updating ticker with new price',ticker._id);
+            return db.Ticker.updateOne({ ticker: req.params.ticker }, { $push: { prices: req.body }}, function (err, price) {
               if (err) {
                 return res.status(500).end();
               }
               else {
-                return res.json(price);
+                return res.status(201).json(price);
               }
             });
         }
