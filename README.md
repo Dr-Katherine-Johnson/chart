@@ -250,6 +250,17 @@ npm run build
       500 Server error
     </td>
   </tr>
+    <tr>
+    <td>DELETE /price/:ticker</td>
+    <td>Deletes a ticker</td>
+    <td>
+      Note: will delete all the information related to that ticker
+    </td>
+    <td>
+      201 Ticker deleted successfully
+      500 Server error
+    </td>
+  </tr>
 </table>
 
 ### Current Price
