@@ -22,7 +22,7 @@
 
 // In InfluxDB
 // ticker and name are tags that identify the series
-// while open, high, low, close and volume are fields?
+// while open, high, low, close and volume are fields
 // and the timestamp is on its own
 // We can create a data point with the information:
 //  tags:
@@ -36,7 +36,7 @@
 /**
  * Generates a line protocol string to write to InfluxDB
  * @param {String} measurement indicates what would be measured over time, almost like a table name, ie the stock prices
- * @param {Number} tickers the number of tickers, or unique series, ie the unique stocks
+ * @param {Number} tickers the number of tickers, or unique series, ie the unique stocks (records)
  * //TODO also have a param for the unique data points per series? (the number of prices in a day)
  * @returns {string} line protocol string with the following syntax
  *
