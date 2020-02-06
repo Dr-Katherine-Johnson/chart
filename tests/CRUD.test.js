@@ -192,6 +192,7 @@ describe('CRUD functions', function() {
         /////// !!!! FIX !!! ///////
         // Test not passing here when adding a new price object to prices array
         sinon.assert.calledWith(Ticker.updateOne, {ticker: newPriceReq.params.ticker}, { $push: { prices: newPriceReq.body }});
+        // check for partial match?
         sinon.assert.calledWith(res.json, sinon.match({ prices: expectedResult.prices }));
       }));
       xit('Should return status 403 with a message that it can\'t add an invalid current price', test( function() {
