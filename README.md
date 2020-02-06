@@ -93,7 +93,7 @@ make install
   ```
 
 If you're installing new packages first start a shell in the container
-running node. 
+running node.
 
 1. Find the CONTAINER_NAME corresponding with the node image with:
   ```sh
@@ -221,9 +221,44 @@ npm run build
       </pre>
     </td>
     <td>
-      201 ticker saved successfully
-      400 could not save
-      409 trying to post a duplicate ticker
+      201 Ticker saved successfully
+      400 Could not save
+      409 Trying to post a duplicate ticker
+      500 Server error
+    </td>
+  </tr>
+  <tr>
+    <td>PUT /price/:ticker</td>
+    <td>Updates a ticker with a new prices</td>
+    <td>
+      body
+      <pre lang="json">
+      {
+        "dateTime": String, // ISO 8601
+            "open": Number,
+            "high": Number,
+            "low": Number,
+            "close": Number,
+            "volume": Number
+      }
+      </pre>
+    </td>
+    <td>
+      201 Ticker update successfully
+      403 Price sent was for a date that is older than current price
+      404 Could not find ticker
+      500 Server error
+    </td>
+  </tr>
+    <tr>
+    <td>DELETE /price/:ticker</td>
+    <td>Deletes a ticker</td>
+    <td>
+      Note: will delete all the information related to that ticker
+    </td>
+    <td>
+      201 Ticker deleted successfully
+      500 Server error
     </td>
   </tr>
 </table>
