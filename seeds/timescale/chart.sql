@@ -1,11 +1,13 @@
+CREATE DATABASE robinhood_price_chart;
 DROP EXTENSION IF EXISTS timescaledb;
+\c robinhood_price_chart
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 
 DROP TABLE IF EXISTS "tickers";
 CREATE TABLE "tickers"(
   ticker TEXT,
-  company TEXT,
-)
+  company TEXT
+);
 
 DROP TABLE IF EXISTS "prices";
 CREATE TABLE "prices"(
@@ -15,7 +17,7 @@ CREATE TABLE "prices"(
   high NUMERIC,
   low NUMERIC,
   close_price NUMERIC,
-  volume NUMERIC,
+  volume NUMERIC
 );
 -- Specifically timescaleDB
 -- This creates a hypertable that is partitioned by time and ticker
