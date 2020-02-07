@@ -1,10 +1,9 @@
-CREATE DATABASE robinhood-price-chart;
-\c robinhood-price-chart
-CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
-
-// # import the table schemas
-psql -U postgres -d robinhood-price-chart -h localhost < chart.sql
-
-// # import data
-psql -U postgres -d robinhood-price-chart -h localhost -c "\COPY tickers FROM tickers.csv CSV"
-psql -U postgres -d robinhood-price-chart -h localhost -c "\COPY prices FROM prices.csv CSV"
+// TODO test bash script and run using child_process module
+const { exec } = require('child_process');
+var script = exec('sh seed.sh', (err, stdout, stderr) => {
+  if (err) {
+    console.log(`exec error: ${err}`);
+  }
+  console.log(stdout);
+  console.log(stderr);
+})
