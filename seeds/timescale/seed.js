@@ -3,8 +3,8 @@ const prices = require('../prices.js');
 const tickers = require('../tickers.js');
 const fastcsv = require('fast-csv');
 const fs = require('fs');
-const wsTickers = fs.createWriteStream("tickers.csv");
-const wsPrices = fs.createWriteStream("prices.csv");
+const wsTickers = fs.createWriteStream("./seeds/timescale/tickers.csv");
+const wsPrices = fs.createWriteStream("./seeds/timescale/prices.csv");
 
 var tickerData = [];
 var priceData = [];
