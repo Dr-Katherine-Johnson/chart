@@ -36,14 +36,14 @@ const getTickerAndPriceData = (numberOfUniqueTickers) => {
   return tickerData;
 }
 
-getTickerAndPriceData(100);
+getTickerAndPriceData(1000);
 
 // output 2 files, one with tickers + names
 // the other with tickers + prices
 fastcsv
-  .write(tickerData, { headers: true })
+  .write(tickerData, { headers: false })
   .pipe(wsTickers);
 
 fastcsv
-.write(priceData, { headers: true })
+.write(priceData, { headers: false })
 .pipe(wsPrices);
