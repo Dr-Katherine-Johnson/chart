@@ -14,6 +14,7 @@ const wsPrices = fs.createWriteStream('./seeds/timescale/prices.csv');
 
 ////////////////////////// FUNCTION THAT WRITE TO THE TWO CSV FILES ////////////////////////
 const writeTickerData = async (maxTickers, tickerWriter, pricesWriter) => {
+  console.time("all");
   // get the unique tickers with our previous function
   const allTickers = tickers.createNTickers(maxTickers);
   let currentTickerIdx = 0;
@@ -40,6 +41,7 @@ const writeTickerData = async (maxTickers, tickerWriter, pricesWriter) => {
       console.timeEnd("batch");
     }
   }
+  console.timeEnd("all");
 }
 
 // prefents backpressuring when writing to stream
