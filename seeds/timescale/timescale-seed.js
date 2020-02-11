@@ -56,4 +56,4 @@ const write = (writer, data) => {
   })
 }
 
-writeTickerData(2000000, wsTickers, wsPrices)
+writeTickerData(200, wsTickers, wsPrices)

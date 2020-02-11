@@ -1,5 +1,5 @@
 # create the csv files
-node seed.js
+node timescale-seed.js
 
 # Using Docker
 # start up the container
