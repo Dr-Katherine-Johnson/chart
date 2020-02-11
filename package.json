@@ -31,7 +31,8 @@
     "test:charthat": "jest --watch charthat.test.js",
     "test:verticalline": "jest --watch verticalline.test.js",
     "test:pricewheel": "jest --watch pricewheel.test.js",
-    "test:seed": "jest --watch ./tests/seeding.test.js"
+    "test:seed": "jest --watch ./tests/seeding.test.js",
+    "write-csv": "node seeds/influx/influx-seed.js"
   },
   "dependencies": {
     "@influxdata/influx": "^0.5.5",
