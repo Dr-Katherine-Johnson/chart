@@ -20,7 +20,6 @@ const writeTickerData = async (maxTickers, tickerWriter, pricesWriter) => {
   let currentTickerIdx = 0;
   // first csv file
   while (currentTickerIdx < maxTickers) {
-    console.time("batch");
     let currentTicker = allTickers[currentTickerIdx];
     let priceList = prices.generatePricesList();
     let currentPriceIdx = 0;
@@ -36,9 +35,15 @@ const writeTickerData = async (maxTickers, tickerWriter, pricesWriter) => {
     var tickerData = `${currentTicker},${company}\n`;
     await write(tickerWriter, tickerData);
     currentTickerIdx++;
-    if ((currentTickerIdx + 1) % 10000 === 0) {
-      console.log('batch ticker ', currentTickerIdx + 1);
-      console.timeEnd("batch");
+    // NOTE check how long it takes to load up that 20MB file
+    if ((currentTickerIdx + 1) % 200 === 0) {
+      // end the prices writeStream
+
+      // run a bash commands with child process
+        // copies the csv file into the container
+        // executes the COPY command using postgres
+        // deletes the file
+      // recreate the stream
     }
   }
   console.timeEnd("all");
