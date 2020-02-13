@@ -61,5 +61,5 @@ const dockerTSDBLoadSchema = (schema) => {
 };
 
 
-module.exports = { write, dockerCopy, dockerTSDBLoadSchema };
+module.exports = { write, dockerCopy, dockerTSDBLoadSchema, deleteFile };
 
