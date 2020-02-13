@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 module.exports = {
   // We'll generate characters in order of Uppercase letters, Lowercase Letters, and then Numbers 0-9
   // TODO: would be nice to generate only upper alpha, upper+lower, upper+lower+nums, depending on what you needed
