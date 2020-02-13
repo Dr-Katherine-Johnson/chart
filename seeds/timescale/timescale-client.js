@@ -1,5 +1,6 @@
 const { Client } = require('pg');
-const { copyFrom } = require('pg-copy-streams');
+const copyFrom = require('pg-copy-streams').from;
+const fs = require('fs');
 
 const timescale = new Client({
   host: '127.0.0.1',
@@ -31,7 +32,7 @@ const loadDataToTable = (inputFile, targetTable) => {
   return execute(targetTable)
     .then(done => {
       return new Promise((resolve, reject) => {
-        var stream = client.query(copyFrom(`COPY ${targetTable} FROM STDIN`))
+        var stream = timescale.query(copyFrom(`COPY ${targetTable} FROM STDIN`))
         var fileStream = fs.createReadStream(inputFile)
         fileStream.on('error', (error) =>{
             console.log(`Error in creating read stream`)
@@ -50,9 +51,8 @@ const loadDataToTable = (inputFile, targetTable) => {
       })
     })
     .catch((err) => {
-      return console.log(`Error: ${err}`;
+      return console.log(`Error: ${err}`);
     });
-  })
 }
 
 module.exports = { timescale, loadDataToTable };
