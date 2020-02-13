@@ -13,7 +13,7 @@ const { timescale, loadDataToTable } = require('./timescale-client.js')
 
 ////////////////////////// FUNCTION THAT WRITES TO THE TWO CSV FILES /////////////////////
 module.exports = {
-  writeTickerDataToCSV: async function (maxTickers) {
+  seedTSDB: async function (maxTickers) {
     // open the files we want to write our tickers and prices to
     let tickerFile = path.join(__dirname, `tickers.csv`);
     let pricesFile = path.join(__dirname, `prices.csv`);
@@ -51,15 +51,15 @@ module.exports = {
       currentTickerIdx++;
       // Every 200 tickers + corresponding prices ~ 20MB csv load to database
       if ((currentTickerIdx + 1) % 200 === 0) {
-        // executes the COPY command using postgres
+        // executes the COPY command using postgres client
         await loadDataToTable(tickerFile, 'tickers');
         await loadDataToTable(pricesFile, 'prices');
         // deletes the files so we make better use of space
         await deleteFile(tickerFile);
         await deleteFile(pricesFile);
         // recreate the streams
-        tickerWriter = fs.createWriteStream(path.join(__dirname, `tickers${currentFile}.csv`));
-        pricesWriter = fs.createWriteStream(path.join(__dirname, `prices${currentFile}.csv`));
+        tickerWriter = fs.createWriteStream(tickerFile);
+        pricesWriter = fs.createWriteStream(pricesFile);
       }
     }
     console.timeEnd("all");
