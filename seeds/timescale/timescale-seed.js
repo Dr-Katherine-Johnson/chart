@@ -7,7 +7,7 @@ const tickers = require('../tickers.js');
 const fs = require('fs');
 const path = require('path');
 const { write, deleteFile, dockerCopy } = require('./seedUtils.js');
-const { timescale, loadDataToTable } = require('./timescale-client.js')
+const { timescale, loadCSV } = require('./timescale-client.js')
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -52,8 +52,8 @@ module.exports = {
       // Every 200 tickers + corresponding prices ~ 20MB csv load to database
       if ((currentTickerIdx + 1) % 200 === 0) {
         // executes the COPY command using postgres client
-        await loadDataToTable(tickerFile, 'tickers');
-        await loadDataToTable(pricesFile, 'prices');
+        await loadCSV('tickers',currentTickerIdx);
+        await loadCSV('prices');
         // deletes the files so we make better use of space
         await deleteFile(tickerFile);
         await deleteFile(pricesFile);
@@ -62,6 +62,7 @@ module.exports = {
         pricesWriter = fs.createWriteStream(pricesFile);
       }
     }
+    timescale.end();
     console.timeEnd("all");
   },
 }
