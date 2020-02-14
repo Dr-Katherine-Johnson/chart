@@ -16,9 +16,9 @@ const write = function (writer, data) {
     }
   })
 };
-const deleteFile = (filename) => {
-  return new Promise((resolve) => {
-    fs.unlink(filename, err => {
+const deleteFile = (file) => {
+  return new Promise((resolve, reject) => {
+    fs.unlink(file, err => {
       if (err) {
         reject(err);
       } else {
