@@ -3,15 +3,6 @@ const copyFrom = require('pg-copy-streams').from;
 const fs = require('fs');
 const path = require('path');
 
-/**
- *
-Error in creating stream
-Error: error: missing data for column "company"
-Truncated prices
-Error in creating stream
-Error: error: missing data for column "date_time"
- */
-
 const timescale = new Client({
   host: '127.0.0.1',
   port: 5432,
@@ -39,7 +30,7 @@ const loadCSV = function(table, idx) {
       reject(error);
     })
     stream.on('end', () => {
-        console.log(`Completed loading data ${idx ? `up to ${idx} idx` : ''} into ${table}`);
+        console.log(`Completed loading data${idx ? ` up to ${idx} idx` : ''} into ${table}`);
         resolve();
     })
     fileStream.pipe(stream);
