@@ -1,10 +1,15 @@
 const { seedTSDB } = require('./timescale-seed.js');
-const { dockerTSDBLoadSchema } = require('./seedUtils.js');
+const { dockerTSDBLoadSchema, deleteFile } = require('./seedUtils.js');
+const path = require('path');
+const fs = require('fs');
+
 
 // After starting up the container
 // Create database
 // load the schema
-dockerTSDBLoadSchema('chart.sql');
+// dockerTSDBLoadSchema('chart.sql');
 // seed database
-seedTSDB(200);
+seedTSDB(1000);
+
+
 
