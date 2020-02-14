@@ -1,6 +1,16 @@
 const { Client } = require('pg');
 const copyFrom = require('pg-copy-streams').from;
 const fs = require('fs');
+const path = require('path');
+
+/**
+ *
+Error in creating stream
+Error: error: missing data for column "company"
+Truncated prices
+Error in creating stream
+Error: error: missing data for column "date_time"
+ */
 
 const timescale = new Client({
   host: '127.0.0.1',
@@ -15,44 +25,25 @@ timescale
   .then(() => console.log('connected'))
   .catch(err => console.error('connection error', err.stack));
 
-const loadDataToTable = (inputFile, targetTable) => {
-  const execute = (target) => {
-    return new Promise((resolve, reject) => {
-      timescale.query(`Truncate ${target}`, (err) => {
-        if (err) {
-          timescale.end();
-          reject(err);
-        } else {
-          console.log(`Truncated ${target}`)
-          resolve(target);
-        }
-      })
+const loadCSV = function(table, idx) {
+  let inputFile = path.join(__dirname, `${table}.csv`);
+  let stream = timescale.query(copyFrom(`COPY ${table} FROM STDIN CSV`));
+  let fileStream = fs.createReadStream(inputFile);
+  return new Promise((resolve, reject) => {
+    fileStream.on('error', (error) =>{
+      console.log(`Error in reading file: ${error}`);
+      reject(error);
     })
-  }
-  return execute(targetTable)
-    .then(done => {
-      return new Promise((resolve, reject) => {
-        var stream = timescale.query(copyFrom(`COPY ${targetTable} FROM STDIN`))
-        var fileStream = fs.createReadStream(inputFile)
-        fileStream.on('error', (error) =>{
-            console.log(`Error in creating read stream`)
-            reject(error);
-        })
-        stream.on('error', (error) => {
-            console.log(`Error in creating stream`)
-            reject(error);
-        })
-        stream.on('end', () => {
-            console.log(`Completed loading data into ${targetTable}`)
-            client.end()
-            resolve();
-        })
-        fileStream.pipe(stream);
-      })
+    stream.on('error', (error) => {
+        console.log(`Error in copy command: ${error}`);
+      reject(error);
     })
-    .catch((err) => {
-      return console.log(`Error: ${err}`);
-    });
-}
+    stream.on('end', () => {
+        console.log(`Completed loading data ${idx ? `up to ${idx} idx` : ''} into ${table}`);
+        resolve();
+    })
+    fileStream.pipe(stream);
+  });
+};
 
-module.exports = { timescale, loadDataToTable };
+module.exports = { timescale, loadCSV };
