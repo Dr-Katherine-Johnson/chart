@@ -14,17 +14,17 @@ const { timescale, loadCSV } = require('./timescale-client.js')
 ////////////////////////// FUNCTION THAT WRITES TO THE TWO CSV FILES /////////////////////
 module.exports = {
   seedTSDB: async function (maxTickers) {
-    // open the files we want to write our tickers and prices to
-    let tickerFile = path.join(__dirname, `tickers.csv`);
-    let pricesFile = path.join(__dirname, `prices.csv`);
-    let tickerWriter = fs.createWriteStream(tickerFile);
-    let pricesWriter = fs.createWriteStream(pricesFile);
     // start a timer
     console.time("all");
     // get the unique tickers
     const allTickers = tickers.createNTickers(maxTickers);
     // since we're using a while loop initialize our index
     let currentTickerIdx = 0;
+    // open the files we want to write our tickers and prices to
+    let tickerFile = path.join(__dirname, `tickers${currentTickerIdx}.csv`);
+    let pricesFile = path.join(__dirname, `prices${currentTickerIdx}.csv`);
+    let tickerWriter = fs.createWriteStream(tickerFile);
+    let pricesWriter = fs.createWriteStream(pricesFile);
     // first csv file is the outer loop - tickers
     while (currentTickerIdx < maxTickers) {
       let currentTicker = allTickers[currentTickerIdx];
@@ -52,12 +52,14 @@ module.exports = {
       // Every 200 tickers + corresponding prices ~ 20MB csv load to database
       if ((currentTickerIdx + 1) % 200 === 0) {
         // executes the COPY command using postgres client
-        await loadCSV('tickers',currentTickerIdx);
+        await loadCSV('tickers', currentTickerIdx);
         await loadCSV('prices');
         // deletes the files so we make better use of space
-        await deleteFile(tickerFile);
-        await deleteFile(pricesFile);
+        deleteFile(tickerFile);
+        deleteFile(pricesFile);
         // recreate the streams
+        tickerFile = path.join(__dirname, `tickers${currentTickerIdx}.csv`);
+        pricesFile = path.join(__dirname, `prices${currentTickerIdx}.csv`);
         tickerWriter = fs.createWriteStream(tickerFile);
         pricesWriter = fs.createWriteStream(pricesFile);
       }
