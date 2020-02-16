@@ -17,7 +17,7 @@ module.exports = {
   generatePricesList() {
     const result = [];
 
-    for (let i = 0; i < 1750; i++) {
+    for (let i = 0; i < 390; i++) {
       result.push(this.generateDate(this.generatePrice(result[i - 1]), i, result[i - 1]));
     }
     return result;
@@ -71,28 +71,42 @@ module.exports = {
   // returns a new object with the date added to its input argument
   generateDate(priceObject, index, prev) {
     let dateTime;
-
+    let prevDateTime;
+    const msInHour = 3600000;
     // index is 0, generate 9:30 AM on today's date
     if (index === 0) {
       const now = new Date();
       dateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9 - (new Date().getTimezoneOffset() / 60), 30);
 
-    } else if (index % 7 === 0) {
-      const prevDateTime = new Date(prev.dateTime);
+    } else if (index % 15 === 0) {
+      // skip weekends, so that every 5 days, with three points per day, skip to monday
+      var timeToNextMonday = 17 * 48 * msInHour;
+      prevDateTime = new Date(prev.dateTime);
+      dateTime = new Date(prevDateTime.getTime() + timeToNextMonday);
+    } else if (index % 3 === 0) {
       // index DOES divide by 7 evenly, add the amount of milliseconds to the next day's 9:30 AM
-      dateTime = new Date(prevDateTime.getTime() + 64800000);
+      // CHANGE: checking how 1 day looks being rendered by 3 points since with too
+      // many points per day they don't fit in the EC2 instance
+      // from 4:30 pm to 9:30 am, there are 17 hours
+      prevDateTime = new Date(prev.dateTime);
+      var timeToNextDay = 17 * msInHour;
+      dateTime = new Date(prevDateTime.getTime() + timeToNextDay);
     } else {
-      const prevDateTime = new Date(prev.dateTime);
       // index does NOT divide by 7 evenly, add 1 hour to the previous dateTime
-      dateTime = new Date(prevDateTime.getTime() + 3600000);
+      // CHANGE: every 4 hours 9:30, then 12:30 then 4:30
+      prevDateTime = new Date(prev.dateTime);
+      var timeToNextPoint = 4 * msInHour;
+      dateTime = new Date(prevDateTime.getTime() + timeToNextPoint);
     }
 
     return Object.assign({}, priceObject, { dateTime: dateTime.toISOString() });
   },
 
-  // returns a number that is less than 10% different from its argument
-  // @param num - INT - input number
-  // @param useLessThan - INT - should the function return a number less than or greater than the input argument, 0 for yes, 1 for no, omit for random
+  /**
+   * @param num - INT - input number
+   * @param useLessThan - INT - should the function return a number less than or greater than the input argument, 0 for yes, 1 for no, omit for random
+   * @returns num less than 10% different from its argument
+   */
   lessThanTenPercentDifferent(num, useLessThan) {
     if (useLessThan === undefined) {
       useLessThan = Math.round(Math.random());
