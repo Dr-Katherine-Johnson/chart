@@ -50,10 +50,10 @@ module.exports = {
       await write(tickerWriter, tickerData);
       currentTickerIdx++;
       // Every 200 tickers + corresponding prices ~ 20MB csv load to database
-      if ((currentTickerIdx + 1) % 200 === 0) {
+      if ((currentTickerIdx + 1) % 5000 === 0 || currentTickerIdx + 1 === maxTickers) {
         // executes the COPY command using postgres client
-        await loadCSV('tickers', currentTickerIdx);
-        await loadCSV('prices');
+        await loadCSV(`tickers`, tickerFile, currentTickerIdx);
+        await loadCSV('prices', pricesFile);
         // deletes the files so we make better use of space
         deleteFile(tickerFile);
         deleteFile(pricesFile);

@@ -16,10 +16,9 @@ timescale
   .then(() => console.log('connected'))
   .catch(err => console.error('connection error', err.stack));
 
-const loadCSV = function(table, idx) {
-  let inputFile = path.join(__dirname, `${table}.csv`);
+const loadCSV = function(table, file, idx) {
   let stream = timescale.query(copyFrom(`COPY ${table} FROM STDIN CSV`));
-  let fileStream = fs.createReadStream(inputFile);
+  let fileStream = fs.createReadStream(file);
   return new Promise((resolve, reject) => {
     fileStream.on('error', (error) =>{
       console.log(`Error in reading file: ${error}`);
