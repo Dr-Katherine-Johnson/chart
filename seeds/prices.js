@@ -75,7 +75,10 @@ module.exports = {
     const msInHour = 3600000;
     // index is 0, generate 9:30 AM on today's date
     if (index === 0) {
-      const start = new Date('January 1, 2019 23:15:30');
+      const now = new Date();
+      const hoursIn6Months = 4380;
+      const sixMonthsOffset = hoursIn6Months * msInHour;
+      const start = new Date(now - sixMonthsOffset);
       dateTime = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 9 - (new Date().getTimezoneOffset() / 60), 30);
 
     } else if (prev) {
