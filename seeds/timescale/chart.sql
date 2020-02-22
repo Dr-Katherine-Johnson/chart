@@ -1,7 +1,5 @@
-DROP DATABASE robinhood_price_chart;
 CREATE DATABASE robinhood_price_chart;
 \c robinhood_price_chart
-DROP EXTENSION IF EXISTS timescaledb;
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 
 DROP TABLE IF EXISTS "tickers";
