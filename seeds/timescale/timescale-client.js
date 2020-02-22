@@ -1,4 +1,6 @@
+// timescale is an extension of posgtres so we can connect using a postgres client
 const { Client } = require('pg');
+// this library allows us to use the COPY command from SQL for postgres
 const copyFrom = require('pg-copy-streams').from;
 const fs = require('fs');
 const path = require('path');
@@ -7,8 +9,8 @@ const timescale = new Client({
   host: '127.0.0.1',
   port: 5432,
   user: 'postgres',
-  password: 'robin',
-  database: 'robinhood_price_chart',
+  password: 'robin', // should probably go into .env file
+  database: 'robinhood_price_chart', // database needs to be created before we can connect
 });
 
 timescale
