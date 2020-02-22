@@ -4,12 +4,13 @@ const path = require('path');
 const fs = require('fs');
 
 
-// After starting up the container
+// Start up the container
 // Create database
 // load the schema
-// dockerTSDBLoadSchema('chart.sql');
+dockerTSDBLoadSchema('chart.sql');
 // seed database
-seedTSDB(1000);
+seedTSDB(1350000);
 
+// Can be converted to a docker-compose if this database is chosen
 
 
