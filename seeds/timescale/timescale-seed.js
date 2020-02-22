@@ -4,6 +4,7 @@ const prices = require('../prices.js');
 const tickers = require('../tickers.js');
 
 /////////////////////////  WRITING TO CSV/DATABSE SETUP //////////////////////////////////
+// Writing to a CSV allows us to use the COPY and batch write large CSV files
 const fs = require('fs');
 const path = require('path');
 const { write, deleteFile, dockerCopy } = require('./seedUtils.js');
@@ -11,7 +12,7 @@ const { timescale, loadCSV } = require('./timescale-client.js')
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-////////////////////////// FUNCTION THAT WRITES TO THE TWO CSV FILES /////////////////////
+///////////////// FUNCTION THAT WRITES TO THE TWO CSV FILES AND LOADS INTO DB ////////////
 module.exports = {
   seedTSDB: async function (maxTickers) {
     // start a timer
