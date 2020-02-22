@@ -9,5 +9,5 @@
   "javascript.suggest.enabled": false,
   "javascript.updateImportsOnFileMove.enabled": "never",
   "javascript.validate.enable": false,
-  "python.pythonPath": "python-seed/bin/python3"
+  "python.pythonPath": "/usr/local/bin/python3"
 }
