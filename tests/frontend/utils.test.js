@@ -1,4 +1,4 @@
-const utils = require('../client/src/utils.js');
+const utils = require('../../client/src/utils.js');
 
 // UTILS TESTS
 describe('utils', () => {

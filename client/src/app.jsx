@@ -118,23 +118,23 @@ class App extends React.Component {
   }
 
   // TODO: add tests
-  updateTimeFrame(e, dataPointCount = 1680) {
+  updateTimeFrame(e, dataPointCount = 390) {
     const timeFrame = e.target.textContent;
     switch (timeFrame) {
       case '1D':
-        dataPointCount = 7;
+        dataPointCount = 3;
         break;
       case '1W':
-        dataPointCount = 35;
+        dataPointCount = 15;
         break;
       case '1M':
-        dataPointCount = 140;
+        dataPointCount = 60;
         break;
       case '3M':
-        dataPointCount = 420;
+        dataPointCount = 180;
         break;
       case '1Y':
-        dataPointCount = 1680;
+        dataPointCount = 390;
         break;
     }
 

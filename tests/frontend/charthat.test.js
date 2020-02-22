@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme'
 
-import ChartHat from '../client/src/charthat.jsx';
+import ChartHat from '../../client/src/charthat.jsx';
 
 describe('CharHat', () => {
   let wrapper = shallow(<ChartHat />)

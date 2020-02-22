@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const seed = require('../seeds/seed.js');
+const seed = require('../seeds/mongo-seed.js');
 const config = require('../env.config.js');
 
 console.log('config.DATABASE_URL: ', config.DATABASE_URL);
