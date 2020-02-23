@@ -56,7 +56,7 @@
  *
  * Strings are case senstive and float is a IEEE-754 64-bit floating-point numbers
  */
-const Influx = require('./influx-client.js');
+const Influx = require('../../db/influx-client.js');
 const prices = require('../prices.js');
 const tickers = require('../tickers.js');
 
