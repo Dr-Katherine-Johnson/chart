@@ -23,7 +23,8 @@ class fluxQuery {
     this.endpoint = {
       name: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group(columns: ["name"])|> distinct(column: "name")|> keep(columns: ["_value"])`,
       prices: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group()|> keep(columns: ["_time", "_value","_field"])|> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")`,
-      last: `  |> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> keep(columns: ["_value"])|> last()`
+      last: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> keep(columns: ["_value"])|> last()`,
+      change: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> tail(n:2)|> keep(columns: ["_value"])`
     }
   }
   createQuery(endpoint) {
@@ -60,6 +61,7 @@ module.exports = {
   },
   /**
    * @param {String} ticker indicates the ticker for which we want to get data
+   * @param {String} endpoint — corresponds to: name, prices, last, or change
    */
   query(connection, ticker, endpoint) {
     const { hostname, token, orgID, bucket } = connection;
