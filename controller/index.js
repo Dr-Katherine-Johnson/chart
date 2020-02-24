@@ -1,5 +1,5 @@
 const db = require('../db/influx-client');
-const { fluxToJSON } = require('./Utils');
+const { fluxToJSON, isEmpty } = require('./Utils');
 const config = require('../env.config.js');
 require('dotenv').config();
 
@@ -20,17 +20,13 @@ module.exports = {
     // first get the name
     return db.query(connection, stock.ticker, 'name')
       .then(csv => {
-        const isEmpty = /^\r\n$/.test(csv)
-        if (isEmpty) {
+        if (isEmpty(csv)) {
           console.log('empty response from database');
           throw 'Ticker not in database';
         }
         return fluxToJSON(csv);
       })
       .then(jsonObject => {
-        if (!jsonObject) {
-          console.log('nothing back from database')
-        }
         // assign name
         stock.name = jsonObject[0]._value;
         // get price list
@@ -50,7 +46,27 @@ module.exports = {
       })
   },
   getCurrentPrice(req, res, next) {
-
+    console.log('getting current price', req.params.ticker)
+    return db.query(connection, req.params.ticker, 'last')
+      .then(csv => {
+        if (isEmpty(csv)) {
+          console.log('empty response from database');
+          throw 'Ticker not in database';
+        }
+        return fluxToJSON(csv);
+      })
+      .then(lastPrice => {
+        console.log(lastPrice)
+        const stock = {
+          currentPrice: lastPrice[0]._value
+        };
+        res.status(200).send(stock);
+      })
+      .catch(err =>{
+        // TO DO : how can we get better errors back from the database
+        console.log('ERROR', err);
+        res.status(500).send(err);
+      })
   },
   getPercentChange(req, res, next) {
 
