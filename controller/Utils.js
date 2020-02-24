@@ -6,3 +6,7 @@ module.exports.fluxToJSON = (fluxCSV) => {
     .then(jsonObj => jsonObj)
     .catch(err => console.log(err));
 }
+
+module.exports.isEmpty = (csv) => {
+  return /^\r\n$/.test(csv);
+}
