@@ -35,4 +35,16 @@ describe('GET /price/:ticker', () => {
       done();
     });
   });
+  //
+  it(`Should return a 500 error for a ticker that is not in the database`, (done) => {
+    // call the endpoint with that ticker
+    const badTickerURL = `http://localhost:${PORT}/price/NOTINDBS`;
+    request({ url: badTickerURL, json: true }, (err, response, body) => {
+      if (err) {
+        return console.log(err)
+      }
+      expect(response.statusCode).toEqual(500);
+      done();
+    });
+  });
 });
