@@ -1,5 +1,5 @@
 const db = require('../db/influx-client');
-const { fluxToJSON, isEmpty } = require('./Utils');
+const { fluxToJSON, isEmpty, percentChange } = require('./Utils');
 const config = require('../env.config.js');
 require('dotenv').config();
 
@@ -43,7 +43,7 @@ module.exports = {
         // TO DO : how can we get better errors back from the database
         console.log('ERROR', err);
         res.status(500).send(err);
-      })
+      });
   },
   getCurrentPrice(req, res, next) {
     console.log('getting current price', req.params.ticker)
@@ -66,9 +66,26 @@ module.exports = {
         // TO DO : how can we get better errors back from the database
         console.log('ERROR', err);
         res.status(500).send(err);
-      })
+      });
   },
   getPercentChange(req, res, next) {
-
+    console.log('getting percent cha ge', req.params.ticker)
+    return db.query(connection, req.params.ticker, 'change')
+      .then(csv => {
+        if (isEmpty(csv)) {
+          console.log('empty response from database');
+          throw 'Ticker not in database';
+        }
+        return fluxToJSON(csv);
+      })
+      .then(last2prices => {
+        const change = percentChange(last2prices);
+        res.status(200).send({ percentChange: change })
+      })
+      .catch(err =>{
+        // TO DO : how can we get better errors back from the database
+        console.log('ERROR', err);
+        res.status(500).send(err);
+      });
   }
 }
