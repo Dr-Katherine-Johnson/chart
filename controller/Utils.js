@@ -10,3 +10,13 @@ module.exports.fluxToJSON = (fluxCSV) => {
 module.exports.isEmpty = (csv) => {
   return /^\r\n$/.test(csv);
 }
+
+module.exports.percentChange = (array) => {
+  const lastPrice = array[1]._value;
+  const prevPrice = array[0]._value;
+  let percentChange = (lastPrice - prevPrice) / prevPrice;
+  if (isNaN(percentChange)) {
+    percentChange = 0;
+  }
+  return percentChange.toFixed(4);
+}
