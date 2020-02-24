@@ -16,12 +16,21 @@ module.exports = {
     let stock = {
       ticker: req.params.ticker
     }
+    console.log('getting ticker', stock.ticker)
     // first get the name
     return db.query(connection, stock.ticker, 'name')
       .then(csv => {
+        const isEmpty = /^\r\n$/.test(csv)
+        if (isEmpty) {
+          console.log('empty response from database');
+          throw 'Ticker not in database';
+        }
         return fluxToJSON(csv);
       })
       .then(jsonObject => {
+        if (!jsonObject) {
+          console.log('nothing back from database')
+        }
         // assign name
         stock.name = jsonObject[0]._value;
         // get price list
@@ -35,7 +44,8 @@ module.exports = {
         res.status(200).send(stock);
       })
       .catch(err =>{
-        console.log(err);
+        // TO DO : how can we get better errors back from the database
+        console.log('ERROR', err);
         res.status(500).send(err);
       })
   },
