@@ -30,7 +30,7 @@ describe('GET /price/:ticker', () => {
       if (err) { return console.log(err); }
       expect(body.ticker).toEqual(tickerObj.ticker);
       expect(body.name).toEqual(expect.any(String));
-      expect(body.prices[Math.floor(Math.random() * 1750)].volume).toEqual(expect.any(Number));
+      expect(body.prices[Math.floor(Math.random() * 390)].volume).toEqual(expect.any(Number));
       expect(body.prices).toEqual(expect.any(Array));
       done();
     });
