@@ -20,7 +20,7 @@ class fluxQuery {
   constructor(bucket, ticker) {
     this.source = `from(bucket:"${bucket}")`;
     this.start = '|> range(start:2019-08-19)';
-    this.endpoint = {
+    this.fluxquery = {
       name: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group(columns: ["name"])|> distinct(column: "name")|> keep(columns: ["_value"])`,
       prices: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group()|> keep(columns: ["_time", "_value","_field"])|> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")`,
       last: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> keep(columns: ["_value"])|> last()`,
@@ -28,7 +28,7 @@ class fluxQuery {
     }
   }
   createQuery(endpoint) {
-    return `${this.source}${this.start}${this.endpoint[endpoint]}`;
+    return `${this.source}${this.start}${this.fluxquery[endpoint]}`;
   }
 }
 
@@ -73,7 +73,7 @@ module.exports = {
         'Content-type': 'application/vnd.flux'
       }})
       .then(res => {
-        return res;
+        return res.data;
       })
       .catch(err => console.log(err))
   }
