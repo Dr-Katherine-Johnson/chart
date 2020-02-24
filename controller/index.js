@@ -16,14 +16,27 @@ module.exports = {
     let stock = {
       ticker: req.params.ticker
     }
+    // first get the name
     return db.query(connection, stock.ticker, 'name')
       .then(csv => {
         return fluxToJSON(csv);
       })
       .then(jsonObject => {
-        console.log(jsonObject)
+        // assign name
         stock.name = jsonObject[0]._value;
-        console.log('STOCK', stock)
+        // get price list
+        return db.query(connection, stock.ticker, 'prices')
+      })
+      .then(pricescsv => {
+        return fluxToJSON(pricescsv);
+      })
+      .then(prices => {
+        stock.prices = prices;
+        res.status(200).send(stock);
+      })
+      .catch(err =>{
+        console.log(err);
+        res.status(500).send(err);
       })
   },
   getCurrentPrice(req, res, next) {
