@@ -1,8 +1,7 @@
 const Influx = require('../db/influx-client');
 const { fluxToJSON } = require('../controller/Utils');
 const config = require('../env.config.js');
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 
 const connection = {
   hostname: config.SERVICE_CHART_URL,
