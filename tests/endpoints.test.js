@@ -1,4 +1,4 @@
-const db = require('../db/index.js');
+const db = require('../db/influx-client.js');
 const request = require('request');
 const tickers = require('../seeds/tickers');
 const prices = require('../seeds/prices');
@@ -21,19 +21,18 @@ describe('GET /price/:ticker', () => {
   const tickerList = seedFactory();
   // get a random ticker from the list
   const tickerObj = tickerList[Math.floor(Math.random() * tickerList.length)]
-  console.log(tickerObj)
   const url = `http://localhost:${PORT}/price/${tickerObj.ticker}`;
 
   // check that the response is equal to the original ticker
-  xit(`Should return a JSON object of that ticker's price data`, (done) => {
+  it(`Should return a JSON object of that ticker's price data`, (done) => {
     // call the endpoint with that ticker
-    // request({ url, json: true }, (err, response, body) => {
-    //   if (err) { return console.log(err); }
-    //   expect(body.ticker).toEqual(tickerObj.ticker);
-    //   expect(body.name).toEqual(expect.any(String));
-    //   expect(body.prices[Math.floor(Math.random() * 1750)].volume).toEqual(expect.any(Number));
-    //   expect(body.prices).toEqual(expect.any(Array));
-    //   done();
-    // });
+    request({ url, json: true }, (err, response, body) => {
+      if (err) { return console.log(err); }
+      expect(body.ticker).toEqual(tickerObj.ticker);
+      expect(body.name).toEqual(expect.any(String));
+      expect(body.prices[Math.floor(Math.random() * 1750)].volume).toEqual(expect.any(Number));
+      expect(body.prices).toEqual(expect.any(Array));
+      done();
+    });
   });
 });
