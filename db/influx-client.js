@@ -22,7 +22,7 @@ class fluxQuery {
     this.start = '|> range(start:2019-08-19)';
     this.fluxquery = {
       name: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group(columns: ["name"])|> distinct(column: "name")|> keep(columns: ["_value"])`,
-      prices: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group()|> keep(columns: ["_time", "_value","_field"])|> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")`,
+      prices: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group()|> keep(columns: ["_time", "_value","_field"])|> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")|> map(fn: (r) => ({ dateTime: r._time, open: r.open,high: r.high, low: r.low, close: r.close, volume: r.volume }))`,
       last: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> keep(columns: ["_value"])|> last()`,
       change: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> tail(n:2)|> keep(columns: ["_value"])`
     }
