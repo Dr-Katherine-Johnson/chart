@@ -5,6 +5,7 @@ import ChartHat from './charthat.jsx';
 import Chart from './chart.jsx';
 import utils from './utils.js';
 import config from '../../env.config.js';
+import queryString from 'query-string';
 
 import moment from 'moment';
 
@@ -14,8 +15,8 @@ class App extends React.Component {
 
     // default values initially in state
     this.state = {
-      ticker: 'ABCD',
-      name: 'ABCD Company',
+      ticker: 'ABCDE',
+      name: 'ABCDE Company',
       theme: 'light',
       prices: [
         {
@@ -184,8 +185,12 @@ class App extends React.Component {
 
     // random integer in the thousands
     const peopleOwn = parseInt(Math.random() * 100000);
-
-    const ticker = this.state.ticker;
+    // window.location.search is the end of the address after '?'
+    // so it would be /?ticker=ABCDE
+    const query = queryString.parse(window.location.search);
+    // we can set a default value so that it doesn't
+    // error on the frontend if there is no query string
+    const ticker = (window.location.search) ? query.ticker : this.state.ticker;
 
     console.log('config: ', config);
 
