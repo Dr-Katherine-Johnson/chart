@@ -57,15 +57,15 @@ module.exports = {
    * http://localhost:9999/api/v2/write?org=66c5cd13f69410bd&bucket=robinhood-chart&precision=ms
    *
    */
-  writePoints(connection, data) {
-    const { hostname, token, bucket, orgID, precision } = connection;
+  writePoints(connection, data, precision) {
+    const { hostname, token, bucket, orgID } = connection;
     var writeInfluxURL = `${hostname}:9999/api/v2/write?org=${orgID}&bucket=${bucket}&precision=${precision}`;
     return axios.post(writeInfluxURL, data, {headers: {
         'Authorization': `Token ${token}`,
         'Content-type': 'text/plain'
       }})
       .then(res => {
-        return res;
+        return res.status;
       })
       .catch(err => console.log(err));
   },
