@@ -1,5 +1,8 @@
 const db = require('../db/influx-client.js');
-const request = require('request');
+const chai = require('chai');
+const { expect } = require('chai');
+const chaiHttp = require('chai-http');
+chai.use(chaiHttp);
 const tickers = require('../seeds/tickers');
 const prices = require('../seeds/prices');
 const PORT = process.env.PORT || 4444;
@@ -25,6 +28,7 @@ describe('Endpoint tests', () => {
     // check that the response is equal to the original ticker
     it(`Should return a JSON object of that ticker's price data`, (done) => {
       // call the endpoint with that ticker
+      // TODO Refactor to chai syntax
       request({ url, json: true }, (err, response, body) => {
         if (err) { return console.log(err); }
         expect(body.ticker).toEqual(tickerObj.ticker);
@@ -95,6 +99,48 @@ describe('Endpoint tests', () => {
         expect(response.statusCode).toEqual(500);
         done();
       });
+    });
+  });
+  describe('POST /price/:ticker', () => {
+    // get a random ticker from the list
+    const priceURL = `http://localhost:${PORT}/price/`;
+    const lastPriceIdx = tickerObj.prices.length - 1;
+    const lastPriceObject = tickerObj.prices[lastPriceIdx];
+    const lastTime = new Date(lastPriceObject.dateTime);
+    const newTime = new Date(lastTime.getTime() + 1);
+    const newPrice = prices.generatePrice(lastPriceObject);
+    const newPriceObject = {
+      'dateTime': newTime,
+      'open': newPrice.open,
+      'high': newPrice.high,
+      'low': newPrice.low,
+      'volume': newPrice.volume
+    };
+    it(`Should save a JSON object of that ticker's new price`, (done) => {
+      // call the endpoint with that ticker
+      chai.request(priceURL)
+        .post(tickerObj.ticker)
+        .type('form')
+        .send(newPriceObject)
+        .end((err, res) => {
+          expect(err).to.be.null;
+          expect(res).to.have.status(201);
+          done()
+         }
+        )
+    });
+
+    it(`Should return a 500 error for a ticker that is not in the database`, (done) => {
+      // call the endpoint with that ticker
+      const badTicker = `NOTINDBS`;
+      chai.request(priceURL)
+        .post(badTicker)
+        .type('form')
+        .send({})
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          done()
+        })
     });
   });
 });
