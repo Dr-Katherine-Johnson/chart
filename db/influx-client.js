@@ -6,7 +6,7 @@ const axios = require('axios');
   * @param {object} authentication — An object where the keys are the hostname, orgId, and authenticating token
   */
 
-// TODO refactor to es6 class syntax?
+// TODO refactor client to es6 class syntax?
 // class Client {
 //   constructor(authentication) {
 //     this.authentication = authentication;
@@ -22,7 +22,7 @@ class fluxQuery {
     this.start = '|> range(start:2019-08-19)';
     this.fluxquery = {
       name: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group(columns: ["name"])|> distinct(column: "name")|> keep(columns: ["_value"])`,
-      prices: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group()|> keep(columns: ["_time", "_value","_field"])|> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")|> map(fn: (r) => ({ dateTime: r._time, open: r.open,high: r.high, low: r.low, close: r.close, volume: r.volume }))`,
+      prices: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group()|> keep(columns: ["_time", "_value","_field"])|> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")|> map(fn: (r) => ({ dateTime: r._time, open: r.open, high: r.high, low: r.low, close: r.close, volume: r.volume }))`,
       last: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> keep(columns: ["_value"])|> last()`,
       change: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> tail(n:2)|> keep(columns: ["_value"])`
     }
@@ -34,11 +34,21 @@ class fluxQuery {
 
 module.exports = {
   /**
-   * @param {String} hostname indicates the url where influxDB api is located, if hosted locally this would be http://localhost => http://localhost:9999/api/v2
+   * @param {Object} connection
    *
-   * @param {String} token the token authenticates the request and should be located in an .env file
+   * const connection = {
+      hostname: config.SERVICE_CHART_URL,
+      token: process.env.INFLUX_TOKEN,
+      bucket: config.BUCKET,
+      orgID: process.env.ORG_ID,
+      precision: 'ms'
+    }
    *
-   * @param {Object} options should be {bucket: 'BUCKET_NAME', orgID: 'ID', precision: 'ns|ms|s'} if precision is not specified it will assume ms by default since this is the type given by JavaScript .getTime method
+   * hostname —indicates the url where influxDB api is located, if hosted locally this would be http://localhost => http://localhost:9999/api/v2
+   *
+   * token — the token authenticates the request and should be located in an .env file
+   *
+   * precision: 'ns|ms|s' if precision is not specified it will assume ms by default since this is the type given by JavaScript .getTime method
    * @param {String} data should follow line protocol syntax as well as best practices
    *
    * @returns {Promise} with the result of writing the point to influxDB
@@ -47,8 +57,8 @@ module.exports = {
    * http://localhost:9999/api/v2/write?org=66c5cd13f69410bd&bucket=robinhood-chart&precision=ms
    *
    */
-  writePoints(hostname, options, token, data) {
-    const { bucket, orgID, precision } = options;
+  writePoints(connection, data) {
+    const { hostname, token, bucket, orgID, precision } = connection;
     var writeInfluxURL = `${hostname}:9999/api/v2/write?org=${orgID}&bucket=${bucket}&precision=${precision}`;
     return axios.post(writeInfluxURL, data, {headers: {
         'Authorization': `Token ${token}`,
