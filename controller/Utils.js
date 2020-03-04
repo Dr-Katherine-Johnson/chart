@@ -83,13 +83,13 @@ module.exports.JSONTickerToLineProtocol = (measurement, { ticker, name, price })
     } else {
       // make sure that if we're done with all the fields our separator is an empty string
       var separator = (currentField === 'volume') ? '' : ',';
-      var fieldValue = priceObject[currentField];
+      var fieldValue = price[currentField];
       fieldSet += `${currentField}=${fieldValue}${separator}`
     }
   }
   // now we can create the whole line protocol with the right separators
   // we need to make sure time is in the right format - Unix Time
-  var timeInISO8601 = new Date(priceObject.dateTime);
+  var timeInISO8601 = new Date(price.dateTime);
   // NOTE: InfluxDB expects default time in ns, gut the JavaScript default for .getTime method is in ms
   // So we'll have to make sure to pass that precision into the options on the requests
   var timeStamp = timeInISO8601.getTime();
