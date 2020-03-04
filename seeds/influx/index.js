@@ -9,7 +9,7 @@ const connection = {
   hostname: config.SERVICE_CHART_URL,
   token: process.env.INFLUX_TOKEN,
   bucket: config.BUCKET,
-  orgID: process.env.ORG_ID
+  orgID: process.env.ORG_ID,
   precision: 'ms'
 }
 // seed database
