@@ -1,5 +1,5 @@
 const db = require('../db/influx-client');
-const { fluxToJSON, isEmpty, percentChange } = require('./Utils');
+const { fluxToJSON, isEmpty, percentChange, JSONTickerToLineProtocol } = require('./Utils');
 const config = require('../env.config.js');
 require('dotenv').config();
 
@@ -45,6 +45,38 @@ module.exports = {
         res.status(500).send(err);
       });
   },
+  updateTicker(req, res, next) {
+    let stock = {
+      ticker: req.params.ticker,
+    };
+    let newPrice = req.body;
+    // console.log(newPrice);
+    // first get the name
+    return db.query(connection, stock.ticker, 'name')
+      .then(csv => {
+        if (isEmpty(csv)) {
+          // console.log('empty response from database');
+          const newError = new Error('Ticker not in database');
+          res.status(404).send(newError);
+        }
+        return fluxToJSON(csv);
+      })
+      .then(jsonObject => {
+        // assign name
+        stock.name = jsonObject[0]._value;
+        // convert to lineProtocol
+        const data = JSONTickerToLineProtocol('prices', { ticker: stock.ticker, name: stock.name, price: newPrice});
+        return db.writePoints(connection, data, 'ms');
+      })
+      .then(wrote => {
+        res.status(201).end()
+      })
+      .catch(err =>{
+        // TO DO : how can we get better errors back from the database
+        console.log('ERROR', err);
+        res.status(500).send(err);
+      });
+  },
   getCurrentPrice(req, res, next) {
     // console.log('getting current price', req.params.ticker)
     return db.query(connection, req.params.ticker, 'last')
@@ -56,7 +88,7 @@ module.exports = {
         return fluxToJSON(csv);
       })
       .then(lastPrice => {
-        console.log(lastPrice)
+        // console.log(lastPrice)
         const stock = {
           currentPrice: lastPrice[0]._value
         };
