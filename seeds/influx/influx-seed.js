@@ -59,6 +59,7 @@
 const Influx = require('../../db/influx-client.js');
 const prices = require('../prices.js');
 const tickers = require('../tickers.js');
+const { JSONTickerToLineProtocol } = require('../../controller/Utils');
 
 const seedInfluxDB = async function(measurement, series, connection) {
   // start a timer
@@ -112,7 +113,7 @@ const seedInfluxDB = async function(measurement, series, connection) {
       // So we'll have to make sure to pass that precision into the options on the requests
       var timeStamp = timeInISO8601.getTime();
       // Everytime we write a datapoint we increment the counter
-      var dataPoint = `${measurement},${tagSet} ${fieldSet} ${timeStamp}`
+      var dataPoint = `${measurement},${tagSet} ${fieldSet} ${timeStamp}`;
       dataPoints++;
       // To write multiple lines in one request, each line of line protocol must be delimited by a new line (\n).
       lineProtocolString += `${dataPoint}\n`
