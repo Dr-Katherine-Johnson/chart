@@ -65,7 +65,6 @@
     "enzyme-adapter-react-16": "^1.15.1",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor",
     "jest": "^24.9.0",
-    "k6": "0.0.0",
     "nodemon": "^1.19.4",
     "puppeteer": "^2.0.0",
     "query-string": "^6.11.0",
