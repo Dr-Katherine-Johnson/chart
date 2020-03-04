@@ -16,7 +16,7 @@ module.exports = {
     let stock = {
       ticker: req.params.ticker
     }
-    console.log('getting ticker', stock.ticker)
+    // console.log('getting ticker', stock.ticker)
     // first get the name
     return db.query(connection, stock.ticker, 'name')
       .then(csv => {
@@ -46,7 +46,7 @@ module.exports = {
       });
   },
   getCurrentPrice(req, res, next) {
-    console.log('getting current price', req.params.ticker)
+    // console.log('getting current price', req.params.ticker)
     return db.query(connection, req.params.ticker, 'last')
       .then(csv => {
         if (isEmpty(csv)) {
@@ -69,7 +69,7 @@ module.exports = {
       });
   },
   getPercentChange(req, res, next) {
-    console.log('getting percent cha ge', req.params.ticker)
+    // console.log('getting percent change', req.params.ticker)
     return db.query(connection, req.params.ticker, 'change')
       .then(csv => {
         if (isEmpty(csv)) {
