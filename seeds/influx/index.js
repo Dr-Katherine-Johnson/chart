@@ -9,8 +9,8 @@ const connection = {
   hostname: config.SERVICE_CHART_URL,
   token: process.env.INFLUX_TOKEN,
   bucket: config.BUCKET,
-  orgID: process.env.ORG_ID,
-  precision: 'ms'
+  orgID: process.env.ORG_ID
 }
+const precision: 'ms';
 // seed database
-seedInfluxDB(measurement, records, connection);
+seedInfluxDB(measurement, records, connection, precision);
