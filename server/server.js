@@ -1,10 +1,10 @@
+require('newrelic');
 const express = require('express');
 const app = express();
 const config = require('../env.config.js');
 const PORT = config.SERVICE_CHART_PORT;
 const controller = require('../controller/index.js');
 const cors = require('cors');
-require('newrelic');
 
 app.use(cors());
 app.use(express.static('client/dist'));
