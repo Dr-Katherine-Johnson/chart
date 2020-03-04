@@ -49,7 +49,7 @@ const prices = require('../prices.js');
 const tickers = require('../tickers.js');
 const { JSONTickerToLineProtocol } = require('../../controller/Utils');
 
-const seedInfluxDB = async function(measurement, series, connection) {
+const seedInfluxDB = async function(measurement, series, connection, precision) {
   // start a timer
   console.time("all");
   // The idea is to create a line protocol string with concatenation:
@@ -79,7 +79,7 @@ const seedInfluxDB = async function(measurement, series, connection) {
       // once we have 5000 points, we write to the database
       if (dataPoints % batchSize === 0 ) {
         // we want to make sure we wait for the database response before writing the next string
-        await Influx.writePoints(connection, lineProtocolString)
+        await Influx.writePoints(connection, lineProtocolString, precision)
         // and reset the protocol string
         lineProtocolString = '';
         if (dataPoints % 10000 === 0) {
