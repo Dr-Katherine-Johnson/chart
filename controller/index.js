@@ -63,6 +63,7 @@ module.exports = {
       })
       .then(jsonObject => {
         // assign name
+        // console.log(jsonObject)
         stock.name = jsonObject[0]._value;
         // convert to lineProtocol
         const data = JSONTickerToLineProtocol('prices', { ticker: stock.ticker, name: stock.name, price: newPrice});
