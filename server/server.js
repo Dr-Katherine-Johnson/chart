@@ -14,7 +14,7 @@ app.use(express.static('client/dist'));
 app.use(express.static('client/public'));
 
 app.get('/price/:ticker', controller.getTicker);
-app.post('/price/:ticker', controller.updateTicker);
+app.put('/price/:ticker', controller.updateTicker);
 app.get('/current-price/:ticker', controller.getCurrentPrice);
 app.get('/percent-change/:ticker', controller.getPercentChange);
 
