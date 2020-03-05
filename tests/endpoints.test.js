@@ -122,7 +122,7 @@ describe('Endpoint tests', () => {
     it(`Should save a JSON object of that ticker's new price`, (done) => {
       // call the endpoint with that ticker
       chai.request(priceURL)
-        .post(tickerObj.ticker)
+        .put(tickerObj.ticker)
         .type('form')
         .send(newPriceObject)
         .end((err, res) => {
