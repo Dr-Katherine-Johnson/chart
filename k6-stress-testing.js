@@ -2,8 +2,8 @@ import http from 'k6/http';
 import { sleep, check } from 'k6';
 
 // we can test in terms of rps by limiting how many requests each VU is able to make per second
-let desiredRPS = 840; //total rps for the test
-let RPSperVU = 47 // max requests exec by one VU per second
+let desiredRPS = 400; //total rps for the test
+let RPSperVU = 22; // max requests exec by one VU per second
 // we do a unit conversion to get VUs required
 // desired RPS
 // ---------- => VU = desiredRPs/RPSperVU
@@ -18,12 +18,32 @@ export const options = {
 };
 
 // is there a way to generate a random ticker to ask from the database?
+// for get requests
 const ticker = 'ABCDE';
 
 export default function() {
   let iterationStart = new Date().getTime();
   for (let i of Array(RPSperVU).keys()) {
-    const res = http.get(`http://localhost:4444/current-price/${ticker}`);
+    const url = `http://localhost:4444/price/${ticker}`;
+    // get route
+    // const res = http.get(url);
+    // post route
+    // some fake price update
+    const payload = JSON.stringify({
+      dateTime: new Date(),
+      open: Math.random()*1000,
+      high: Math.random()*1000,
+      low: Math.random()*1000,
+      close: Math.random()*1000,
+      volume: Math.round(Math.random() * 1000000),
+    });
+    const params = {
+      headers: {
+        'Content-type': 'application/json',
+      },
+    };
+    const res = http.post(url, payload, params);
+    // post next
     let iterationDuration = (new Date().getTime() - iterationStart)/1000;
     // since requests are every second we can check if the virtual user needs
     // to sleep between executions
@@ -32,7 +52,10 @@ export default function() {
       sleep(sleepTime);
     }
     const checkRes = check(res, {
-      "status is 200": (r) => r.status === 200
+      // for get route
+      // "status is 200": (r) => r.status === 200
+      // for post route
+      "status is 201": (r) => r.status === 201
     });
   }
 }
