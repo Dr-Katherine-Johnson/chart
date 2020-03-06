@@ -12,7 +12,6 @@ module.exports = {
     if (isNumber) {
       // get the ticker form our array
       let ticker = tickerArray[Number(req.params.ticker)];
-      console.log(ticker);
       // re-write the params
       req.params.ticker = ticker;
     }
@@ -21,6 +20,6 @@ module.exports = {
   generateTickers() {
     console.log('generating tickers for testing');
     // use our seeding function ticker generator
-    tickerArray = tickers.createNTickers(1350000); //custom
+    tickerArray = tickers.createNTickers(1350000); // use your custom function
   }
 }
