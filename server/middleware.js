@@ -20,6 +20,8 @@ module.exports = {
   generateTickers() {
     console.log('generating tickers for testing');
     // use our seeding function ticker generator
-    tickerArray = tickers.createNTickers(1350000); // use your custom function
+    const max = 1350000;
+    const last10percent = Math.floor(max * .1);
+    tickerArray = tickers.createNTickers(1350000).slice(last10percent, max); // use your custom function
   }
 }
