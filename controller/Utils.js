@@ -67,11 +67,16 @@ module.exports.percentChange = (array) => {
  *
  */
 module.exports.JSONTickerToLineProtocol = (measurement, { ticker, name, price }) => {
-  // Line protocol for tag values should escape both commas and spaces
-  var escapeCharacters = /[, ]/g;
-  // Some names can contain commas and spaces
-  var tickerName = name.replace(escapeCharacters, (match) => `\\${match}`);
-  var tagSet = `ticker=${ticker},name=${tickerName} `;
+  var tagSet = `${ticker}`;
+  if (name) {
+    // Line protocol for tag values should escape both commas and spaces
+    var escapeCharacters = /[, ]/g;
+    // Some names can contain commas and spaces
+    var tickerName = name.replace(escapeCharacters, (match) => `\\${match}`);
+    var tagSet += `,name=${tickerName} `;
+  } else {
+    tagSet += ' ';
+  }
   var fields = Object.keys(price);
   var fieldSet = '';
   // we want to generate the field set dynamically with the price object keys => the fields (open, high, low...)
