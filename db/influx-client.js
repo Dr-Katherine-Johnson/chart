@@ -1,7 +1,7 @@
 // Simple client to connect to influxDB database v2 does not have a node client
 const axios = require('axios');
 
- /**
+/**
   * Base class to connect to influx, takes in an authentication object with
   * @param {object} authentication — An object where the keys are the hostname, orgId, and authenticating token
   */
@@ -25,7 +25,7 @@ class fluxQuery {
       prices: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}")|> group()|> keep(columns: ["_time", "_value","_field"])|> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")|> map(fn: (r) => ({ dateTime: r._time, open: r.open, high: r.high, low: r.low, close: r.close, volume: r.volume }))`,
       last: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> keep(columns: ["_value"])|> last()`,
       change: `|> filter(fn: (r) => r._measurement == "prices" and r.ticker == "${ticker}" and r._field == "close")|> tail(n:2)|> keep(columns: ["_value"])`
-    }
+    };
   }
   createQuery(endpoint) {
     return `${this.source}${this.start}${this.fluxquery[endpoint]}`;
@@ -61,9 +61,9 @@ module.exports = {
     const { hostname, token, bucket, orgID } = connection;
     var writeInfluxURL = `${hostname}:9999/api/v2/write?org=${orgID}&bucket=${bucket}&precision=${precision}`;
     return axios.post(writeInfluxURL, data, {headers: {
-        'Authorization': `Token ${token}`,
-        'Content-type': 'text/plain'
-      }})
+      'Authorization': `Token ${token}`,
+      'Content-type': 'text/plain'
+    }})
       .then(res => {
         return res.status;
       })
@@ -78,15 +78,15 @@ module.exports = {
     const queryInfluxURL = `${hostname}:9999/api/v2/query?org=${orgID}`;
     const query = new fluxQuery(bucket, ticker);
     return axios.post(queryInfluxURL, query.createQuery(endpoint), {headers: {
-        'Authorization': `Token ${token}`,
-        'Accept': 'application/csv',
-        'Content-type': 'application/vnd.flux'
-      }})
+      'Authorization': `Token ${token}`,
+      'Accept': 'application/csv',
+      'Content-type': 'application/vnd.flux'
+    }})
       .then(res => {
         return res.data;
       })
       .catch(err => {
         return err;
-      })
+      });
   }
-}
+};
