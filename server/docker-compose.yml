@@ -6,3 +6,7 @@ services:
       - '4444:4444'
     env_file:
       - .env
+  memcached:
+    container_name: memcached 
+    ports:
+      - "11211:11211"
