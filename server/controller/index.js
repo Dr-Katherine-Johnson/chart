@@ -9,14 +9,14 @@ const connection = {
   token: process.env.INFLUX_TOKEN,
   bucket: config.BUCKET,
   orgID: process.env.ORG_ID
-}
+};
 // console.log(connection);
 module.exports = {
   getTicker(req, res, next) {
     let stock = {
       ticker: req.params.ticker
-    }
-    // console.log('getting ticker', stock.ticker)
+    };
+    console.log('getting ticker', stock.ticker);
     // first get the name
     return db.query(connection, stock.ticker, 'name')
       .then(csv => {
@@ -30,13 +30,14 @@ module.exports = {
         // assign name
         stock.name = jsonObject[0]._value;
         // get price list
-        return db.query(connection, stock.ticker, 'prices')
+        return db.query(connection, stock.ticker, 'prices');
       })
       .then(pricescsv => {
         return fluxToJSON(pricescsv);
       })
       .then(prices => {
         stock.prices = prices;
+        console.log('sending response');
         res.status(200).send(stock);
       })
       .catch(err =>{
@@ -70,7 +71,7 @@ module.exports = {
         return db.writePoints(connection, data, 'ms');
       })
       .then(wrote => {
-        res.status(201).end()
+        res.status(201).end();
       })
       .catch(err =>{
         // TO DO : how can we get better errors back from the database
@@ -113,7 +114,7 @@ module.exports = {
       })
       .then(last2prices => {
         const change = percentChange(last2prices);
-        res.status(200).send({ percentChange: change })
+        res.status(200).send({ percentChange: change });
       })
       .catch(err =>{
         // TO DO : how can we get better errors back from the database
@@ -121,4 +122,4 @@ module.exports = {
         res.status(500).send(err);
       });
   }
-}
+};
