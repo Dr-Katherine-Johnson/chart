@@ -1,0 +1,24 @@
+{
+  "name": "chart-server",
+  "version": "1.0.0",
+  "description": "node server for robinhood-chart API",
+  "main": "env.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js",
+    "start:dev": "nodemon server/server.js",
+    "docker:build": "docker build -t manuelag19/robinhood-chart . && docker push manuelag19/robinhood-chart"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "csvtojson": "^2.0.10",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "memcached": "^2.2.2"
+  }
+}

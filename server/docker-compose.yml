@@ -1,0 +1,12 @@
+version: '3.2'
+services:
+  chart:
+    image: manuelag19/robinhood-chart:latest
+    ports:
+      - '4444:4444'
+    env_file:
+      - .env
+  memcached:
+    container_name: memcached 
+    ports:
+      - "11211:11211"
