@@ -5,8 +5,8 @@
   "main": "env.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server.js",
-    "start:dev": "nodemon server/server.js",
+    "start": "node index.js",
+    "start:dev": "nodemon index.js",
     "docker:build": "docker build -t manuelag19/robinhood-chart . && docker push manuelag19/robinhood-chart"
   },
   "keywords": [],

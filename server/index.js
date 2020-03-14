@@ -1,18 +1,22 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const config = require('../env.config.js');
+const config = require('./env.config.js');
 const PORT = config.SERVICE_CHART_PORT;
-const controller = require('../controller/index.js');
+const controller = require('./controller/index.js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cache = require('./cache.js');
+const LOADERIOFILE = config.LOADER_IO;
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('client/dist'));
-app.use(express.static('client/public'));
+app.use(express.static('loaderio'));
 
+// adding caching to the slowest route
+app.get('/cached/price/:ticker', cache.memCachedMiddleware(30), controller.getTicker);
 app.get('/price/:ticker', controller.getTicker);
 app.put('/price/:ticker', controller.updateTicker);
 app.get('/current-price/:ticker', controller.getCurrentPrice);
