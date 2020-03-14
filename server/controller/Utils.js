@@ -4,14 +4,20 @@ const csv = require('csvtojson');
 module.exports.fluxToJSON = (fluxCSV) => {
   return csv({checkType: true, ignoreEmpty: true, ignoreColumns: /(result|table)/})
     .fromString(fluxCSV)
+    .on('header', (header) => {
+      const timeIdx = header.indexOf('_time');
+      if ( timeIdx > -1) {
+        header[timeIdx] = 'dateTime';
+      }
+    })
     .then(jsonObj => jsonObj)
     .catch(err => console.log(err));
-}
+};
 
 // checks the contents of a csv file to see if it's empty
 module.exports.isEmpty = (csv) => {
   return /^\r\n$/.test(csv);
-}
+};
 
 /**
  * Given a two element array calculates the percent change
@@ -26,7 +32,7 @@ module.exports.percentChange = (array) => {
     percentChange = 0;
   }
   return percentChange.toFixed(4);
-}
+};
 
 /**
  * Takes in a JSON ticker with the following data
@@ -78,13 +84,13 @@ module.exports.JSONTickerToLineProtocol = (measurement, { ticker, name, price })
   for (let k = 0; k < fields.length; k++) {
     // The price object also includes dateTime, make sure it's skipped and added at the end
     var currentField = fields[k];
-    if (currentField === "dateTime") {
+    if (currentField === 'dateTime') {
       continue;
     } else {
       // make sure that if we're done with all the fields our separator is an empty string
       var separator = (currentField === 'volume') ? '' : ',';
       var fieldValue = price[currentField];
-      fieldSet += `${currentField}=${fieldValue}${separator}`
+      fieldSet += `${currentField}=${fieldValue}${separator}`;
     }
   }
   // now we can create the whole line protocol with the right separators
@@ -96,4 +102,4 @@ module.exports.JSONTickerToLineProtocol = (measurement, { ticker, name, price })
   // Everytime we write a datapoint we increment the counter
   var dataPoint = `${measurement},${tagSet} ${fieldSet} ${timeStamp}`;
   return dataPoint;
-}
+};

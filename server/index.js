@@ -1,3 +1,4 @@
+require('newrelic');
 const express = require('express');
 const app = express();
 require('dotenv').config();
@@ -7,7 +8,6 @@ const controller = require('./controller/index.js');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cache = require('./cache.js');
-const LOADERIOFILE = config.LOADER_IO;
 
 app.use(cors());
 app.use(bodyParser.json());
