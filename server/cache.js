@@ -20,31 +20,31 @@ let memCachedMiddleware = (duration) => {
   return (req, res, next) => {
     // our keys will be related to the tickers
     let key = '__chart__' + req.params.ticker;
-    console.log(key);
+    // console.log(key);
     // check if they are in the cache
     memcached.get(key, function(err, data) {
       if (err) {
         console.log('ERROR GETTING FROM CACHE: ', err);
       }
       if (data) {
-        console.log('in cache');
+        // console.log('in cache');
         // if so send it back in the response, no need to process the request
         res.send(data);
         return;
       } else {
-        console.log('not in cache processing request');
+        // console.log('not in cache processing request');
         // otherwise, process the request, wait for the database response
         res.status(200).sendResponse = res.status(200).send;
+        // overwrite the roginal function 
         res.status(200).send = (body) => {
           // make sure the request is stored in our cache
-          console.log('caching response');
+          // before the response is sent to the user
+          console.log('caching response', key);
           memcached.set(key, body, (duration * 60), function(err, res) {
             if (err) {
               console.log('ERROR: ', err);
             }
-            console.log('NO ERROR: ', res);
           });
-          // before the response is sent to the user
           res.status(200).sendResponse(body);
         };
         next();
