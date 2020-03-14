@@ -16,7 +16,7 @@ module.exports = {
     let stock = {
       ticker: req.params.ticker
     };
-    console.log('getting ticker', stock.ticker);
+    // console.log('getting ticker', stock.ticker);
     // first get the name
     return db.query(connection, stock.ticker, 'name')
       .then(csv => {
@@ -37,7 +37,7 @@ module.exports = {
       })
       .then(prices => {
         stock.prices = prices;
-        console.log('sending response');
+        // console.log('sending response');
         res.status(200).send(stock);
       })
       .catch(err =>{

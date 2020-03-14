@@ -2,6 +2,7 @@ version: '3.4'
 services:
   chart:
     image: manuelag19/robinhood-chart:latest
+    restart: always
     ports:
       - '4444:4444'
     env_file:

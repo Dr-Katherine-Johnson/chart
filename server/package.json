@@ -19,6 +19,7 @@
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "memcached": "^2.2.2"
+    "memcached": "^2.2.2",
+    "newrelic": "^6.4.2"
   }
 }
