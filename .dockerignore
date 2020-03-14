@@ -10,8 +10,9 @@ babel.config.js
 # AWS
 awscli-bundle
 
-# Source Files
-client/src
+# Frontend
+client
+webpack.config.js
 
 # Generated Files
 package-lock.json
@@ -22,7 +23,24 @@ README.md
 
 # Deployment
 .env
+compose.sh
+deploy.sh
+ec2-install.sh
 
 # Other
 sampledata
-awscli-bundle/
+docker-compose.builder.yml
+docker-compose.dev.yml
+Makefile
+
+#local stress testing
+newrelic_agent.log
+newrelic.js
+
+#other seeding scripts
+seeds/timescale
+seeds/mongo-seed.js
+seeds/start.js
+
+#mongo client
+db/index.js
