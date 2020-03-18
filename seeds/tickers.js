@@ -85,7 +85,7 @@ module.exports = {
     // get all unique combinations from alphanum string
     const tickers = utils.chooseKCombos(alphaNumString, k);
     return tickers.slice(0,n);
-  }
+  },
 };
 
 

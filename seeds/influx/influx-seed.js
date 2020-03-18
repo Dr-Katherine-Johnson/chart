@@ -60,15 +60,18 @@ const seedInfluxDB = async function(measurement, series, connection, precision) 
   let dataPoints = 0;
   // get all the unique tickers that will become one of our tags
   const uniqueTickers = tickers.createNTickers(series);
+  // QUESTION: Will faker generate enought random names?
+  const uniqueNames = prices.generateAllNames(series);
   // For each ticker, there will be n data points or line protocol strings that correspond to the number of prices
   // This means we'll have to double loop, once over the tickers and once over the prices array
+  // for handling index creation we first generate one point for each ticker
+  // so that the AWS instance doesn't crash while trying to seed the db
   for (let i = 0; i < series; i++) {
     var currentTicker = uniqueTickers[i];
-    // QUESTION: Will faker generate enought random names?
-    var tickerName = prices.generateName()
+    var tickerName = uniqueNames[i];
     var pricesList = prices.generatePricesList();
-    // Second loop over all the prices
-    for (let j = 0; j < pricesList.length; j++) {
+    // Write the remaining price points to the database
+    for (let j = 1; j < pricesList.length; j++) {
       var priceObject = pricesList[j];
       // use our utils function to convert to line protocol
       var dataPoint = JSONTickerToLineProtocol(measurement, { ticker: currentTicker, name: tickerName, price: priceObject});
