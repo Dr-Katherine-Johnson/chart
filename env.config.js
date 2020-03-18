@@ -19,5 +19,5 @@ if (process.env.NODE_ENV === 'development') {
     DATABASE_URL: 'mongodb://database',
   });
 }
-
+console.log(obj);
 module.exports = obj;

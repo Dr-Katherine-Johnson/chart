@@ -195,7 +195,7 @@ class App extends React.Component {
     console.log('config: ', config);
 
     $.ajax({
-      url: `${config.SERVICE_CHART_URL}:${config.SERVICE_CHART_PORT}/price/${ticker}`,
+      url: `${config.SERVICE_CHART_URL}:${config.SERVICE_CHART_PORT}/cached/price/${ticker}`,
       dataType: 'json',
       success: (ticker) => {
         ticker.prices.forEach(price => {

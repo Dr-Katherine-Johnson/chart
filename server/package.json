@@ -21,5 +21,8 @@
     "express": "^4.17.1",
     "memcached": "^2.2.2",
     "newrelic": "^6.4.2"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0"
   }
 }
