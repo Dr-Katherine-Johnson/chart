@@ -1,5 +1,7 @@
+const utils = require('./tickerUtils.js');
+
 module.exports = {
-  createTickers() {
+  create100Tickers() {
     // returns the same array of 100 unique strings (tickers)
       // each ticker is 3 - 4 characters in length
       // TODO: vary the ticker length
@@ -55,5 +57,35 @@ module.exports = {
         ticker = [];
       }
       return result;
+  },
+  createNTickers(n) {
+    // can create up to 6,471,002 unique tickers
+    // using alphanumeric lower/uppercase for each character there are 26(lower)+26(upper)+10(numbers) = 62 possibilities
+    // that means if we want at least 2*10^6 combinations we'd need to do the following operation
+    // (N choose k) > 2 million =>
+    // (26 choose 3) = 2,600
+    // (26 choose 4) = 14,950
+    // (52 choose 4) = 270,725
+    // (62 choose 4) = 557,845
+    // (52 choose 5) = 2,598,960
+    // (62 choose 5) = 6,471,002
+    // Depending on how many you needed to generate you could set your alphaNumString length and k -> pass along an argument to the getAlphaNumberic function?
+    // we can hard-code two
+    var stringLength;
+    var k;
+    if (n < 2700) {
+      stringLength = 26
+      k = 3;
+    } else {
+      stringLength = 52;
+      k = 5;
+    }
+    // we can represent letters+numbers in a string 'A...Za...z0...9'
+    var alphaNumString = utils.getAlphaNumeric().slice(0,stringLength).join('');
+    // get all unique combinations from alphanum string
+    const tickers = utils.chooseKCombos(alphaNumString, k);
+    return tickers.slice(0,n);
   }
-}
+};
+
+
