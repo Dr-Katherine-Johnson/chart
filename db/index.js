@@ -10,7 +10,8 @@ mongoose.connect(`${config.DATABASE_URL}:/${config.DATABASE_NAME}`, { useNewUrlP
 const db = mongoose.connection;
 
 db.on('error', (err) => console.log(err));
-db.once('open', () => console.log('db connected'));
+// breaks the test with JEST
+// db.once('open', () => console.log('db connected'));
 
 const tickerSchema = new mongoose.Schema({
   ticker: String,

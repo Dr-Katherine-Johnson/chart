@@ -8,8 +8,16 @@
   - [Deployment](#deployment)
     - [If Needed](#if-needed)
   - [Requirements](#requirements)
-  - [Development](#development)
+  - [Development using Docker](#development-using-docker)
+    - [Mount](#mount)
+    - [Dependencies](#dependencies)
+    - [Develop](#develop)
+    - [Run a MongoDB shell](#run-a-mongo-shell)
   - [Build](#build)
+  - [API](#api)
+    - [Prices](#prices)
+    - [Current price](#current-price)
+    - [Percent change](#percent-change)
 
 ## Related Projects
 - [Reverse Proxy](https://github.com/Dr-Wing/chart-proxy) that interacts with the other microservices
@@ -55,7 +63,13 @@ bash compose.sh $pathToPEM $instance
 docker exec -i chart_mongo_1 mongo "mongodb://localhost"
 ```
 
+## Additional Documentation
+
+For documentation related to the database see:
+- Mongoose (^5.7) https://mongoosejs.com/docs/api.html
+
 ## Requirements
+- CLI like Bash
 - docker
 - docker-compose
 
@@ -79,16 +93,18 @@ make install
   ```
 
 If you're installing new packages first start a shell in the container
-running node. 
+running node.
 
 1. Find the CONTAINER_NAME corresponding with the node image with:
   ```sh
 docker ps
   ```
 
+If make install ran successfully you should see "chart_chart_1". Start a shell in the container:
+
 2. Then start a shell in the container
   ```sh
-docker exec -ti CONTAINER_NAME /bin/bash
+docker exec -ti chart_chart_1 /bin/bash
   ```
 
  - You'll see something like:
@@ -96,16 +112,18 @@ docker exec -ti CONTAINER_NAME /bin/bash
 root@2e3dba3578ae:/usr/src/service#
   ```
 
-3. You can then run your
+3. You can then install additional dependencies with the command
   ```sh
 npm install PACKAGE --save
   ```
+where `PACKAGE` is the name of your npm package.
 
 ### Develop
-To start a development environment
+To start a development environment, use the commmand
   ```sh
 make dev
   ```
+This will create a bundle.js, start the server, seed the database and connect the server to the database.
 
 For other commands see docker-compose.builder.yml and Makefile. Example:
 Build webpack bundle
@@ -113,8 +131,210 @@ Build webpack bundle
 make bundle
   ```
 
+### Run a MongoDB shell
+From the root directory in your terminal, once your Mongo container is running (it should be called `chart_mongo_1`), you can run an interactive shell to query the database:
+  ```sh
+  docker exec -ti chart_mongo_1 mongo
+  ```
+
+
 ## Build
 - Creates a webpack bundle, Builds a docker image, and pushes it to dockerhub
 ```sh
 npm run build
 ```
+
+## API
+
+### Prices
+
+<table>
+  <tr>
+    <td>Endpoint</td>
+    <td>Output</td>
+    <td>Shape (JSON)</td>
+    <td>Example Resonse</td>
+  </tr>
+  <tr>
+    <td>GET /price/:ticker</td>
+    <td>Returns all the prices for a ticker as objects in the prices array</td>
+    <td>
+      <pre lang="json">
+      {
+        "ticker": "APPL",
+        "name": "Apple",
+        "prices": [
+          {
+            "dateTime": "2019-11-16T22:27:19.319Z",
+            "open": "264.03",
+            "high": "264.40",
+            "low": "264.02",
+            "close": "264.35",
+            "volume": "96770"
+          },
+          // ... about 1750 more prices
+        ]
+      }
+      </pre>
+    </td>
+    <td>
+      <pre lang="json">
+      {
+        "ticker": String,
+        "name": String,
+        "prices": [
+          {
+            "dateTime": String, // ISO 8601
+            "open": Number,
+            "high": Number,
+            "low": Number,
+            "close": Number,
+            "volume": Number,
+          },
+          // ... about 1750 more prices
+        ]
+      }
+      </pre>
+    </td>
+  </tr>
+  <tr>
+    <td>POST /price/:ticker</td>
+    <td>Creates a ticker with corresponding prices</td>
+    <td>
+      body
+      <pre lang="json">
+      {
+        "ticker": String,
+        "name": String,
+        "prices": [
+          {
+            "dateTime": String, // ISO 8601
+            "open": Number,
+            "high": Number,
+            "low": Number,
+            "close": Number,
+            "volume": Number,
+          },
+          // ... about 1750 more prices
+        ]
+      }
+      </pre>
+    </td>
+    <td>
+      201 Ticker saved successfully
+      400 Could not save
+      409 Trying to post a duplicate ticker
+      500 Server error
+    </td>
+  </tr>
+  <tr>
+    <td>PUT /price/:ticker</td>
+    <td>Updates a ticker with a new prices</td>
+    <td>
+      body
+      <pre lang="json">
+      {
+        "dateTime": String, // ISO 8601
+            "open": Number,
+            "high": Number,
+            "low": Number,
+            "close": Number,
+            "volume": Number
+      }
+      </pre>
+    </td>
+    <td>
+      201 Ticker update successfully
+      403 Price sent was for a date that is older than current price
+      404 Could not find ticker
+      500 Server error
+    </td>
+  </tr>
+    <tr>
+    <td>DELETE /price/:ticker</td>
+    <td>Deletes a ticker</td>
+    <td>
+      Note: will delete all the information related to that ticker
+    </td>
+    <td>
+      201 Ticker deleted successfully
+      500 Server error
+    </td>
+  </tr>
+</table>
+
+### Current Price
+
+<table>
+  <tr>
+    <td>Endpoint</td>
+    <td>Output</td>
+    <td>Shape (JSON)</td>
+    <td>Example Resonse</td>
+  </tr>
+  <tr>
+    <td>GET /current-price/:ticker</td>
+    <td>Returns the last available price for that stock</td>
+    <td>
+      <pre lang="json">
+        {
+          "price": NUMBER
+        }
+      </pre>
+    </td>
+    <td>
+      <pre lang="json">
+        {
+          "price": "264.35"
+        }
+      </pre>
+    </td>
+  </tr>
+    <tr>
+    <td>GET /current-price/:ticker</td>
+    <td>Returns the last available price for that stock</td>
+    <td>
+      <pre lang="json">
+        {
+          "price": NUMBER
+        }
+      </pre>
+    </td>
+    <td>
+      <pre lang="json">
+        {
+          "price": "264.35"
+        }
+      </pre>
+    </td>
+  </tr>
+</table>
+
+### Percent change
+
+<table>
+  <tr>
+    <td>Endpoint</td>
+    <td>Output</td>
+    <td>Shape (JSON)</td>
+    <td>Example Resonse</td>
+  </tr>
+  <tr>
+    <td>GET /percent-change/:ticker</td>
+    <td>Returns the percent change between the last available price and the price immediately before that (ie, the penultimate data point)</td>
+    <td>
+      <pre lang="json">
+        {
+          "percentChange": NUMBER
+        }
+      </pre>
+    </td>
+    <td>
+      <pre lang="json">
+        {
+          "percentChange": "-0.0014"
+        }
+      </pre>
+    </td>
+  </tr>
+</table>
